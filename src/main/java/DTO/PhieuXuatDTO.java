@@ -8,17 +8,17 @@ public class PhieuXuatDTO {
     private int maPX;
     private int maNV;
     private int maKH;
-    private int tongTIen;
+    private int tongTien;
     private Date ngayXuat;
 
     public PhieuXuatDTO() {
     }
 
-    public PhieuXuatDTO(int maPX, int maNV, int maKH, int tongTIen, Date ngayXuat) {
+    public PhieuXuatDTO(int maPX, int maNV, int maKH, int tongTien, Date ngayXuat) {
         this.maPX = maPX;
         this.maNV = maNV;
         this.maKH = maKH;
-        this.tongTIen = tongTIen;
+        this.tongTien = tongTien;
         this.ngayXuat = ngayXuat;
     }
 
@@ -34,8 +34,8 @@ public class PhieuXuatDTO {
         return maKH;
     }
 
-    public int getTongTIen() {
-        return tongTIen;
+    public int getTongTien() {
+        return tongTien;
     }
 
     public Date getNgayXuat() {
@@ -54,8 +54,8 @@ public class PhieuXuatDTO {
         this.maKH = maKH;
     }
 
-    public void setTongTIen(int tongTIen) {
-        this.tongTIen = tongTIen;
+    public void setTongTien(int tongTien) {
+        this.tongTien = tongTien;
     }
 
     public void setNgayXuat(Date ngayXuat) {
@@ -64,7 +64,7 @@ public class PhieuXuatDTO {
 
     @Override
     public String toString() {
-        return "PhieuXuatDTO{" + "maPX=" + maPX + ", maNV=" + maNV + ", maKH=" + maKH + ", tongTIen=" + tongTIen + ", ngayXuat=" + ngayXuat + '}';
+        return "PhieuXuatDTO{" + "maPX=" + maPX + ", maNV=" + maNV + ", maKH=" + maKH + ", tongTIen=" + tongTien + ", ngayXuat=" + ngayXuat + '}';
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PhieuXuatDTO {
         hash = 37 * hash + this.maPX;
         hash = 37 * hash + this.maNV;
         hash = 37 * hash + this.maKH;
-        hash = 37 * hash + this.tongTIen;
+        hash = 37 * hash + this.tongTien;
         hash = 37 * hash + Objects.hashCode(this.ngayXuat);
         return hash;
     }
@@ -99,7 +99,7 @@ public class PhieuXuatDTO {
         if (this.maKH != other.maKH) {
             return false;
         }
-        if (this.tongTIen != other.tongTIen) {
+        if (this.tongTien != other.tongTien) {
             return false;
         }
         return Objects.equals(this.ngayXuat, other.ngayXuat);

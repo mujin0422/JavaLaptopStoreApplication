@@ -5,14 +5,14 @@ import java.util.Objects;
 
 public class KhachHangDTO {
     private int maKH;
-    private int tenKH;
+    private String tenKH;
     private String sdt;
     private String email;
 
     public KhachHangDTO() {
     }
 
-    public KhachHangDTO(int maKH, int tenKH, String sdt, String email) {
+    public KhachHangDTO(int maKH, String tenKH, String sdt, String email) {
         this.maKH = maKH;
         this.tenKH = tenKH;
         this.sdt = sdt;
@@ -23,7 +23,7 @@ public class KhachHangDTO {
         return maKH;
     }
 
-    public int getTenKH() {
+    public String getTenKH() {
         return tenKH;
     }
 
@@ -39,7 +39,7 @@ public class KhachHangDTO {
         this.maKH = maKH;
     }
 
-    public void setTenKH(int tenKH) {
+    public void setTenKH(String tenKH) {
         this.tenKH = tenKH;
     }
 
@@ -56,15 +56,6 @@ public class KhachHangDTO {
         return "KhachHangDTO{" + "maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt + ", email=" + email + '}';
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + this.maKH;
-        hash = 71 * hash + this.tenKH;
-        hash = 71 * hash + Objects.hashCode(this.sdt);
-        hash = 71 * hash + Objects.hashCode(this.email);
-        return hash;
-    }
 
     @Override
     public boolean equals(Object obj) {

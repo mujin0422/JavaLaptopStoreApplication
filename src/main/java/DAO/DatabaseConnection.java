@@ -19,14 +19,4 @@ public class DatabaseConnection {
         }
         return conn;
     }
-    
-    public static void main(String[] args) {
-        Connection conn = DatabaseConnection.getConnection();
-        if (conn != null) {
-            System.out.println("SUCCESSFULL");
-        } else {
-            System.out.println("ERROL");
-        }
-    }
-
 }
