@@ -11,7 +11,7 @@ package DTO;
 public class ChiTietPhieuNhapDTO {
     private int maPN;
     private int maSP;
-    private int soLuong;
+    private int soLuongSP;
     private int giaNhap;
 
     public ChiTietPhieuNhapDTO() {
@@ -20,7 +20,7 @@ public class ChiTietPhieuNhapDTO {
     public ChiTietPhieuNhapDTO(int maPN, int maSP, int soLuong, int giaNhap) {
         this.maPN = maPN;
         this.maSP = maSP;
-        this.soLuong = soLuong;
+        this.soLuongSP = soLuong;
         this.giaNhap = giaNhap;
     }
 
@@ -32,8 +32,8 @@ public class ChiTietPhieuNhapDTO {
         return maSP;
     }
 
-    public int getSoLuong() {
-        return soLuong;
+    public int getSoLuongSP() {
+        return soLuongSP;
     }
 
     public int getGiaNhap() {
@@ -49,46 +49,12 @@ public class ChiTietPhieuNhapDTO {
     }
 
     public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
+        this.soLuongSP = soLuong;
     }
 
     public void setGiaNhap(int giaNhap) {
         this.giaNhap = giaNhap;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 59 * hash + this.maPN;
-        hash = 59 * hash + this.maSP;
-        hash = 59 * hash + this.soLuong;
-        hash = 59 * hash + this.giaNhap;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ChiTietPhieuNhapDTO other = (ChiTietPhieuNhapDTO) obj;
-        if (this.maPN != other.maPN) {
-            return false;
-        }
-        if (this.maSP != other.maSP) {
-            return false;
-        }
-        if (this.soLuong != other.soLuong) {
-            return false;
-        }
-        return this.giaNhap == other.giaNhap;
-    }
-
-  
+    
 }

@@ -1,13 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BUS;
 
-/**
- *
- * @author Dell Vostro
- */
+import DAO.RomDAO;
+import DTO.RomDTO;
+import java.util.ArrayList;
+
 public class RomBUS {
-    
+    private RomDAO romDAO;
+
+    public RomBUS() {
+        romDAO = new RomDAO();
+    }
+
+    public ArrayList<RomDTO> getAllRom() {
+        return romDAO.getAll();
+    }
+
+    public boolean addRom(RomDTO rom) {       
+        return romDAO.add(rom) > 0;
+    }
+
+    public boolean updateRom(RomDTO rom) {
+        return romDAO.update(rom) > 0; 
+    }
+
+    public boolean deleteRom(int maROM) {
+        return romDAO.delete(maROM) > 0;  
+    }
 }

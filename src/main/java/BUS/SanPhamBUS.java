@@ -1,13 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BUS;
 
-/**
- *
- * @author Dell Vostro
- */
+import DAO.SanPhamDAO;
+import DTO.SanPhamDTO;
+import java.util.ArrayList;
+
 public class SanPhamBUS {
-    
+    private SanPhamDAO sanPhamDAO;
+
+    public SanPhamBUS() {
+        sanPhamDAO = new SanPhamDAO();
+    }
+
+    public ArrayList<SanPhamDTO> getAllSanPham() {
+        return sanPhamDAO.getAll();
+    }
+
+    public boolean addSanPham(SanPhamDTO sanPham) {
+        return sanPhamDAO.add(sanPham) > 0;
+    }
+
+    public boolean updateSanPham(SanPhamDTO sanPham) {
+        return sanPhamDAO.update(sanPham) > 0;
+    }
+
+    public boolean deleteSanPham(int maSP) {
+        return sanPhamDAO.delete(maSP) > 0;
+    }
+
+    public SanPhamDTO getSanPhamById(int maSP) {
+        return sanPhamDAO.getById(maSP);
+    }
 }

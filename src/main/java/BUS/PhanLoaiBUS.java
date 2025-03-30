@@ -1,13 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BUS;
 
-/**
- *
- * @author Dell Vostro
- */
+import DAO.PhanLoaiDAO;
+import DTO.PhanLoaiDTO;
+import java.util.ArrayList;
+
 public class PhanLoaiBUS {
-    
+    private PhanLoaiDAO phanLoaiDAO;
+
+    public PhanLoaiBUS() {
+        phanLoaiDAO = new PhanLoaiDAO();
+    }
+
+    public ArrayList<PhanLoaiDTO> getAllPhanLoai() {
+        return phanLoaiDAO.getAll();
+    }
+
+    public boolean addPhanLoai(PhanLoaiDTO phanLoai) {
+        return phanLoaiDAO.add(phanLoai) > 0;
+    }
+
+    public boolean updatePhanLoai(PhanLoaiDTO phanLoai) {
+        return phanLoaiDAO.update(phanLoai) > 0;
+    }
+
+    public boolean deletePhanLoai(int maLoai) {
+        return phanLoaiDAO.delete(maLoai) > 0;
+    }
+
+    public PhanLoaiDTO getPhanLoaiById(int maLoai) {
+        return phanLoaiDAO.getById(maLoai);
+    }
 }

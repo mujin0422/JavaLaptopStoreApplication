@@ -1,18 +1,20 @@
 package DAO;
 
-import DTO.ChiTietPhieuNhapDTO;
+import DTO.ChiTietPhieuXuatDTO;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ChiTietPhieuNhapDAO {
-    public int add(ChiTietPhieuNhapDTO obj) {
-        String sql = "INSERT INTO chitietphieunhap (maSP, maPN, soLuongSP, giaNhap) VALUES (?, ?, ?, ?)";
+public class ChiTietPhieuXuatDAO {
+
+    public int add(ChiTietPhieuXuatDTO obj) {
+        String sql = "INSERT INTO chitietphieuxuat (maSP, maPX, giaBan, soLuongSP, serialSP) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, obj.getMaSP());
-            ps.setInt(2, obj.getMaPN());
-            ps.setInt(3, obj.getSoLuongSP());
-            ps.setInt(4, obj.getGiaNhap());
+            ps.setInt(2, obj.getMaPX());
+            ps.setInt(3, obj.getGiaBan());
+            ps.setInt(4, obj.getSoLuongSP());
+            ps.setString(5, obj.getSerialSP());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -20,14 +22,15 @@ public class ChiTietPhieuNhapDAO {
         return 0;
     }
 
-    public int update(ChiTietPhieuNhapDTO obj) {
-        String sql = "UPDATE chitietphieunhap SET soLuongSP=?, giaNhap=? WHERE maSP=? AND maPN=?";
+    public int update(ChiTietPhieuXuatDTO obj) {
+        String sql = "UPDATE chitietphieuxuat SET giaBan=?, soLuongSP=?, serialSP=? WHERE maSP=? AND maPX=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, obj.getSoLuongSP());
-            ps.setInt(2, obj.getGiaNhap());
-            ps.setInt(3, obj.getMaSP());
-            ps.setInt(4, obj.getMaPN());
+            ps.setInt(1, obj.getGiaBan());
+            ps.setInt(2, obj.getSoLuongSP());
+            ps.setString(3, obj.getSerialSP());
+            ps.setInt(4, obj.getMaSP());
+            ps.setInt(5, obj.getMaPX());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,12 +38,12 @@ public class ChiTietPhieuNhapDAO {
         return 0;
     }
 
-    public int delete(int maSP, int maPN) {
-        String sql = "DELETE FROM chitietphieunhap WHERE maSP=? AND maPN=?";
+    public int delete(int maSP, int maPX) {
+        String sql = "DELETE FROM chitietphieuxuat WHERE maSP=? AND maPX=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maSP);
-            ps.setInt(2, maPN);
+            ps.setInt(2, maPX);
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,18 +51,19 @@ public class ChiTietPhieuNhapDAO {
         return 0;
     }
 
-    public ArrayList<ChiTietPhieuNhapDTO> getAll() {
-        ArrayList<ChiTietPhieuNhapDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM chitietphieunhap";
+    public ArrayList<ChiTietPhieuXuatDTO> getAll() {
+        ArrayList<ChiTietPhieuXuatDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM chitietphieuxuat";
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet rs = stm.executeQuery(sql)) {
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                list.add(new ChiTietPhieuNhapDTO(
+                list.add(new ChiTietPhieuXuatDTO(
                     rs.getInt("maSP"),
-                    rs.getInt("maPN"),
+                    rs.getInt("maPX"),
+                    rs.getInt("giaBan"),
                     rs.getInt("soLuongSP"),
-                    rs.getInt("giaNhap")
+                    rs.getString("serialSP")
                 ));
             }
         } catch (SQLException e) {
@@ -68,19 +72,20 @@ public class ChiTietPhieuNhapDAO {
         return list;
     }
 
-    public ChiTietPhieuNhapDTO getById(int maSP, int maPN) {
-        String sql = "SELECT * FROM chitietphieunhap WHERE maSP=? AND maPN=?";
+    public ChiTietPhieuXuatDTO getById(int maSP, int maPX) {
+        String sql = "SELECT * FROM chitietphieuxuat WHERE maSP=? AND maPX=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maSP);
-            ps.setInt(2, maPN);
+            ps.setInt(2, maPX);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new ChiTietPhieuNhapDTO(
+                    return new ChiTietPhieuXuatDTO(
                         rs.getInt("maSP"),
-                        rs.getInt("maPN"),
+                        rs.getInt("maPX"),
+                        rs.getInt("giaBan"),
                         rs.getInt("soLuongSP"),
-                        rs.getInt("giaNhap")
+                        rs.getString("serialSP")
                     );
                 }
             }

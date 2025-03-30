@@ -8,7 +8,7 @@ public class ChiTietPhieuXuatDTO {
     private int maSP;
     private int giaBan;
     private int soLuongSP;
-    private String serialSp;
+    private String serialSP;
 
     public ChiTietPhieuXuatDTO() {
     }
@@ -18,7 +18,7 @@ public class ChiTietPhieuXuatDTO {
         this.maSP = maSP;
         this.giaBan = giaBan;
         this.soLuongSP = soLuongSP;
-        this.serialSp = serialSp;
+        this.serialSP = serialSp;
     }
 
     public int getMaPX() {
@@ -37,8 +37,8 @@ public class ChiTietPhieuXuatDTO {
         return soLuongSP;
     }
 
-    public String getSerialSp() {
-        return serialSp;
+    public String getSerialSP() {
+        return serialSP;
     }
 
     public void setMaPX(int maPX) {
@@ -57,47 +57,8 @@ public class ChiTietPhieuXuatDTO {
         this.soLuongSP = soLuongSP;
     }
 
-    public void setSerialSp(String serialSp) {
-        this.serialSp = serialSp;
+    public void setSerialSP(String serialSp) {
+        this.serialSP = serialSp;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 17 * hash + this.maPX;
-        hash = 17 * hash + this.maSP;
-        hash = 17 * hash + this.giaBan;
-        hash = 17 * hash + this.soLuongSP;
-        hash = 17 * hash + Objects.hashCode(this.serialSp);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ChiTietPhieuXuatDTO other = (ChiTietPhieuXuatDTO) obj;
-        if (this.maPX != other.maPX) {
-            return false;
-        }
-        if (this.maSP != other.maSP) {
-            return false;
-        }
-        if (this.giaBan != other.giaBan) {
-            return false;
-        }
-        if (this.soLuongSP != other.soLuongSP) {
-            return false;
-        }
-        return Objects.equals(this.serialSp, other.serialSp);
-    }
-
-    
 }

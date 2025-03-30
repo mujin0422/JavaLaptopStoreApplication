@@ -2,11 +2,11 @@ package DTO;
 
 public class RamDTO {
     private int maRAM;
-    private int dungLuongRAM; 
+    private String dungLuongRAM; 
 
     public RamDTO() {}
 
-    public RamDTO(int maRAM, int dungLuongRAM) {
+    public RamDTO(int maRAM, String dungLuongRAM) {
         this.maRAM = maRAM;
         this.dungLuongRAM = dungLuongRAM;
     }
@@ -19,39 +19,13 @@ public class RamDTO {
         this.maRAM = maRAM;
     }
 
-    public int getDungLuongRAM() {
+    public String getDungLuongRAM() {
         return dungLuongRAM;
     }
 
-    public void setDungLuongRAM(int dungLuongRAM) {
+    public void setDungLuongRAM(String dungLuongRAM) {
         this.dungLuongRAM = dungLuongRAM;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 43 * hash + this.maRAM;
-        hash = 43 * hash + this.dungLuongRAM;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final RamDTO other = (RamDTO) obj;
-        if (this.maRAM != other.maRAM) {
-            return false;
-        }
-        return this.dungLuongRAM == other.dungLuongRAM;
-    }
-    
     
 }

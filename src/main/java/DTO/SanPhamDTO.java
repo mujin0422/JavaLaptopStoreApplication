@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DTO;
 
 import java.util.Objects;
 
-/**
- *
- * @author Dell Vostro
- */
 public class SanPhamDTO {
     private int maSP;
     private String tenSP;
@@ -18,14 +10,15 @@ public class SanPhamDTO {
     private int maCPU;
     private int maRAM;
     private int maROM;
-    private int maDPG; 
+    private int maDPG;
     private int maLoai;
-    private int thoiGianBH; 
+    private int maTH; // Mã thương hiệu
+    private int thoiGianBH;
 
     public SanPhamDTO() {
     }
 
-    public SanPhamDTO(int maSP, String tenSP, int giaSP, int soLuongTon, int maCPU, int maRAM, int maROM, int maDPG, int maLoai, int thoiGianBH) {
+    public SanPhamDTO(int maSP, String tenSP, int giaSP, int soLuongTon, int maCPU, int maRAM, int maROM, int maDPG, int maLoai, int maTH, int thoiGianBH) {
         this.maSP = maSP;
         this.tenSP = tenSP;
         this.giaSP = giaSP;
@@ -35,6 +28,7 @@ public class SanPhamDTO {
         this.maROM = maROM;
         this.maDPG = maDPG;
         this.maLoai = maLoai;
+        this.maTH = maTH;
         this.thoiGianBH = thoiGianBH;
     }
 
@@ -72,6 +66,10 @@ public class SanPhamDTO {
 
     public int getMaLoai() {
         return maLoai;
+    }
+
+    public int getMaTH() {
+        return maTH;
     }
 
     public int getThoiGianBH() {
@@ -114,67 +112,11 @@ public class SanPhamDTO {
         this.maLoai = maLoai;
     }
 
+    public void setMaTH(int maTH) {
+        this.maTH = maTH;
+    }
+
     public void setThoiGianBH(int thoiGianBH) {
         this.thoiGianBH = thoiGianBH;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 41 * hash + this.maSP;
-        hash = 41 * hash + Objects.hashCode(this.tenSP);
-        hash = 41 * hash + this.giaSP;
-        hash = 41 * hash + this.soLuongTon;
-        hash = 41 * hash + this.maCPU;
-        hash = 41 * hash + this.maRAM;
-        hash = 41 * hash + this.maROM;
-        hash = 41 * hash + this.maDPG;
-        hash = 41 * hash + this.maLoai;
-        hash = 41 * hash + this.thoiGianBH;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final SanPhamDTO other = (SanPhamDTO) obj;
-        if (this.maSP != other.maSP) {
-            return false;
-        }
-        if (this.giaSP != other.giaSP) {
-            return false;
-        }
-        if (this.soLuongTon != other.soLuongTon) {
-            return false;
-        }
-        if (this.maCPU != other.maCPU) {
-            return false;
-        }
-        if (this.maRAM != other.maRAM) {
-            return false;
-        }
-        if (this.maROM != other.maROM) {
-            return false;
-        }
-        if (this.maDPG != other.maDPG) {
-            return false;
-        }
-        if (this.maLoai != other.maLoai) {
-            return false;
-        }
-        if (this.thoiGianBH != other.thoiGianBH) {
-            return false;
-        }
-        return Objects.equals(this.tenSP, other.tenSP);
-    }
-
-    
 }

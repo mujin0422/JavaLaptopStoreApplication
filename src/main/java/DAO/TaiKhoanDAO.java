@@ -23,7 +23,7 @@ public class TaiKhoanDAO {
     }
 
     public int update(TaiKhoanDTO obj) {
-        String sql = "UPDATE sach SET tenDangNhap=?, matKhau=?, maQuyen=? WHERE maNV=?";
+        String sql = "UPDATE taikhoan SET tenDangNhap=?, matKhau=?, maQuyen=? WHERE maNV=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, obj.getTenDangNhap());
@@ -58,7 +58,7 @@ public class TaiKhoanDAO {
             while (rs.next()) {
                 dsTaiKhoan.add(new TaiKhoanDTO(
                     rs.getString("tenDangNhap"),
-                    rs.getString("matkhau"),
+                    rs.getString("matKhau"),
                     rs.getInt("maQuyen"),
                     rs.getInt("maNV")
                     
