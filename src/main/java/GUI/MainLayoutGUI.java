@@ -92,7 +92,7 @@ public final class MainLayoutGUI extends JFrame {
                     targetPanel = statisticsPanel;
                     break;
                 case 1:
-                    button.setButtonIcon("/Icon/Sach_icon.png");
+                    button.setButtonIcon("/Icon/Laptop_icon.png");
                     targetPanel = bookPanel;
                     break;
                 case 2:

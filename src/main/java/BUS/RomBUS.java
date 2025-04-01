@@ -11,19 +11,19 @@ public class RomBUS {
         romDAO = new RomDAO();
     }
 
-    public ArrayList<RomDTO> getAllRom() {
+    public ArrayList<RomDTO> getAllROM() {
         return romDAO.getAll();
     }
 
-    public boolean addRom(RomDTO rom) {       
+    public boolean addROM(RomDTO rom) {       
         return romDAO.add(rom) > 0;
     }
 
-    public boolean updateRom(RomDTO rom) {
+    public boolean updateROM(RomDTO rom) {
         return romDAO.update(rom) > 0; 
     }
 
-    public boolean deleteRom(int maROM) {
+    public boolean deleteROM(int maROM) {
         return romDAO.delete(maROM) > 0;  
     }
 }

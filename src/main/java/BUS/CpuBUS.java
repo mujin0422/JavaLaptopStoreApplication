@@ -11,19 +11,19 @@ public class CpuBUS {
         cpuDAO = new CpuDAO();
     }
 
-    public ArrayList<CpuDTO> getAllCpu() {
+    public ArrayList<CpuDTO> getAllCPU() {
         return cpuDAO.getAll();
     }
 
-    public boolean addCpu(CpuDTO cpu) {
+    public boolean addCPU(CpuDTO cpu) {
         return cpuDAO.add(cpu) > 0;
     }
 
-    public boolean updateCpu(CpuDTO cpu) {
+    public boolean updateCPU(CpuDTO cpu) {
         return cpuDAO.update(cpu) > 0;
     }
 
-    public boolean deleteCpu(int maCPU) {
+    public boolean deleteCPU(int maCPU) {
         return cpuDAO.delete(maCPU) > 0;
     }
 

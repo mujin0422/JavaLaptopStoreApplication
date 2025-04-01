@@ -98,7 +98,7 @@ public class AddAndEditCostumerGUI extends JDialog{
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();
             KhachHangDTO kh = new KhachHangDTO(maKH, tenKH, soDT, email);
-            if(khachHangBus.addKhachHang(kh)){
+            if(khachHangBus.updateKhachHang(kh)){
                 JOptionPane.showMessageDialog(this, "Cập nhật khach hang thành công!");
                 dispose();
             } else {
