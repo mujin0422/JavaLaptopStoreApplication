@@ -1,12 +1,25 @@
 package GUI.MainContent;
 
-import Utils.UIConstants;
-import Utils.UIButton;
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Window;
+
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import BUS.SanPhamBUS;
+import GUI.MainContentDiaLog.AddAndEditProductGUI;
+import Utils.UIButton;
+import Utils.UIConstants;
+
 public class ProductMainContentGUI extends JPanel {
+    private SanPhamBUS sanPhamBUS;
     private UIButton btnAdd, btnDelete, btnEdit;
     private JTextField txtSearch;
     private JComboBox<String> cbFilter;
@@ -26,6 +39,7 @@ public class ProductMainContentGUI extends JPanel {
 
         // Tạo các button (Nằm bên trái)
         btnAdd = new UIButton("menuButton", "THÊM", 100, 30, "/Icon/them_icon.png");
+        btnAdd.addActionListener(e -> addProduct()); // Thêm sự kiện cho nút thêm
         btnDelete = new UIButton("menuButton", "XÓA", 100, 30, "/Icon/xoa_icon.png");
         btnEdit = new UIButton("menuButton", "SỬA", 100, 30, "/Icon/sua_icon.png");
 
@@ -75,4 +89,24 @@ public class ProductMainContentGUI extends JPanel {
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
     }
+    
+
+    // private void loadTableData(){
+    //     tableModel.setRowCount(0);
+    //     ArrayList<KhachHangDTO> listKH = khachHangBUS.getAllKhachHang();
+    //     for(KhachHangDTO kh : listKH){
+    //         tableModel.addRow(new Object[]{
+    //             kh.getMaKH(),
+    //             kh.getTenKH(),
+    //             kh.getSdt(),
+    //             kh.getEmail()
+    //         });
+    //     }
+    // }
+    private void addProduct() {
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Thêm Sản Phẩm", "add");
+        // loadTableData(); // Cập nhật lại bảng sau khi thêm
+    }
+
 }
