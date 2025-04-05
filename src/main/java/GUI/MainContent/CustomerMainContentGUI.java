@@ -1,14 +1,10 @@
 package GUI.MainContent;
 
-import BUS.KhachHangBUS;
-import DTO.KhachHangDTO;
-import GUI.MainContentDiaLog.AddAndEditCostumerGUI;
-import Utils.UIButton;
-import Utils.UIConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Window;
 import java.util.ArrayList;
+
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -18,6 +14,13 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+
+import BUS.KhachHangBUS;
+import BUS.SanPhamBUS;
+import DTO.KhachHangDTO;
+import GUI.MainContentDiaLog.AddAndEditCostumerGUI;
+import Utils.UIButton;
+import Utils.UIConstants;
 
 public class CustomerMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit;
@@ -75,6 +78,7 @@ public class CustomerMainContentGUI extends JPanel{
         tableModel = new DefaultTableModel(columnNames, 0);
         tblContent = new JTable(tableModel);
         tblContent.setDefaultEditor(Object.class, null);
+        
             // Thiết lập header của bảng
         tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
         tblContent.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);

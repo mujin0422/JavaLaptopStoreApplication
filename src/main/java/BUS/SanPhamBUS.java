@@ -1,8 +1,9 @@
 package BUS;
 
+import java.util.ArrayList;
+
 import DAO.SanPhamDAO;
 import DTO.SanPhamDTO;
-import java.util.ArrayList;
 
 public class SanPhamBUS {
     private SanPhamDAO sanPhamDAO;
@@ -11,7 +12,7 @@ public class SanPhamBUS {
         sanPhamDAO = new SanPhamDAO();
     }
 
-    public ArrayList<SanPhamDTO> getAllSanPham() {
+    public  ArrayList<SanPhamDTO> getAllSanPham() {
         return sanPhamDAO.getAll();
     }
 

@@ -3,6 +3,7 @@ package GUI.MainContent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Window;
+import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.SanPhamBUS;
+import DTO.SanPhamDTO;
 import GUI.MainContentDiaLog.AddAndEditProductGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
@@ -25,14 +27,17 @@ public class ProductMainContentGUI extends JPanel {
     private JComboBox<String> cbFilter;
     private JTable tblContent;
     private JPanel pnlHeader, pnlContent;
+    private DefaultTableModel tableModel;
 
     public ProductMainContentGUI() {
+        this.sanPhamBUS = new SanPhamBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH - 200 - 10, UIConstants.HEIGHT - 200 - 10));
         this.setLayout(new BorderLayout(5, 5));
 
         //=========================== Panel Header =============================
         pnlHeader = new JPanel();
+        
         pnlHeader.setLayout(null); // Sử dụng null layout
         pnlHeader.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlHeader.setPreferredSize(new Dimension(this.getWidth(), 50));
@@ -68,10 +73,11 @@ public class ProductMainContentGUI extends JPanel {
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
 
         // Tạo bảng dữ liệu
-        String[] columnNames = {"MÃ", "TÊN SÁCH", "TÁC GIẢ", "NHÀ XUẤT BẢN", "TỒN KHO", "....."};
+        String[] columnNames = {"MÃ SẢN PHẨM", "TÊN SẢN PHÂM", "GIÁ SẢN PHẨM", "NHÀ XUẤT BẢN", "TỒN KHO", "....."};
         Object[][] data = {}; // Chưa có dữ liệu
-        tblContent = new JTable(new DefaultTableModel(data, columnNames));
-
+        tableModel = new DefaultTableModel(data,columnNames);
+        tblContent = new JTable(tableModel);
+        
         // Thiết lập header của bảng
         tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
         tblContent.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
@@ -88,21 +94,34 @@ public class ProductMainContentGUI extends JPanel {
         // Thêm panel tiêu đề và bảng vào giao diện chính
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
+        loadTableData();
     }
     
 
-    // private void loadTableData(){
-    //     tableModel.setRowCount(0);
-    //     ArrayList<KhachHangDTO> listKH = khachHangBUS.getAllKhachHang();
-    //     for(KhachHangDTO kh : listKH){
-    //         tableModel.addRow(new Object[]{
-    //             kh.getMaKH(),
-    //             kh.getTenKH(),
-    //             kh.getSdt(),
-    //             kh.getEmail()
-    //         });
-    //     }
-    // }
+
+    private void loadTableData() {
+        
+        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+
+        ArrayList<SanPhamDTO> dsSanPham = sanPhamBUS.getAllSanPham();
+
+        for (SanPhamDTO sp : dsSanPham) {
+            tableModel.addRow(new Object[] {
+                sp.getMaSP(),
+                sp.getTenSP(),
+                sp.getGiaSP(),
+                sp.getSoLuongTon(),
+                sp.getMaCPU(),
+                sp.getMaRAM(),
+                sp.getMaROM(),
+                sp.getMaDPG(),
+                sp.getMaLoai(),
+                sp.getMaTH(),
+                sp.getThoiGianBH()
+            });
+        }
+    }
+
     private void addProduct() {
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Thêm Sản Phẩm", "add");

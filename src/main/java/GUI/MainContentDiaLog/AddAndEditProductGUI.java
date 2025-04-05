@@ -103,6 +103,7 @@ public class AddAndEditProductGUI extends JDialog {
 
         this.add(inputPanel, BorderLayout.CENTER);
         this.add(btnPanel, BorderLayout.SOUTH);
+        
 
         btnCancel.addActionListener(e -> dispose());
         if (btnAdd != null) btnAdd.addActionListener(e -> addProduct());
@@ -110,24 +111,23 @@ public class AddAndEditProductGUI extends JDialog {
     }
 
     private void saveProduct() {
-        if (!CheckFormInput()) return;
+        if (CheckFormInput()) return;
         try {
             int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String tenSP = txtTenSP.getText().trim();
-            double gia = Double.parseDouble(txtGiaSP.getText().trim());
-            // int soLuong = Integer.parseInt(txtSoLuong.getText().trim());
-            // int soLuongTon = Integer.parseInt(txtSoLuong.getText().trim());
-            // int maCPU = Integer.parseInt(txtSoLuong.getText().trim());
-            // int maRAM = Integer.parseInt(txtSoLuong.getText().trim());
-            // int maROM = Integer.parseInt(txtSoLuong.getText().trim());
-            // int maDPG = Integer.parseInt(txtSoLuong.getText().trim());
-            // int maLoai = Integer.parseInt(txtSoLuong.getText().trim());
-            // int maTH = Integer.parseInt(txtSoLuong.getText().trim());
-            // int thoiGianBH = Integer.parseInt(txtSoLuong.getText().trim());
+            int giaSP = Integer.parseInt(txtGiaSP.getText().trim());
+            int soLuongTon = Integer.parseInt(txtSoLuongTon.getText().trim());
+            int maRam = Integer.parseInt(txtMaRam.getText().trim());
+            int maCPU = Integer.parseInt(txtMaCPU.getText().trim());
+            int maRom = Integer.parseInt(txtMaRom.getText().trim());
+            int maDPG = Integer.parseInt(txtMaDPG.getText().trim());
+            int maLoai = Integer.parseInt(txtMaLoai.getText().trim());
+            int maTH = Integer.parseInt(txtMaTH.getText().trim());
+            int thoiGianBH = Integer.parseInt(txtThoiGianBH.getText().trim());
             
-            // SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, gia);
+            SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
 
-            if (sanPhamBus.updateSanPham(sanPham)) {
+            if (sanPhamBus.updateSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công!");
                 dispose();
             } else {
@@ -139,21 +139,21 @@ public class AddAndEditProductGUI extends JDialog {
     }
 
     private void addProduct() {
-        if (!checkFormInput()) return;
+        if (checkFormInput()) return;
         try {
             int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String tenSP = txtTenSP.getText().trim();
-            double giaSP = Double.parseDouble(txtGiaSP.getText().trim());
+            int giaSP = Integer.parseInt(txtGiaSP.getText().trim());
             int soLuongTon = Integer.parseInt(txtSoLuongTon.getText().trim());
-            String maRam = txtMaRam.getText().trim();
-            String maCPU = txtMaCPU.getText().trim();
-            String maRom = txtMaRom.getText().trim();
-            String maDPG = txtMaDPG.getText().trim();
-            String maLoai = txtMaLoai.getText().trim();
-            String maTH = txtMaTH.getText().trim();
-            String thoiGianBH = txtThoiGianBH.getText().trim();
+            int maRam = Integer.parseInt(txtMaRam.getText().trim());
+            int maCPU = Integer.parseInt(txtMaCPU.getText().trim());
+            int maRom = Integer.parseInt(txtMaRom.getText().trim());
+            int maDPG = Integer.parseInt(txtMaDPG.getText().trim());
+            int maLoai = Integer.parseInt(txtMaLoai.getText().trim());
+            int maTH = Integer.parseInt(txtMaTH.getText().trim());
+            int thoiGianBH = Integer.parseInt(txtThoiGianBH.getText().trim());
 
-            // SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, int(giaSP), int(soLuongTon),int( aRam), int(maCPU), int(maRom), int(maDPG), int(maLoai),int( maTH), int(thoiGianBH));
+            SanPhamDTO sp = new SanPhamDTO( maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
             if (sanPhamBus.addSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!");
                 dispose();
@@ -162,6 +162,7 @@ public class AddAndEditProductGUI extends JDialog {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
