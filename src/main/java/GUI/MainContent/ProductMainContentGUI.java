@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -46,7 +47,9 @@ public class ProductMainContentGUI extends JPanel {
         btnAdd = new UIButton("menuButton", "THÊM", 100, 30, "/Icon/them_icon.png");
         btnAdd.addActionListener(e -> addProduct()); // Thêm sự kiện cho nút thêm
         btnDelete = new UIButton("menuButton", "XÓA", 100, 30, "/Icon/xoa_icon.png");
+        btnDelete.addActionListener(e -> deleteProduct());
         btnEdit = new UIButton("menuButton", "SỬA", 100, 30, "/Icon/sua_icon.png");
+        btnEdit.addActionListener(e -> editProduct()); // Thêm sự kiện cho nút sửa
 
         btnAdd.setBounds(10, 10, 100, 30);
         btnDelete.setBounds(120, 10, 100, 30);
@@ -77,6 +80,8 @@ public class ProductMainContentGUI extends JPanel {
         Object[][] data = {}; // Chưa có dữ liệu
         tableModel = new DefaultTableModel(data,columnNames);
         tblContent = new JTable(tableModel);
+        tblContent.setDefaultEditor(Object.class, null);
+        
         
         // Thiết lập header của bảng
         tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
@@ -125,7 +130,52 @@ public class ProductMainContentGUI extends JPanel {
     private void addProduct() {
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Thêm Sản Phẩm", "add");
-        // loadTableData(); // Cập nhật lại bảng sau khi thêm
+        loadTableData();
+    }
+    private void editProduct(){
+        int selectedRow = tblContent.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int maSP = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+        String tenSP = tableModel.getValueAt(selectedRow, 1).toString();
+        int giaSP = Integer.parseInt((tableModel.getValueAt(selectedRow, 2).toString()));
+        int soLuongTon = Integer.parseInt(tableModel.getValueAt(selectedRow, 3).toString());
+        int maCPU = Integer.parseInt(tableModel.getValueAt(selectedRow, 4).toString());
+        int maRam = Integer.parseInt(tableModel.getValueAt(selectedRow, 5).toString());
+        int maRom = Integer.parseInt(tableModel.getValueAt(selectedRow, 6).toString());
+        int maDPG = Integer.parseInt(tableModel.getValueAt(selectedRow, 7).toString());
+        int maLoai = Integer.parseInt(tableModel.getValueAt(selectedRow, 8).toString());
+        int maTH = Integer.parseInt(tableModel.getValueAt(selectedRow, 9).toString());
+        int thoiGianBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 10).toString());
+
+        // Tạo đối tượng SanPhamDTO với dữ liệu đã chọn
+        
+        
+        SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Chỉnh sửa sản phẩm", "save", sp);
+         
+        loadTableData();
+    }
+    private void deleteProduct(){
+        int selectedRow = tblContent.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một san pham để xoa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Ban co chac chan khong", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            int maSP = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+            if (sanPhamBUS.deleteSanPham(maSP)) { 
+                JOptionPane.showMessageDialog(this, "Xóa san pham thanh công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                loadTableData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Xóa san phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
 }

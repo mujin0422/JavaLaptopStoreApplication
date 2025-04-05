@@ -108,10 +108,11 @@ public class AddAndEditProductGUI extends JDialog {
         btnCancel.addActionListener(e -> dispose());
         if (btnAdd != null) btnAdd.addActionListener(e -> addProduct());
         if (btnSave != null) btnSave.addActionListener(e -> saveProduct());
+        
     }
 
     private void saveProduct() {
-        if (CheckFormInput()) return;
+        if (!CheckFormInput()) return;
         try {
             int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String tenSP = txtTenSP.getText().trim();
@@ -139,7 +140,7 @@ public class AddAndEditProductGUI extends JDialog {
     }
 
     private void addProduct() {
-        if (checkFormInput()) return;
+        if (!checkFormInput()) return;
         try {
             int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String tenSP = txtTenSP.getText().trim();
@@ -162,10 +163,14 @@ public class AddAndEditProductGUI extends JDialog {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            
         }
     }
 
+    /**
+     * ...
+     * @return false: error, true: ok
+     */
     private boolean checkFormInput() {
         try {
             String maSPStr = txtMaSP.getText().trim();

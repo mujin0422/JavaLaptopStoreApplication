@@ -5,8 +5,8 @@ import java.awt.Font;
 
 public class UIConstants {
     // Kích thước Frame
-    public static final int WIDTH = 1300;
-    public static final int HEIGHT = 700;
+    public static final int WIDTH = 1280;
+    public static final int HEIGHT = 670;
     // Kích thước thành phần chính của Frame
     public static final int WIDTH_TITLE = WIDTH;
     public static final int HEIGHT_TITLE = 50;
