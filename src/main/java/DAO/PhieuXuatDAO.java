@@ -15,7 +15,7 @@ public class PhieuXuatDAO {
             ps.setInt(2, obj.getMaNV());
             ps.setInt(3, obj.getMaKH());
             ps.setInt(4, obj.getTongTien());
-            ps.setDate(5, new java.sql.Date(obj.getNgayXuat().getTime()));
+            ps.setString(5, obj.getNgayXuat());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class PhieuXuatDAO {
             ps.setInt(1, obj.getMaNV());
             ps.setInt(2, obj.getMaKH());
             ps.setInt(3, obj.getTongTien());
-            ps.setDate(4, new java.sql.Date(obj.getNgayXuat().getTime()));
+            ps.setString(5, obj.getNgayXuat());
             ps.setInt(5, obj.getMaPX());
             return ps.executeUpdate();
         } catch (SQLException e) {
@@ -64,7 +64,7 @@ public class PhieuXuatDAO {
                     rs.getInt("maNV"),
                     rs.getInt("maKH"),
                     rs.getInt("tongTien"),
-                    rs.getDate("ngayXuat")
+                    rs.getString("ngayXuat")
                 );
                 list.add(obj);
             }
@@ -86,7 +86,7 @@ public class PhieuXuatDAO {
                         rs.getInt("maNV"),
                         rs.getInt("maKH"),
                         rs.getInt("tongTien"),
-                        rs.getDate("ngayXuat")
+                        rs.getString("ngayXuat")
                     );
                 }
             }

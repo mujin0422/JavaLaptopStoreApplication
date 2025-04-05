@@ -9,12 +9,12 @@ public class PhieuXuatDTO {
     private int maNV;
     private int maKH;
     private int tongTien;
-    private Date ngayXuat;
+    private String ngayXuat;
 
     public PhieuXuatDTO() {
     }
 
-    public PhieuXuatDTO(int maPX, int maNV, int maKH, int tongTien, Date ngayXuat) {
+    public PhieuXuatDTO(int maPX, int maNV, int maKH, int tongTien, String ngayXuat) {
         this.maPX = maPX;
         this.maNV = maNV;
         this.maKH = maKH;
@@ -38,7 +38,7 @@ public class PhieuXuatDTO {
         return tongTien;
     }
 
-    public Date getNgayXuat() {
+    public String getNgayXuat() {
         return ngayXuat;
     }
 
@@ -58,7 +58,7 @@ public class PhieuXuatDTO {
         this.tongTien = tongTien;
     }
 
-    public void setNgayXuat(Date ngayXuat) {
+    public void setNgayXuat(String ngayXuat) {
         this.ngayXuat = ngayXuat;
     }
 

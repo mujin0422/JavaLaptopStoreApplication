@@ -112,6 +112,14 @@ public class TaiKhoanDAO {
         return null;
     }
     
+    public TaiKhoanDTO getByTenDangNhap(String tenDangNhap) {
+        for (TaiKhoanDTO tk : getAll()) {  // getAll() là method lấy tất cả tài khoản
+            if (tk.getTenDangNhap().equals(tenDangNhap)) {
+                return tk;
+            }
+        }
+        return null; // Trả về null nếu không tìm thấy
+    }
 }
 
    
