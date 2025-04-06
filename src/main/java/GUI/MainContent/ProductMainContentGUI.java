@@ -76,7 +76,7 @@ public class ProductMainContentGUI extends JPanel {
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
 
         // Tạo bảng dữ liệu
-        String[] columnNames = {"MÃ SẢN PHẨM", "TÊN SẢN PHÂM", "GIÁ SẢN PHẨM", "NHÀ XUẤT BẢN", "TỒN KHO", "....."};
+        String[] columnNames = {"MÃ SẢN PHẨM", "TÊN SẢN PHÂM", "GIÁ SẢN PHẨM", "TỒN KHO", "Ma CPU", "MÃ RAM", "MÃ ROM", "MÃ DP", "MÃ LOẠI", "MÃ TH", "THỜI GIAN BH"};
         Object[][] data = {}; // Chưa có dữ liệu
         tableModel = new DefaultTableModel(data,columnNames);
         tblContent = new JTable(tableModel);
@@ -155,9 +155,9 @@ public class ProductMainContentGUI extends JPanel {
         
         
         SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
-        Window window = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Chỉnh sửa sản phẩm", "save", sp);
-         
+        Window window1 = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditProductGUI((JFrame) window1, sanPhamBUS, "Chỉnh sửa sản phẩm", "save", sp);
+        window1.setVisible(true); 
         loadTableData();
     }
     private void deleteProduct(){
