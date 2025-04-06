@@ -3,6 +3,7 @@ package DAO;
 import DTO.SanPhamDTO;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SanPhamDAO {
     
@@ -62,32 +63,29 @@ public class SanPhamDAO {
         return 0;
     }
     
-    public ArrayList<SanPhamDTO> getAll() {
-        ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
+    public List<SanPhamDTO> getAllSanPham() {
+        List<SanPhamDTO> ds = new ArrayList<>();
         String sql = "SELECT * FROM sanpham";
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stm = conn.createStatement();
-             ResultSet rs = stm.executeQuery(sql)) {
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
-                dsSanPham.add(new SanPhamDTO(
-                    rs.getInt("maSP"),
-                    rs.getString("tenSP"),
-                    rs.getInt("giaSP"),
-                    rs.getInt("soLuongTon"),
-                    rs.getInt("maCPU"),
-                    rs.getInt("maROM"),
-                    rs.getInt("maRAM"),
-                    rs.getInt("maTH"),
-                    rs.getInt("maDPG"),
-                    rs.getInt("maLoai"),
-                    rs.getInt("thoigianBH")
-                ));
+                SanPhamDTO sp = new SanPhamDTO();
+                sp.setMaSP(rs.getInt("maSP"));
+                sp.setTenSP(rs.getString("tenSP"));
+                sp.setGiaSP(rs.getInt("giaSP"));
+                sp.setSoLuongTon(rs.getInt("soLuongTon"));
+                // các trường khác nếu có
+                ds.add(sp);
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return dsSanPham;
+        return ds;
     }
+
     
     public SanPhamDTO getById(int maSP) {
         String sql = "SELECT * FROM sanpham WHERE maSP=?";

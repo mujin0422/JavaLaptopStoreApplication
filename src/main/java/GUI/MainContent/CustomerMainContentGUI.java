@@ -119,7 +119,7 @@ public class CustomerMainContentGUI extends JPanel{
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một khach hang để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int maKH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+        String maKH = tableModel.getValueAt(selectedRow, 0).toString();
         String tenKh = tableModel.getValueAt(selectedRow, 1).toString();
         String sdt = tableModel.getValueAt(selectedRow, 2).toString();
         String email = tableModel.getValueAt(selectedRow, 3).toString();
@@ -138,7 +138,7 @@ public class CustomerMainContentGUI extends JPanel{
         }
         int confirm = JOptionPane.showConfirmDialog(this, "Ban co chac chan khong", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            int maKH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+            String maKH = tableModel.getValueAt(selectedRow, 0).toString();
             if (khachHangBUS.deleteKhachHang(maKH)) { 
                 JOptionPane.showMessageDialog(this, "Xóa khach hang thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 loadTableData();

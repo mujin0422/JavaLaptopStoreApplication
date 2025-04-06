@@ -1,13 +1,19 @@
 package Utils; // hoặc package tương ứng nếu bạn để chỗ khác
 
-public class Session {
-    private static String currentUsername;
+import DTO.TaiKhoanDTO;
 
-    public static void setCurrentUsername(String username) {
-        currentUsername = username;
+public class Session {
+    private static TaiKhoanDTO currentUser;
+
+    public static void setUser(TaiKhoanDTO user) {
+        currentUser = user;
     }
 
-    public static String getCurrentUsername() {
-        return currentUsername;
+    public static TaiKhoanDTO getUser() {
+        return currentUser;
+    }
+
+    public static void clearSession() {
+        currentUser = null;
     }
 }

@@ -10,9 +10,9 @@ public class TaiKhoanDTO {
     private String tenDangNhap;
     private String matKhau;
     private int maQuyen;
-    private int maNV;
+    private String maNV;
 
-    public TaiKhoanDTO(String tenDangNhap, String matKhau, int maQuyen, int maNV) {
+    public TaiKhoanDTO(String tenDangNhap, String matKhau, int maQuyen, String maNV) {
         this.tenDangNhap = tenDangNhap;
         this.matKhau = matKhau;
         this.maQuyen = maQuyen;
@@ -46,11 +46,11 @@ public class TaiKhoanDTO {
         this.maQuyen = maQuyen;
     }
 
-    public int getMaNV() {
+    public String getMaNV() {
         return maNV;
     }
 
-    public void setMaNV(int maNV) {
+    public void setMaNV(String maNV) {
         this.maNV = maNV;
     }
 
@@ -60,7 +60,7 @@ public class TaiKhoanDTO {
         hash = 71 * hash + Objects.hashCode(this.tenDangNhap);
         hash = 71 * hash + Objects.hashCode(this.matKhau);
         hash = 71 * hash + this.maQuyen;
-        hash = 71 * hash + this.maNV;
+        hash = 71 * hash + Objects.hashCode(this.maNV);
         return hash;
     }
 

@@ -7,6 +7,7 @@ import javax.swing.*;
 import Utils.UIButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import Utils.Session;
 
 public final class LoginGUI extends JFrame {
     private JTextField txtAccount;
@@ -113,8 +114,31 @@ public final class LoginGUI extends JFrame {
         btnLogin = new UIButton("confirm", "ĐĂNG NHẬP", 160, 35, "/Icon/login_key_icon.png");
         btnLogin.setBounds(150, 240, 160, 40 );
         btnLogin.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                login();
+                String tenDangNhap = txtAccount.getText();
+                String matKhau = new String(txtPassword.getPassword());
+
+                if (tenDangNhap.isEmpty() || matKhau.isEmpty()) {
+                    JOptionPane.showMessageDialog(LoginGUI.this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Sử dụng DAO để kiểm tra tài khoản
+                TaiKhoanDTO taiKhoan = taiKhoanDAO.getByUsername(tenDangNhap);
+
+                if (taiKhoan == null) {
+                    JOptionPane.showMessageDialog(LoginGUI.this, "Tài khoản không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                } else if (!taiKhoan.getMatKhau().equals(matKhau)) {
+                    JOptionPane.showMessageDialog(LoginGUI.this, "Mật khẩu không chính xác!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Đăng nhập thành công, lưu thông tin người dùng vào session
+                    Session.setUser(taiKhoan);
+
+                    JOptionPane.showMessageDialog(LoginGUI.this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    new MainLayoutGUI();  // Hiển thị giao diện chính sau khi đăng nhập thành công
+                    dispose(); // Đóng cửa sổ đăng nhập
+                }
             }
         });
 
@@ -133,27 +157,4 @@ public final class LoginGUI extends JFrame {
     public static void main(String[] args) {
         new LoginGUI();
     }
-    
-    public void login(){
-        String tenDangNhap = txtAccount.getText();
-        String matKhau = new String(txtPassword.getPassword());
-
-        if (tenDangNhap.isEmpty() || matKhau.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        TaiKhoanDTO taiKhoan = taiKhoanDAO.getByUsername(tenDangNhap);
-
-        if (taiKhoan == null) {
-            JOptionPane.showMessageDialog(this, "Tài khoản không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } else if (!taiKhoan.getMatKhau().equals(matKhau)) {
-            JOptionPane.showMessageDialog(this, "Mật khẩu không chính xác!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            new MainLayoutGUI();
-            this.dispose();
-        }
-        
-    }
-    
 }

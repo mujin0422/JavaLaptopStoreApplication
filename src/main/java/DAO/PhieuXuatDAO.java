@@ -95,4 +95,19 @@ public class PhieuXuatDAO {
         }
         return null;
     }
+    
+    public int demSoPhieuXuat() {
+        String sql = "SELECT COUNT(*) FROM phieuxuat";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);  // Trả về số lượng phiếu xuất
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;  // Nếu có lỗi, trả về 0
+    }
 }

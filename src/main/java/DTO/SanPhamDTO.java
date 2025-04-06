@@ -32,91 +32,28 @@ public class SanPhamDTO {
         this.thoiGianBH = thoiGianBH;
     }
 
-    public int getMaSP() {
-        return maSP;
-    }
-
-    public String getTenSP() {
-        return tenSP;
-    }
-
-    public int getGiaSP() {
-        return giaSP;
-    }
-
-    public int getSoLuongTon() {
-        return soLuongTon;
-    }
-
-    public int getMaCPU() {
-        return maCPU;
-    }
-
-    public int getMaRAM() {
-        return maRAM;
-    }
-
-    public int getMaROM() {
-        return maROM;
-    }
-
-    public int getMaDPG() {
-        return maDPG;
-    }
-
-    public int getMaLoai() {
-        return maLoai;
-    }
-
-    public int getMaTH() {
-        return maTH;
-    }
-
-    public int getThoiGianBH() {
-        return thoiGianBH;
-    }
-
-    public void setMaSP(int maSP) {
-        this.maSP = maSP;
-    }
-
-    public void setTenSP(String tenSP) {
-        this.tenSP = tenSP;
-    }
-
-    public void setGiaSP(int giaSP) {
-        this.giaSP = giaSP;
-    }
-
-    public void setSoLuongTon(int soLuongTon) {
-        this.soLuongTon = soLuongTon;
-    }
-
-    public void setMaCPU(int maCPU) {
-        this.maCPU = maCPU;
-    }
-
-    public void setMaRAM(int maRAM) {
-        this.maRAM = maRAM;
-    }
-
-    public void setMaROM(int maROM) {
-        this.maROM = maROM;
-    }
-
-    public void setMaDPG(int maDPG) {
-        this.maDPG = maDPG;
-    }
-
-    public void setMaLoai(int maLoai) {
-        this.maLoai = maLoai;
-    }
-
-    public void setMaTH(int maTH) {
-        this.maTH = maTH;
-    }
-
-    public void setThoiGianBH(int thoiGianBH) {
-        this.thoiGianBH = thoiGianBH;
-    }
+    // Getter và Setter
+    public int getMaSP() { return maSP; }
+    public String getTenSP() { return tenSP; }
+    public int getGiaSP() { return giaSP; }
+    public int getSoLuongTon() { return soLuongTon; }
+    public int getMaCPU() { return maCPU; }
+    public int getMaRAM() { return maRAM; }
+    public int getMaROM() { return maROM; }
+    public int getMaDPG() { return maDPG; }
+    public int getMaLoai() { return maLoai; }
+    public int getMaTH() { return maTH; }
+    public int getThoiGianBH() { return thoiGianBH; }
+    
+    public void setMaSP(int maSP) { this.maSP = maSP; }
+    public void setTenSP(String tenSP) { this.tenSP = tenSP; }
+    public void setGiaSP(int giaSP) { this.giaSP = giaSP; }
+    public void setSoLuongTon(int soLuongTon) { this.soLuongTon = soLuongTon; }
+    public void setMaCPU(int maCPU) { this.maCPU = maCPU; }
+    public void setMaRAM(int maRAM) { this.maRAM = maRAM; }
+    public void setMaROM(int maROM) { this.maROM = maROM; }
+    public void setMaDPG(int maDPG) { this.maDPG = maDPG; }
+    public void setMaLoai(int maLoai) { this.maLoai = maLoai; }
+    public void setMaTH(int maTH) { this.maTH = maTH; }
+    public void setThoiGianBH(int thoiGianBH) { this.thoiGianBH = thoiGianBH; }
 }

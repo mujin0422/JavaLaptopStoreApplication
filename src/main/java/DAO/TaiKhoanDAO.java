@@ -14,7 +14,7 @@ public class TaiKhoanDAO {
             ps.setString(1, obj.getTenDangNhap());
             ps.setString(2, obj.getMatKhau());
             ps.setInt(3, obj.getMaQuyen());
-            ps.setInt(4, obj.getMaNV());
+            ps.setString(4, obj.getMaNV());
             return ps.executeUpdate(); 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -29,7 +29,7 @@ public class TaiKhoanDAO {
             ps.setString(1, obj.getTenDangNhap());
             ps.setString(2, obj.getMatKhau());
             ps.setInt(3, obj.getMaQuyen());
-            ps.setInt(4, obj.getMaNV());
+            ps.setString(4, obj.getMaNV());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class TaiKhoanDAO {
                     rs.getString("tenDangNhap"),
                     rs.getString("matKhau"),
                     rs.getInt("maQuyen"),
-                    rs.getInt("maNV")
+                    rs.getString("maNV")
                     
                 ));
             }
@@ -81,7 +81,7 @@ public class TaiKhoanDAO {
                         rs.getString("tenDangNhap"),
                         rs.getString("matkhau"),
                         rs.getInt("maQuyen"),
-                        rs.getInt("maNV")
+                        rs.getString("maNV")
                     );
                 }
             }
@@ -102,7 +102,7 @@ public class TaiKhoanDAO {
                         rs.getString("tenDangNhap"),
                         rs.getString("matKhau"),
                         rs.getInt("maQuyen"),
-                        rs.getInt("maNV")
+                        rs.getString("maNV")
                     );
                 }
             }
@@ -110,15 +110,6 @@ public class TaiKhoanDAO {
             e.printStackTrace();
         }
         return null;
-    }
-    
-    public TaiKhoanDTO getByTenDangNhap(String tenDangNhap) {
-        for (TaiKhoanDTO tk : getAll()) {  // getAll() là method lấy tất cả tài khoản
-            if (tk.getTenDangNhap().equals(tenDangNhap)) {
-                return tk;
-            }
-        }
-        return null; // Trả về null nếu không tìm thấy
     }
 }
 

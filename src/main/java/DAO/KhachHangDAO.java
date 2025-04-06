@@ -15,7 +15,7 @@ public class KhachHangDAO {
         String sql = "INSERT INTO khachhang(maKH, tenKH, sdt, email) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, obj.getMaKH());
+            ps.setString(1, obj.getMaKH());
             ps.setString(2, obj.getTenKH());
             ps.setString(3, obj.getSdt());
             ps.setString(4, obj.getEmail());
@@ -33,7 +33,7 @@ public class KhachHangDAO {
             ps.setString(1, obj.getTenKH());
             ps.setString(2, obj.getSdt());
             ps.setString(3, obj.getEmail());
-            ps.setInt(4, obj.getMaKH());
+            ps.setString(4, obj.getMaKH());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -41,11 +41,11 @@ public class KhachHangDAO {
         return 0;
     }
 
-    public int delete(int maKH) {
+    public int delete(String maKH) {
         String sql = "DELETE FROM khachhang WHERE maKH=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maKH);
+            ps.setString(1, maKH);
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class KhachHangDAO {
         return 0;
     }
 
-    public ArrayList<KhachHangDTO> getAll() {
+    public ArrayList<KhachHangDTO> getAllKhachHang() {
         ArrayList<KhachHangDTO> dsKhachHang = new ArrayList<>();
         String sql = "SELECT * FROM khachhang";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -61,7 +61,7 @@ public class KhachHangDAO {
              ResultSet rs = stm.executeQuery(sql)) {
             while (rs.next()) {
                 dsKhachHang.add(new KhachHangDTO(
-                    rs.getInt("maKH"),
+                    rs.getString("maKH"),
                     rs.getString("tenKH"),
                     rs.getString("sdt"),
                     rs.getString("email")
@@ -81,7 +81,7 @@ public class KhachHangDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new KhachHangDTO(
-                        rs.getInt("maKH"),
+                        rs.getString("maKH"),
                         rs.getString("tenKH"),
                         rs.getString("sdt"),
                         rs.getString("email")

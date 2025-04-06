@@ -93,7 +93,7 @@ public class AddAndEditCostumerGUI extends JDialog{
     private void saveCostumer(){
         if(!CheckFormInput()) return;
         try {
-            int maKH = Integer.parseInt(txtMaKH.getText().trim());
+            String maKH = txtMaKH.getText().trim();
             String tenKH = txtTenKH.getText().trim();
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();
@@ -112,7 +112,7 @@ public class AddAndEditCostumerGUI extends JDialog{
     private void addCostumer(){
         if(!CheckFormInput()) return;
         try {
-            int maKH = Integer.parseInt(txtMaKH.getText().trim());
+            String maKH = txtMaKH.getText().trim();
             String tenKH = txtTenKH.getText().trim();
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();

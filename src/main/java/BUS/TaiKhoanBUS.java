@@ -7,8 +7,10 @@ import java.util.ArrayList;
 public class TaiKhoanBUS {
     private TaiKhoanDAO TaiKhoanDAO;
 
-    public TaiKhoanBUS() {
-        TaiKhoanDAO = new TaiKhoanDAO();
+    TaiKhoanDAO dao = new TaiKhoanDAO();
+
+    public TaiKhoanDTO getTaiKhoanByUsername(String tenDangNhap) {
+        return dao.getByUsername(tenDangNhap);
     }
 
     public ArrayList<TaiKhoanDTO> getAllTaiKhoan() {

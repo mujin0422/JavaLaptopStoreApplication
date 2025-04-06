@@ -2,6 +2,14 @@ package BUS;
 
 import DTO.PhieuXuatDTO;
 import DAO.PhieuXuatDAO;
+import DAO.SanPhamDAO;
+import DAO.KhachHangDAO;
+import DAO.NhanVienDAO;
+import DAO.TaiKhoanDAO;
+import DTO.SanPhamDTO;
+import DTO.KhachHangDTO;
+import DTO.NhanVienDTO;
+import DTO.TaiKhoanDTO;
 import java.util.ArrayList;
 
 public class PhieuXuatBUS {
@@ -47,4 +55,8 @@ public class PhieuXuatBUS {
         return ketQua;
     }
 
+    public String getMaPhieuXuatTiepTheo() {
+        int soLuongHienTai = phieuXuatDAO.demSoPhieuXuat();
+        return "PX" + String.format("%03d", soLuongHienTai + 1);
+    }
 }
