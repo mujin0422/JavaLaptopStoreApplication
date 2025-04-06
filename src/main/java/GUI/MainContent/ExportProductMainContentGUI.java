@@ -157,6 +157,20 @@ public class ExportProductMainContentGUI extends JPanel {
             });
         }
     }
+    
+    private void loadPhieuXuatData() {
+        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        List<PhieuXuatDTO> danhSachPhieuXuat = pxBUS.getAllPhieuXuat();
+        for (PhieuXuatDTO px : danhSachPhieuXuat) {
+            tableModel.addRow(new Object[]{
+                px.getMaPX(),
+                px.getMaNV(),
+                px.getMaKH(),
+                px.getTongTien(),
+                px.getNgayXuat()
+            });
+        }
+    }
 
     private void loadCustomerData() {
         KhachHangDAO khachHangDAO = new KhachHangDAO();
@@ -173,6 +187,7 @@ public class ExportProductMainContentGUI extends JPanel {
         txtTenNV.setEditable(false);
         loadProductData();
         loadCustomerData();
+        loadPhieuXuatData();
     }
 
     private void addEventHandlers() {
