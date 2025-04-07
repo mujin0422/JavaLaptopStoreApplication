@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.ThuongHieuDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class ThuongHieuDAO {
@@ -33,7 +37,7 @@ public class ThuongHieuDAO {
     }
     
     public int delete(int maTH) {
-        String sql = "DELETE FROM thuonghieu WHERE maTH=?";
+        String sql = "UPDATE thuonghieu SET trangThaiXoa=1 WHERE maTH=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maTH);
@@ -46,7 +50,7 @@ public class ThuongHieuDAO {
     
     public ArrayList<ThuongHieuDTO> getAll() {
         ArrayList<ThuongHieuDTO> dsThuongHieu = new ArrayList<>();
-        String sql = "SELECT * FROM thuonghieu";
+        String sql = "SELECT * FROM thuonghieu WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -63,7 +67,7 @@ public class ThuongHieuDAO {
     }
     
     public ThuongHieuDTO getById(int maTH) {
-        String sql = "SELECT * FROM thuonghieu WHERE maTH=?";
+        String sql = "SELECT * FROM thuonghieu WHERE maTH=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maTH);

@@ -1,12 +1,11 @@
 package DTO;
 
-import java.util.Objects;
-
 public class KhachHangDTO {
     private String maKH;
     private String tenKH;
     private String sdt;
     private String email;
+    private int trangThaiXoa;
 
     public KhachHangDTO() {}
 
@@ -15,29 +14,47 @@ public class KhachHangDTO {
         this.tenKH = tenKH;
         this.sdt = sdt;
         this.email = email;
+        this.trangThaiXoa = 0;
     }
 
-    // Getter và Setter
-    public String getMaKH() { return maKH; }
-    public String getTenKH() { return tenKH; }
-    public String getSdt() { return sdt; }
-    public String getEmail() { return email; }
-    
-    public void setMaKH(String maKH) { this.maKH = maKH; }
-    public void setTenKH(String tenKH) { this.tenKH = tenKH; }
-    public void setSdt(String sdt) { this.sdt = sdt; }
-    public void setEmail(String email) { this.email = email; }
-    
-    @Override
-    public String toString() {
-        return "KhachHangDTO{" + "maKH=" + maKH + ", tenKH=" + tenKH + ", sdt=" + sdt + ", email=" + email + '}';
+    public String getMaKH() {
+        return maKH;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        KhachHangDTO other = (KhachHangDTO) obj;
-        return maKH.equals(other.maKH) && Objects.equals(tenKH, other.tenKH) && Objects.equals(sdt, other.sdt) && Objects.equals(email, other.email);
+    public void setMaKH(String maKH) {
+        this.maKH = maKH;
     }
+
+    public String getTenKH() {
+        return tenKH;
+    }
+
+    public void setTenKH(String tenKH) {
+        this.tenKH = tenKH;
+    }
+
+    public String getSdt() {
+        return sdt;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getTrangThaiXoa() {
+        return trangThaiXoa;
+    }
+
+    public void setTrangThaiXoa(int trangThaiXoa) {
+        this.trangThaiXoa = trangThaiXoa;
+    }
+    
 }

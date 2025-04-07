@@ -1,15 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
+
 import DTO.KhachHangDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-/**
- *
- * @author Dell Vostro
- */
+
 public class KhachHangDAO {
     public int add(KhachHangDTO obj) {
         String sql = "INSERT INTO khachhang(maKH, tenKH, sdt, email) VALUES (?, ?, ?, ?)";
@@ -42,7 +40,7 @@ public class KhachHangDAO {
     }
 
     public int delete(String maKH) {
-        String sql = "DELETE FROM khachhang WHERE maKH=?";
+        String sql = "UPDATE khachhang SET trangThaiXoa=1 WHERE maKH=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, maKH);
@@ -55,7 +53,7 @@ public class KhachHangDAO {
 
     public ArrayList<KhachHangDTO> getAllKhachHang() {
         ArrayList<KhachHangDTO> dsKhachHang = new ArrayList<>();
-        String sql = "SELECT * FROM khachhang";
+        String sql = "SELECT * FROM khachhang WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -74,7 +72,7 @@ public class KhachHangDAO {
     }
 
     public KhachHangDTO getById(int maKH) {
-        String sql = "SELECT * FROM khachhang WHERE maKH=?";
+        String sql = "SELECT * FROM khachhang WHERE maKH=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maKH);

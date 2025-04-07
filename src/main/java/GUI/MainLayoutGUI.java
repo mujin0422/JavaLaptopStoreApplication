@@ -61,7 +61,7 @@ public final class MainLayoutGUI extends JFrame {
         pnlMenu.setPreferredSize(new Dimension(UIConstants.WIDTH_MENU, UIConstants.HEIGHT_MENU));
 
         String[] buttonLabels = {"THỐNG KÊ", "SẢN PHẨM", "CẤU HÌNH", "KHÁCH HÀNG", "XUẤT HÀNG",
-                                 "NHÂN VIÊN", "NHÀ CUNG CẤP", "PHÂN QUYỀN", "NHẬP HÀNG"};
+                                 "NHÂN VIÊN", "NHÀ CUNG CẤP", "PHÂN QUYỀN", "NHẬP HÀNG", "TÀI KHOẢN"};
         buttons = new ArrayList<>(); 
         //==============================( End Panel Menu )==============================//
         
@@ -79,7 +79,8 @@ public final class MainLayoutGUI extends JFrame {
         DecentralizationMainContentGUI decentralizationPanel = new DecentralizationMainContentGUI();
         ImportProductMainContentGUI importBookPanel = new ImportProductMainContentGUI();
         ExportProductMainContentGUI exportBookPanel = new ExportProductMainContentGUI();
-
+        AccountMainContentGUI accountPanel = new AccountMainContentGUI();
+        
         for (int i = 0; i < buttonLabels.length; i++) {
             UIButton button = new UIButton("menuButton", buttonLabels[i], 180, 40);
             pnlMenu.add(button);
@@ -122,6 +123,10 @@ public final class MainLayoutGUI extends JFrame {
                 case 8:
                     button.setButtonIcon("/Icon/NhapHang_icon.png");
                     targetPanel = importBookPanel;
+                    break;
+                    case 9:
+                    button.setButtonIcon("/Icon/NhanVien_icon.png");
+                    targetPanel = accountPanel;
                     break;
                 default:
                     targetPanel = new JPanel();

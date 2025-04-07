@@ -1,7 +1,6 @@
 package DTO;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class PhieuBaoHanhDTO {
     private int maPBH;
@@ -11,6 +10,7 @@ public class PhieuBaoHanhDTO {
     private String moTaLoi;
     private int trangThaiBH;
     private int maNVBH;
+    private int trangThaiXoa;
 
     public PhieuBaoHanhDTO() {
     }
@@ -23,6 +23,15 @@ public class PhieuBaoHanhDTO {
         this.moTaLoi = moTaLoi;
         this.trangThaiBH = trangThaiBH;
         this.maNVBH = maNVBH;
+        this.trangThaiXoa = 0;
+    }
+
+    public int getTrangThaiXoa() {
+        return trangThaiXoa;
+    }
+
+    public void setTrangThaiXoa(int trangThaiXoa) {
+        this.trangThaiXoa = trangThaiXoa;
     }
 
     public int getMaPBH() {
@@ -80,51 +89,4 @@ public class PhieuBaoHanhDTO {
     public void setMaNVBH(int maNVBH) {
         this.maNVBH = maNVBH;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + this.maPBH;
-        hash = 37 * hash + this.maSP;
-        hash = 37 * hash + this.maPX;
-        hash = 37 * hash + Objects.hashCode(this.ngayTiepNhan);
-        hash = 37 * hash + Objects.hashCode(this.moTaLoi);
-        hash = 37 * hash + this.trangThaiBH;
-        hash = 37 * hash + this.maNVBH;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final PhieuBaoHanhDTO other = (PhieuBaoHanhDTO) obj;
-        if (this.maPBH != other.maPBH) {
-            return false;
-        }
-        if (this.maSP != other.maSP) {
-            return false;
-        }
-        if (this.maPX != other.maPX) {
-            return false;
-        }
-        if (this.trangThaiBH != other.trangThaiBH) {
-            return false;
-        }
-        if (this.maNVBH != other.maNVBH) {
-            return false;
-        }
-        if (!Objects.equals(this.moTaLoi, other.moTaLoi)) {
-            return false;
-        }
-        return Objects.equals(this.ngayTiepNhan, other.ngayTiepNhan);
-    }
-    
 }

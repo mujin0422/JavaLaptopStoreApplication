@@ -1,20 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
 
 import DTO.QuyenDTO;
-import DAO.DatabaseConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-/**
- *
- * @author Dell Vostro
- */
 public class QuyenDAO {
-    
     public int add(QuyenDTO obj){
         String sql = "INSERT INTO quyen (maQuyen , tenQuyen) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -42,7 +36,7 @@ public class QuyenDAO {
     }
     
     public int delete(int maQuyen){
-        String sql ="DELETE FROM quyen WHERE maQuyen=?";
+        String sql ="UPDATE quyen SET trangThaiXoa=1 WHERE maQuyen=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, maQuyen);
@@ -55,7 +49,7 @@ public class QuyenDAO {
     
     public ArrayList<QuyenDTO> getAll(){
         ArrayList<QuyenDTO> dsquyen = new ArrayList<>();
-        String sql = "SELECT * FROM quyen";
+        String sql = "SELECT * FROM quyen WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)){
@@ -72,7 +66,7 @@ public class QuyenDAO {
     }
     
     public QuyenDTO getById(int id){
-        String sql ="SELECT * FROM quyen WHERE maQuyen=?";
+        String sql ="SELECT * FROM quyen WHERE maQuyen=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, id);

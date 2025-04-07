@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.RamDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class RamDAO {
@@ -33,7 +37,7 @@ public class RamDAO {
     }
     
     public int delete(int maRAM) {
-        String sql = "DELETE FROM ram WHERE maRAM=?";
+        String sql = "UPDATE ram SET trangThaiXoa=1 WHERE maRAM=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maRAM);
@@ -46,7 +50,7 @@ public class RamDAO {
     
     public ArrayList<RamDTO> getAll() {
         ArrayList<RamDTO> dsRam = new ArrayList<>();
-        String sql = "SELECT * FROM ram";
+        String sql = "SELECT * FROM ram WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -63,7 +67,7 @@ public class RamDAO {
     }
     
     public RamDTO getById(int maRAM) {
-        String sql = "SELECT * FROM ram WHERE maRAM=?";
+        String sql = "SELECT * FROM ram WHERE maRAM=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maRAM);

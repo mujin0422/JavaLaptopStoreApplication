@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.PhanLoaiDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class PhanLoaiDAO {
@@ -33,7 +37,7 @@ public class PhanLoaiDAO {
     }
     
     public int delete(int maLoai) {
-        String sql = "DELETE FROM phanloai WHERE maLoai=?";
+        String sql = "UPDATE phanloai SET trangThaiXoa=1 WHERE maLoai=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maLoai);
@@ -46,7 +50,7 @@ public class PhanLoaiDAO {
     
     public ArrayList<PhanLoaiDTO> getAll() {
         ArrayList<PhanLoaiDTO> danhSach = new ArrayList<>();
-        String sql = "SELECT * FROM phanloai";
+        String sql = "SELECT * FROM phanloai WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -63,7 +67,7 @@ public class PhanLoaiDAO {
     }
     
     public PhanLoaiDTO getById(int maLoai) {
-        String sql = "SELECT * FROM phanloai WHERE maLoai=?";
+        String sql = "SELECT * FROM phanloai WHERE maLoai=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maLoai);

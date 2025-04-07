@@ -1,8 +1,10 @@
 package DAO;
 
 import DTO.PhieuXuatDTO;
-import DAO.DatabaseConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class PhieuXuatDAO {
@@ -40,7 +42,7 @@ public class PhieuXuatDAO {
     }
 
     public int delete(int maPX) {
-        String sql = "DELETE FROM phieuxuat WHERE maPX=?";
+        String sql = "UPDATE phieuxuat trangThaiXoa=1 WHERE maPX=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPX);
@@ -53,11 +55,10 @@ public class PhieuXuatDAO {
 
     public ArrayList<PhieuXuatDTO> getAll() {
         ArrayList<PhieuXuatDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM phieuxuat";
+        String sql = "SELECT * FROM phieuxuat WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-            
             while (rs.next()) {
                 PhieuXuatDTO obj = new PhieuXuatDTO(
                     rs.getInt("maPX"),
@@ -75,7 +76,7 @@ public class PhieuXuatDAO {
     }
 
     public PhieuXuatDTO getById(int maPX) {
-        String sql = "SELECT * FROM phieuxuat WHERE maPX=?";
+        String sql = "SELECT * FROM phieuxuat WHERE maPX=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPX);
@@ -101,13 +102,12 @@ public class PhieuXuatDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-
             if (rs.next()) {
-                return rs.getInt(1);  // Trả về số lượng phiếu xuất
+                return rs.getInt(1);  
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;  // Nếu có lỗi, trả về 0
+        return 0;  
     }
 }

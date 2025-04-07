@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.RomDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class RomDAO {
@@ -32,7 +36,7 @@ public class RomDAO {
     }
 
     public int delete(int maROM) {
-        String sql = "DELETE FROM rom WHERE maROM=?";
+        String sql = "UPDATE rom SET trangThaiXoa=1 WHERE maROM=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maROM);
@@ -45,7 +49,7 @@ public class RomDAO {
 
     public ArrayList<RomDTO> getAll() {
         ArrayList<RomDTO> dsRom = new ArrayList<>();
-        String sql = "SELECT * FROM rom";
+        String sql = "SELECT * FROM rom WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -62,7 +66,7 @@ public class RomDAO {
     }
 
     public RomDTO getById(int maROM) {
-        String sql = "SELECT * FROM rom WHERE maROM=?";
+        String sql = "SELECT * FROM rom WHERE maROM=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maROM);

@@ -1,8 +1,11 @@
 package DAO;
 
 import DTO.NhanVienDTO;
-import DAO.DatabaseConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class NhanVienDAO {
@@ -39,7 +42,7 @@ public class NhanVienDAO {
     }
 
     public int delete(int maNhanVien) {
-        String sql = "DELETE FROM nhanvien WHERE maNV=?";
+        String sql = "UPDATE nhanvien SET trangThaiXoa=1 WHERE maNV=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maNhanVien);
@@ -52,7 +55,7 @@ public class NhanVienDAO {
 
     public ArrayList<NhanVienDTO> getAll() {
         ArrayList<NhanVienDTO> dsNhanVien = new ArrayList<>();
-        String sql = "SELECT * FROM nhanvien";
+        String sql = "SELECT * FROM nhanvien WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -71,7 +74,7 @@ public class NhanVienDAO {
     }
 
     public NhanVienDTO getById(int id) {
-        String sql = "SELECT * FROM nhanvien WHERE maNV=?";
+        String sql = "SELECT * FROM nhanvien WHERE maNV=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);

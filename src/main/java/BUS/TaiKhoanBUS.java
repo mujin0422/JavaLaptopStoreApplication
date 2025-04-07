@@ -7,10 +7,8 @@ import java.util.ArrayList;
 public class TaiKhoanBUS {
     private TaiKhoanDAO TaiKhoanDAO;
 
-    TaiKhoanDAO dao = new TaiKhoanDAO();
-
-    public TaiKhoanDTO getTaiKhoanByUsername(String tenDangNhap) {
-        return dao.getByUsername(tenDangNhap);
+    public TaiKhoanBUS() {
+        TaiKhoanDAO = new TaiKhoanDAO();
     }
 
     public ArrayList<TaiKhoanDTO> getAllTaiKhoan() {
@@ -25,8 +23,7 @@ public class TaiKhoanBUS {
         return TaiKhoanDAO.update(taikhoan) > 0; 
     }
 
-    public boolean deleteTaiKhoan(int maNV) {
-        return TaiKhoanDAO.delete(maNV) > 0;  
+    public boolean deleteTaiKhoan(String tenDangNhap) {
+        return TaiKhoanDAO.delete(tenDangNhap) > 0;  
     }
-
 }

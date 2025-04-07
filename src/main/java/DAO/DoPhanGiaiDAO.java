@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.DoPhanGiaiDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DoPhanGiaiDAO {
@@ -33,7 +37,7 @@ public class DoPhanGiaiDAO {
     }
 
     public int delete(int maDPG) {
-        String sql = "DELETE FROM dophangiai WHERE maDPG=?";
+        String sql = "UPDATE dophangiai SET trangThaiXoa=1 WHERE maDPG=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maDPG);
@@ -46,7 +50,7 @@ public class DoPhanGiaiDAO {
 
     public ArrayList<DoPhanGiaiDTO> getAll() {
         ArrayList<DoPhanGiaiDTO> dsDPG = new ArrayList<>();
-        String sql = "SELECT * FROM dophangiai";
+        String sql = "SELECT * FROM dophangiai WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -63,7 +67,7 @@ public class DoPhanGiaiDAO {
     }
 
     public DoPhanGiaiDTO getById(int maDPG) {
-        String sql = "SELECT * FROM dophangiai WHERE maDPG=?";
+        String sql = "SELECT * FROM dophangiai WHERE maDPG=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maDPG);

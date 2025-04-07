@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.NhaCungCapDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class NhaCungCapDAO {
@@ -37,7 +41,7 @@ public class NhaCungCapDAO {
     }
 
     public int delete(int maNCC) {
-        String sql = "DELETE FROM nhacungcap WHERE maNCC=?";
+        String sql = "UPDATE nhacungcap SET trangThaiXoa=1 WHERE maNCC=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maNCC);
@@ -50,7 +54,7 @@ public class NhaCungCapDAO {
 
     public ArrayList<NhaCungCapDTO> getAll() {
         ArrayList<NhaCungCapDTO> dsNCC = new ArrayList<>();
-        String sql = "SELECT * FROM nhacungcap";
+        String sql = "SELECT * FROM nhacungcap WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -69,7 +73,7 @@ public class NhaCungCapDAO {
     }
 
     public NhaCungCapDTO getById(int id) {
-        String sql = "SELECT * FROM nhacungcap WHERE maNCC=?";
+        String sql = "SELECT * FROM nhacungcap WHERE maNCC=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -88,18 +92,4 @@ public class NhaCungCapDAO {
         }
         return null;
     }
-
-//    public boolean exists(int maNCC) {
-//        String sql = "SELECT 1 FROM nhacungcap WHERE maNCC = ? LIMIT 1";
-//        try (Connection conn = DatabaseConnection.getConnection();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setInt(1, maNCC);
-//            try (ResultSet rs = ps.executeQuery()) {
-//                return rs.next();
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
 }

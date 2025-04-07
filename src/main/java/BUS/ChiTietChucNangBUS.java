@@ -23,24 +23,11 @@ public class ChiTietChucNangBUS {
         return chiTietChucNangDAO.update(chiTietChucNang) > 0;
     }
 
-    public boolean deleteChiTietChucNang(int maCN, int maQuyen) {
-        return chiTietChucNangDAO.delete(maCN, maQuyen) > 0;
+    public boolean deleteChiTietChucNang(int maCN, int maQuyen, String maHD) {
+        return chiTietChucNangDAO.delete(maCN, maQuyen, maHD) > 0;
     }
-
-    public ArrayList<ChiTietChucNangDTO> searchChiTietChucNang(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) return chiTietChucNangDAO.getAll();
-
-        ArrayList<ChiTietChucNangDTO> ketQua = new ArrayList<>();
-        keyword = keyword.toLowerCase();
-        ArrayList<ChiTietChucNangDTO> danhSach = chiTietChucNangDAO.getAll();
-        if (danhSach != null) {
-            for (ChiTietChucNangDTO ctc : danhSach) {
-                if (String.valueOf(ctc.getMaCN()).contains(keyword) ||
-                    String.valueOf(ctc.getMaQuyen()).contains(keyword)) {
-                    ketQua.add(ctc);
-                }
-            }
-        }
-        return ketQua;
+    
+    public boolean existsChiTietChucNang(int maCN, int maQuyen, String maHD){
+        return chiTietChucNangDAO.exists(maCN, maQuyen, maHD) > 0;
     }
 }

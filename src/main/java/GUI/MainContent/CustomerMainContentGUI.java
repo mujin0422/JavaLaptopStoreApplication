@@ -21,6 +21,7 @@ import DTO.KhachHangDTO;
 import GUI.MainContentDiaLog.AddAndEditCostumerGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
+import Utils.UIScrollPane;
 
 public class CustomerMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit;
@@ -28,7 +29,6 @@ public class CustomerMainContentGUI extends JPanel{
     private JComboBox<String> cbFilter;
     private JTable tblContent;
     private JPanel pnlHeader, pnlContent;
-    // $$$$
     private DefaultTableModel tableModel;
     private KhachHangBUS khachHangBUS;
     
@@ -44,11 +44,11 @@ public class CustomerMainContentGUI extends JPanel{
         pnlHeader.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlHeader.setPreferredSize(new Dimension(this.getWidth(), 50));
 
-        btnAdd = new UIButton("menuButton", "THÊM", 100, 30, "/Icon/them_icon.png");
+        btnAdd = new UIButton("menuButton", "THÊM", 100, 35, "/Icon/them_icon.png");
         btnAdd.addActionListener(e -> addCustomer());
-        btnDelete = new UIButton("menuButton", "XÓA", 100, 30, "/Icon/xoa_icon.png");
+        btnDelete = new UIButton("menuButton", "XÓA", 100, 35, "/Icon/xoa_icon.png");
         btnDelete.addActionListener(e -> deleteCustomer());
-        btnEdit = new UIButton("menuButton", "SỬA", 100, 30, "/Icon/sua_icon.png");
+        btnEdit = new UIButton("menuButton", "SỬA", 100, 35, "/Icon/sua_icon.png");
         btnEdit.addActionListener(e -> editCustomer());
         btnAdd.setBounds(5, 5, 90, 40);
         btnDelete.setBounds(105, 5, 90, 40);
@@ -85,7 +85,7 @@ public class CustomerMainContentGUI extends JPanel{
         tblContent.getTableHeader().setForeground(UIConstants.WHITE_FONT);
         tblContent.setRowHeight(25);
             // Đặt bảng vào JScrollPane
-        JScrollPane scrollPane = new JScrollPane(tblContent);
+        UIScrollPane scrollPane = new UIScrollPane(tblContent);
         scrollPane.getViewport().setBackground(UIConstants.MAIN_BACKGROUND);
             // Thêm JScrollPane vào pnlContent
         pnlContent.add(scrollPane, BorderLayout.CENTER);

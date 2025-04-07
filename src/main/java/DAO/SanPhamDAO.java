@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.SanPhamDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +56,7 @@ public class SanPhamDAO {
     }
     
     public int delete(int maSP) {
-        String sql = "DELETE FROM sanpham WHERE maSP=?";
+        String sql = "UPDATE sanpham SET trangThaiXoa=1 WHERE maSP=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maSP);
@@ -65,7 +69,7 @@ public class SanPhamDAO {
     
     public List<SanPhamDTO> getAllSanPham() {
         List<SanPhamDTO> ds = new ArrayList<>();
-        String sql = "SELECT * FROM sanpham";
+        String sql = "SELECT * FROM sanpham WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -88,7 +92,7 @@ public class SanPhamDAO {
     
     public ArrayList<SanPhamDTO> getAll() {
         ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
-        String sql = "SELECT * FROM sanpham";
+        String sql = "SELECT * FROM sanpham WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -115,7 +119,7 @@ public class SanPhamDAO {
 
     
     public SanPhamDTO getById(int maSP) {
-        String sql = "SELECT * FROM sanpham WHERE maSP=?";
+        String sql = "SELECT * FROM sanpham WHERE maSP=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maSP);

@@ -9,9 +9,11 @@ import BUS.PhieuXuatBUS;
 import Utils.UIConstants;
 import Utils.Session;
 import Utils.UIButton;
+import Utils.UILabel;
+import Utils.UIScrollPane;
+import Utils.UITextField;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
@@ -20,38 +22,37 @@ import java.util.List;
 public class ExportProductMainContentGUI extends JPanel {
     private JTable table, tableProduct, tableCart;
     private DefaultTableModel tableModel, modelProduct, modelCart;
-    private JTextField txtMaPhieu, txtTenNV, txtSearch, txtSoLuong;
+    private JTextField txtMaPhieu, txtTenNV;
+    private UITextField txtSearch, txtSoLuong;
     private JComboBox<String> cbMaKhach;
-    private UIButton btnThem;
-    private JButton btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnLoc;
+    private UIButton btnThem, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnLoc;
     private PhieuXuatBUS pxBUS = new PhieuXuatBUS();
 
     public ExportProductMainContentGUI() {
         setLayout(new BorderLayout(10, 10));
-        setBorder(new EmptyBorder(15, 15, 15, 15));
         setBackground(UIConstants.SUB_BACKGROUND);
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-        btnThem = new UIButton("menuButton", " THÊM", 120, 35, "/Icon/them_icon.png");
+        btnThem = new UIButton("menuButton", " THÊM", 100, 35, "/Icon/them_icon.png");
         topPanel.add(btnThem);
         add(topPanel, BorderLayout.NORTH);
 
-        JPanel centerPanel = new JPanel(new GridLayout(1, 2, 20, 0));
-        centerPanel.setBackground(UIConstants.SUB_BACKGROUND);
+        JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 0));
+        centerPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         add(centerPanel, BorderLayout.CENTER);
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BorderLayout(15, 15));
-        leftPanel.setBackground(UIConstants.SUB_BACKGROUND);
+        leftPanel.setLayout(new BorderLayout(10, 10));
+        leftPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         centerPanel.add(leftPanel);
 
         JPanel infoPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         infoPanel.setBackground(Color.WHITE);
-        infoPanel.setBorder(BorderFactory.createTitledBorder("Thông tin phiếu xuất"));
 
         txtMaPhieu = new JTextField(pxBUS.getMaPhieuXuatTiepTheo());
-        txtMaPhieu.setEditable(false);  // Không cho phép chỉnh sửa mã phiếu xuất
+        txtMaPhieu.setEditable(false);  
         txtTenNV = new JTextField();
         txtTenNV.setEditable(false);
         cbMaKhach = new JComboBox<>();
@@ -67,34 +68,27 @@ public class ExportProductMainContentGUI extends JPanel {
         String[] cartCols = {"MÃ SẢN PHẨM", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN"};
         modelCart = new DefaultTableModel(cartCols, 0);
         tableCart = new JTable(modelCart);
-        JScrollPane cartScrollPane = new JScrollPane(tableCart);
-        cartScrollPane.setBorder(BorderFactory.createTitledBorder("Danh sách sản phẩm tạm"));
+        UIScrollPane cartScrollPane = new UIScrollPane(tableCart);
         cartScrollPane.setPreferredSize(new Dimension(400, 200));
         leftPanel.add(cartScrollPane, BorderLayout.CENTER);
 
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        actionPanel.setBackground(UIConstants.SUB_BACKGROUND);
+        actionPanel.setBackground(UIConstants.MAIN_BACKGROUND);
 
-        btnXoaKhoiPhieu = new JButton("Xóa khỏi phiếu");
-        btnXoaKhoiPhieu.setBackground(new Color(220, 53, 69));
-        btnXoaKhoiPhieu.setForeground(Color.WHITE);
-
-        btnSuaSoLuong = new JButton("Sửa số lượng");
-        btnSuaSoLuong.setBackground(new Color(0, 123, 255));
-        btnSuaSoLuong.setForeground(Color.WHITE);
-
+        btnXoaKhoiPhieu = new UIButton("delete","Xóa khỏi phiếu",200,30);
+        btnSuaSoLuong = new UIButton("edit","Sửa số lượng",200,30);
         actionPanel.add(btnXoaKhoiPhieu);
         actionPanel.add(btnSuaSoLuong);
         leftPanel.add(actionPanel, BorderLayout.SOUTH);
 
         JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
-        rightPanel.setBackground(UIConstants.SUB_BACKGROUND);
+        rightPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         centerPanel.add(rightPanel);
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
-        searchPanel.setBackground(UIConstants.SUB_BACKGROUND);
-        txtSearch = new JTextField(20);
-        btnLoc = new JButton("Tìm Kiếm");
+        searchPanel.setBackground(UIConstants.MAIN_BACKGROUND);
+        txtSearch = new UITextField(400, 30);
+        btnLoc = new UIButton("add","Tìm Kiếm",100, 30);
         btnLoc.setBackground(UIConstants.MAIN_BUTTON);
         btnLoc.setForeground(Color.WHITE);
         searchPanel.add(txtSearch);
@@ -111,23 +105,20 @@ public class ExportProductMainContentGUI extends JPanel {
         tableProduct.setSelectionBackground(Color.CYAN);
         tableProduct.setSelectionForeground(Color.BLACK);
 
-        JScrollPane productScroll = new JScrollPane(tableProduct);
-        productScroll.setBorder(BorderFactory.createTitledBorder("Danh sách sản phẩm"));
+        UIScrollPane productScroll = new UIScrollPane(tableProduct);
         productScroll.setPreferredSize(new Dimension(400, 250));
         rightPanel.add(productScroll, BorderLayout.CENTER);
 
 
-        JPanel quantityAndAddPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        quantityAndAddPanel.setBackground(UIConstants.SUB_BACKGROUND);
+        JPanel quantityAndAddPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        quantityAndAddPanel.setBackground(UIConstants.MAIN_BACKGROUND);
 
-        JLabel lblSoLuong = new JLabel("SỐ LƯỢNG:");
-        txtSoLuong = new JTextField(10);
+        UILabel lblSoLuong = new UILabel("Số lượng:", 80, 30);
+        txtSoLuong = new UITextField(50,30);
         quantityAndAddPanel.add(lblSoLuong);
         quantityAndAddPanel.add(txtSoLuong);
 
-        btnThemVaoPhieu = new JButton("THÊM VÀO PHIẾU");
-        btnThemVaoPhieu.setBackground(new Color(40, 167, 69));
-        btnThemVaoPhieu.setForeground(Color.WHITE);
+        btnThemVaoPhieu = new UIButton("add" ,"THÊM VÀO PHIẾU", 200, 30);
         quantityAndAddPanel.add(btnThemVaoPhieu);
 
         rightPanel.add(quantityAndAddPanel, BorderLayout.SOUTH);
@@ -135,8 +126,7 @@ public class ExportProductMainContentGUI extends JPanel {
         String[] cols = {"MÃ PHIẾU XUẤT", "MÃ NHÂN VIÊN", "MÃ KHÁCH HÀNG", "TỔNG TIỀN", "NGÀY XUẤT"};
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Danh sách phiếu xuất"));
+        UIScrollPane scrollPane = new UIScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(800, 200));
         add(scrollPane, BorderLayout.SOUTH);
 
@@ -159,7 +149,7 @@ public class ExportProductMainContentGUI extends JPanel {
     }
     
     private void loadPhieuXuatData() {
-        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        tableModel.setRowCount(0); 
         List<PhieuXuatDTO> danhSachPhieuXuat = pxBUS.getAllPhieuXuat();
         for (PhieuXuatDTO px : danhSachPhieuXuat) {
             tableModel.addRow(new Object[]{
@@ -182,8 +172,8 @@ public class ExportProductMainContentGUI extends JPanel {
     }
 
     public void initializeData() {
-        String maNhanVienDangNhap = Session.getUser().getMaNV();
-        txtTenNV.setText(maNhanVienDangNhap);
+        int maNhanVienDangNhap = Session.getUser().getMaNV();
+        txtTenNV.setText(String.valueOf(maNhanVienDangNhap));
         txtTenNV.setEditable(false);
         loadProductData();
         loadCustomerData();
@@ -191,14 +181,12 @@ public class ExportProductMainContentGUI extends JPanel {
     }
 
     private void addEventHandlers() {
-        // Bật tính năng chọn dòng trong bảng sản phẩm
         tableProduct.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableProduct.setRowSelectionAllowed(true);
         
         tableProduct.setSelectionBackground(Color.CYAN);
         tableProduct.setSelectionForeground(Color.BLACK);
 
-        // Lắng nghe sự kiện thay đổi lựa chọn trong bảng sản phẩm
         tableProduct.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = tableProduct.getSelectedRow();

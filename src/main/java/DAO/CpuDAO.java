@@ -1,7 +1,11 @@
 package DAO;
 
 import DTO.CpuDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CpuDAO {
@@ -33,7 +37,7 @@ public class CpuDAO {
     }
     
     public int delete(int maCPU) {
-        String sql = "DELETE FROM cpu WHERE maCPU=?";
+        String sql = "UPDATE cpu SET trangThaiXoa=1 WHERE maCPU=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maCPU);
@@ -46,7 +50,7 @@ public class CpuDAO {
     
     public ArrayList<CpuDTO> getAll() {
         ArrayList<CpuDTO> dsCPU = new ArrayList<>();
-        String sql = "SELECT * FROM cpu";
+        String sql = "SELECT * FROM cpu WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -63,7 +67,7 @@ public class CpuDAO {
     }
     
     public CpuDTO getById(int maCPU) {
-        String sql = "SELECT * FROM cpu WHERE maCPU=?";
+        String sql = "SELECT * FROM cpu WHERE maCPU=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maCPU);

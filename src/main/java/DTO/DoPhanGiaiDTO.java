@@ -1,17 +1,24 @@
 package DTO;
 
-import java.util.Objects;
-
 public class DoPhanGiaiDTO {
     private int maDPG;
     private String tenDPG;
+    private int trangThaiXoa;
 
-    public DoPhanGiaiDTO() {
-    }
+    public DoPhanGiaiDTO() { }
 
     public DoPhanGiaiDTO(int maDPG, String tenDPG) {
         this.maDPG = maDPG;
         this.tenDPG = tenDPG;
+        this.trangThaiXoa = 0;
+    }
+
+    public int getTrangThaiXoa() {
+        return trangThaiXoa;
+    }
+
+    public void setTrangThaiXoa(int trangThaiXoa) {
+        this.trangThaiXoa = trangThaiXoa;
     }
 
     public int getMaDPG() {
@@ -29,31 +36,4 @@ public class DoPhanGiaiDTO {
     public void setTenDPG(String tenDPG) {
         this.tenDPG = tenDPG;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + this.maDPG;
-        hash = 97 * hash + Objects.hashCode(this.tenDPG);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final DoPhanGiaiDTO other = (DoPhanGiaiDTO) obj;
-        if (this.maDPG != other.maDPG) {
-            return false;
-        }
-        return Objects.equals(this.tenDPG, other.tenDPG);
-    }
-    
 }

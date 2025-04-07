@@ -1,16 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
-import DAO.DatabaseConnection;
+
 import DTO.ChucNangDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-/**
- *
- * @author Dell Vostro
- */
+
 public class ChucNangDAO {
     
     public int add(ChucNangDTO obj) {
@@ -40,7 +37,7 @@ public class ChucNangDAO {
     }
     
     public int delete(int maCN) {
-        String sql = "DELETE FROM chucnang WHERE maCN=?";
+        String sql = "UPDATE chucnang SET trangThaiXoa=1 WHERE maCN=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maCN);
@@ -53,7 +50,7 @@ public class ChucNangDAO {
     
     public ArrayList<ChucNangDTO> getAll() {
         ArrayList<ChucNangDTO> dsChucNang = new ArrayList<>();
-        String sql = "SELECT * FROM chucnang";
+        String sql = "SELECT * FROM chucnang WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -70,7 +67,7 @@ public class ChucNangDAO {
     }
     
     public ChucNangDTO getById(int id) {
-        String sql = "SELECT * FROM chucnang WHERE maCN=?";
+        String sql = "SELECT * FROM chucnang WHERE maCN=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);

@@ -1,16 +1,34 @@
 package DTO;
 
-
 public class ChiTietChucNangDTO {
     private int maCN;
     private int maQuyen;
+    private String maHD;
+    private int trangThaiXoa;
+    
+    public ChiTietChucNangDTO() {}
 
-    public ChiTietChucNangDTO() {
-    }
-
-    public ChiTietChucNangDTO(int maCN, int maQuyen) {
+    public ChiTietChucNangDTO(int maCN, int maQuyen, String maHD) {
         this.maCN = maCN;
         this.maQuyen = maQuyen;
+        this.maHD = maHD;
+        this.trangThaiXoa = 0;
+    }
+
+    public String getMaHD() {
+        return maHD;
+    }
+
+    public void setMaHD(String maHD) {
+        this.maHD = maHD;
+    }
+
+    public int getTrangThaiXoa() {
+        return trangThaiXoa;
+    }
+
+    public void setTrangThaiXoa(int trangThaiXoa) {
+        this.trangThaiXoa = trangThaiXoa;
     }
 
     public int getMaCN() {
@@ -28,32 +46,4 @@ public class ChiTietChucNangDTO {
     public void setMaQuyen(int maQuyen) {
         this.maQuyen = maQuyen;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + this.maCN;
-        hash = 71 * hash + this.maQuyen;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ChiTietChucNangDTO other = (ChiTietChucNangDTO) obj;
-        if (this.maCN != other.maCN) {
-            return false;
-        }
-        return this.maQuyen == other.maQuyen;
-    }
-
-    
 }

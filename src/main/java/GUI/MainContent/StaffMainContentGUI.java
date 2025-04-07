@@ -4,12 +4,12 @@ import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
+import Utils.UIScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +20,6 @@ public class StaffMainContentGUI extends JPanel{
     private JComboBox<String> cbFilter;
     private JTable tblContent;
     private JPanel pnlHeader, pnlContent;
-    
     private DefaultTableModel tableModel;
     private NhanVienBUS nhanVienBUS;
 
@@ -44,7 +43,6 @@ public class StaffMainContentGUI extends JPanel{
         btnDelete.setBounds(105, 5, 90, 40);
         btnEdit.setBounds(210, 5, 90, 40);
 
-            // Tạo combobox và ô tìm kiếm
         int panelWidth = this.getPreferredSize().width; 
         cbFilter = new JComboBox<>(new String[]{"Lọc"});
         cbFilter.setBounds(panelWidth - 320, 10, 100, 30);
@@ -52,7 +50,6 @@ public class StaffMainContentGUI extends JPanel{
         txtSearch = new JTextField();
         txtSearch.setBounds(panelWidth - 210, 10, 190, 30);
 
-            // Thêm tất cả vào pnlHeader
         pnlHeader.add(btnAdd);
         pnlHeader.add(btnDelete);
         pnlHeader.add(btnEdit);
@@ -66,27 +63,19 @@ public class StaffMainContentGUI extends JPanel{
         pnlContent = new JPanel();
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
-
-        // Tạo bảng dữ liệu
-        String[] columnNames = {"MÃ NHÂN VIÊN", "TÊN NHÂN VIÊN", "EMAIL", "SỐ ĐIỆN THOẠI", "TÊN QUYỀN"};
-        tableModel = new DefaultTableModel(columnNames, 0); // ####
+        String[] columnNames = {"MÃ NHÂN VIÊN", "TÊN NHÂN VIÊN", "EMAIL", "SỐ ĐIỆN THOẠI"};
+        tableModel = new DefaultTableModel(columnNames, 0); 
         tblContent = new JTable(tableModel);
         tblContent.setDefaultEditor(Object.class, null);
         
-        // Thiết lập header của bảng
         tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
         tblContent.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
         tblContent.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblContent.setRowHeight(25);
-
-        // Đặt bảng vào JScrollPane
-        JScrollPane scrollPane = new JScrollPane(tblContent);
-        scrollPane.getViewport().setBackground(UIConstants.MAIN_BACKGROUND);
-
-        // Thêm JScrollPane vào pnlContent
+        tblContent.setRowHeight(30);
+        UIScrollPane scrollPane = new UIScrollPane(tblContent);
+        
         pnlContent.add(scrollPane, BorderLayout.CENTER);
         //===============================( End Panel Content )===========================//
-        
         
         
         this.add(pnlHeader, BorderLayout.NORTH);
@@ -95,9 +84,7 @@ public class StaffMainContentGUI extends JPanel{
     }
     
     private void loadTableData(){
-        // STEP 1: xóa dữ liệu cũ
-        tableModel.setRowCount(0); 
-        // STEP 2: tải từng dòng lên bảng  
+        tableModel.setRowCount(0);   
         ArrayList<NhanVienDTO> listNhanVien = nhanVienBUS.getAllNhanVien();
         for (NhanVienDTO nhanvien : listNhanVien) {
             tableModel.addRow(new Object[]{

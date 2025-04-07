@@ -1,7 +1,4 @@
-
 package DTO;
-
-import java.util.Objects;
 
 public class ChiTietPhieuXuatDTO {
     private int maPX;
@@ -10,8 +7,7 @@ public class ChiTietPhieuXuatDTO {
     private int soLuongSP;
     private String serialSP;
 
-    public ChiTietPhieuXuatDTO() {
-    }
+    public ChiTietPhieuXuatDTO() { }
 
     public ChiTietPhieuXuatDTO(int maPX, int maSP, int giaBan, int soLuongSP, String serialSp) {
         this.maPX = maPX;

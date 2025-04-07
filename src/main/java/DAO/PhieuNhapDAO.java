@@ -1,8 +1,10 @@
 package DAO;
 
 import DTO.PhieuNhapDTO;
-import DAO.DatabaseConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class PhieuNhapDAO {
@@ -39,7 +41,7 @@ public class PhieuNhapDAO {
     }
     
     public int delete(int maPN) {
-        String sql = "DELETE FROM phieunhap WHERE maPN=?";
+        String sql = "UPDATE phieunhap SET trangThaiXoa=1 WHERE maPN=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPN);
@@ -52,7 +54,7 @@ public class PhieuNhapDAO {
 
     public ArrayList<PhieuNhapDTO> getAll() {
         ArrayList<PhieuNhapDTO> dspn = new ArrayList<>();
-        String sql = "SELECT * FROM phieunhap";
+        String sql = "SELECT * FROM phieunhap WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -73,7 +75,7 @@ public class PhieuNhapDAO {
     }
 
     public PhieuNhapDTO getById(int maPN) {
-        String sql = "SELECT * FROM phieunhap WHERE maPN=?";
+        String sql = "SELECT * FROM phieunhap WHERE maPN=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPN);

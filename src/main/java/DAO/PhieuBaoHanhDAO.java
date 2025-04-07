@@ -1,9 +1,12 @@
 package DAO;
 
 import DTO.PhieuBaoHanhDTO;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PhieuBaoHanhDAO {
     
@@ -44,7 +47,7 @@ public class PhieuBaoHanhDAO {
     }
 
     public int delete(int maPBH) {
-        String sql = "DELETE FROM phieubaohanh WHERE maPBH=?";
+        String sql = "UPDATE phieubaohanh SET trangThaiXoa=1 WHERE maPBH=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPBH);
@@ -57,7 +60,7 @@ public class PhieuBaoHanhDAO {
 
     public ArrayList<PhieuBaoHanhDTO> getAll() {
         ArrayList<PhieuBaoHanhDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM phieubaohanh";
+        String sql = "SELECT * FROM phieubaohanh WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stm = conn.createStatement();
              ResultSet rs = stm.executeQuery(sql)) {
@@ -79,7 +82,7 @@ public class PhieuBaoHanhDAO {
     }
 
     public PhieuBaoHanhDTO getById(int maPBH) {
-        String sql = "SELECT * FROM phieubaohanh WHERE maPBH=?";
+        String sql = "SELECT * FROM phieubaohanh WHERE maPBH=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPBH);
