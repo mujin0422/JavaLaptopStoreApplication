@@ -85,6 +85,33 @@ public class SanPhamDAO {
         }
         return ds;
     }
+    
+    public ArrayList<SanPhamDTO> getAll() {
+        ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
+        String sql = "SELECT * FROM sanpham";
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery(sql)) {
+            while (rs.next()) {
+                dsSanPham.add(new SanPhamDTO(
+                    rs.getInt("maSP"),
+                    rs.getString("tenSP"),
+                    rs.getInt("giaSP"),
+                    rs.getInt("soLuongTon"),
+                    rs.getInt("maCPU"),
+                    rs.getInt("maROM"),
+                    rs.getInt("maRAM"),
+                    rs.getInt("maTH"),
+                    rs.getInt("maDPG"),
+                    rs.getInt("maLoai"),
+                    rs.getInt("thoigianBH")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsSanPham;
+    }
 
     
     public SanPhamDTO getById(int maSP) {
