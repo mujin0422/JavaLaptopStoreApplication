@@ -16,17 +16,15 @@ CREATE TABLE CHUCNANG (
 );
 INSERT INTO CHUCNANG (maCN, tenCN) VALUES
 (1, N'Quản Lí Sản Phẩm'),
-(2, N'Quản Lí Nhà Xuất Bản'),
-(3, N'Quản Lí Tác Giả'),
-(4, N'Quản Lí Thể Loại'),
-(5, N'Quản Lí Khách Hàng'),
-(6, N'Quản Lí Nhân Viên'),
-(7, N'Quản Lí Tài Khoản'),
-(8, N'Quản Lí Nhà Cung Cấp'),
-(9, N'Quản Lí Nhập Hàng'),
-(10, N'Quản Lí Xuất Hàng'),
-(11, N'Quản Lí Phân Quyền'),
-(12, N'Quản Lí Thống Kê');
+(2, N'Quản Lí Cấu Hình'),
+(3, N'Quản Lí Khách Hàng'),
+(4, N'Quản Lí Nhân Viên'),
+(5, N'Quản Lí Tài Khoản'),
+(6, N'Quản Lí Nhà Cung Cấp'),
+(7, N'Quản Lí Nhập Hàng'),
+(8, N'Quản Lí Xuất Hàng'),
+(9, N'Quản Lí Phân Quyền'),
+(10, N'Quản Lí Thống Kê');
 
 CREATE TABLE HANHDONG (
 	maHD VARCHAR(10) PRIMARY KEY,
@@ -59,10 +57,7 @@ INSERT INTO CHITIETCHUCNANG(maCN, maQuyen, maHD) VALUES
 (7, 1, 'view'), (7, 1, 'add'), (7, 1, 'edit'), (7, 1, 'delete'),
 (8, 1, 'view'), (8, 1, 'add'), (8, 1, 'edit'), (8, 1, 'delete'),
 (9, 1, 'view'), (9, 1, 'add'), (9, 1, 'edit'), (9, 1, 'delete'),
-(10, 1, 'view'), (10, 1, 'add'), (10, 1, 'edit'), (10, 1, 'delete'),
-(11, 1, 'view'), (11, 1, 'add'), (11, 1, 'edit'), (11, 1, 'delete'),
-(12, 1, 'view'), (12, 1, 'add'), (12, 1, 'edit'), (12, 1, 'delete');
-
+(10, 1, 'view'), (10, 1, 'add'), (10, 1, 'edit'), (10, 1, 'delete');
 
 CREATE TABLE NHANVIEN (
     maNV INT NOT NULL PRIMARY KEY,
