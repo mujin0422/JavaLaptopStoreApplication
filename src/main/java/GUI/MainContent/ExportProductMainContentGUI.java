@@ -23,71 +23,85 @@ public class ExportProductMainContentGUI extends JPanel {
     private JTable table, tableProduct, tableCart;
     private DefaultTableModel tableModel, modelProduct, modelCart;
     private JTextField txtMaPhieu, txtTenNV;
-    private UITextField txtSearch, txtSoLuong;
+    private UITextField txtSearch, txtSoLuong, txtTongTien;
     private JComboBox<String> cbMaKhach;
-    private UIButton btnThem, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnLoc;
-    private PhieuXuatBUS pxBUS = new PhieuXuatBUS();
+    private UIButton btnThem, btnXem , btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnLoc;
+    private PhieuXuatBUS pxBUS;
 
     public ExportProductMainContentGUI() {
-        setLayout(new BorderLayout(10, 10));
-        setBackground(UIConstants.SUB_BACKGROUND);
+        pxBUS = new PhieuXuatBUS();
+        
+        this.setBackground(UIConstants.SUB_BACKGROUND);
+        this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
+        this.setLayout(new BorderLayout(5, 5));
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         btnThem = new UIButton("menuButton", " THÊM", 100, 35, "/Icon/them_icon.png");
+        btnXem = new UIButton("menuButton", "XEM", 100, 33, "/Icon/chitiet_icon.png");
         topPanel.add(btnThem);
-        add(topPanel, BorderLayout.NORTH);
+        topPanel.add(btnXem);
+        
 
-        JPanel centerPanel = new JPanel(new GridLayout(1, 2, 10, 0));
-        centerPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-        add(centerPanel, BorderLayout.CENTER);
-
-        JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new BorderLayout(10, 10));
+        JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-        centerPanel.add(leftPanel);
-
-        JPanel infoPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
-        infoPanel.setBackground(Color.WHITE);
-
+        JPanel pnlFormNorth = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        pnlFormNorth.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        pnlFormNorth.setBackground(UIConstants.MAIN_BACKGROUND);
+        pnlFormNorth.setPreferredSize(new Dimension(0, 100));
         txtMaPhieu = new JTextField(pxBUS.getMaPhieuXuatTiepTheo());
         txtMaPhieu.setEditable(false);  
         txtTenNV = new JTextField();
         txtTenNV.setEditable(false);
         cbMaKhach = new JComboBox<>();
-
-        infoPanel.add(new JLabel("Mã phiếu xuất:"));
-        infoPanel.add(txtMaPhieu);
-        infoPanel.add(new JLabel("Mã nhân viên:"));
-        infoPanel.add(txtTenNV);
-        infoPanel.add(new JLabel("Mã khách hàng:"));
-        infoPanel.add(cbMaKhach);
-        leftPanel.add(infoPanel, BorderLayout.NORTH);
-
+        txtMaPhieu.setPreferredSize(new Dimension(330,25));
+        txtTenNV.setPreferredSize(new Dimension(330,25));
+        cbMaKhach.setPreferredSize(new Dimension(330,25));
+        pnlFormNorth.add(new UILabel("Mã phiếu xuất:",160, 25));
+        pnlFormNorth.add(txtMaPhieu);
+        pnlFormNorth.add(new UILabel("Mã nhân viên:" ,160, 25));
+        pnlFormNorth.add(txtTenNV);
+        pnlFormNorth.add(new UILabel("Mã khách hàng:", 160, 25));
+        pnlFormNorth.add(cbMaKhach);
+        leftPanel.add(pnlFormNorth, BorderLayout.NORTH);
+        
         String[] cartCols = {"MÃ SẢN PHẨM", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN"};
         modelCart = new DefaultTableModel(cartCols, 0);
         tableCart = new JTable(modelCart);
+        tableCart.setRowHeight(30);
         UIScrollPane cartScrollPane = new UIScrollPane(tableCart);
-        cartScrollPane.setPreferredSize(new Dimension(400, 200));
         leftPanel.add(cartScrollPane, BorderLayout.CENTER);
 
-        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        actionPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-
-        btnXoaKhoiPhieu = new UIButton("delete","Xóa khỏi phiếu",200,30);
-        btnSuaSoLuong = new UIButton("edit","Sửa số lượng",200,30);
-        actionPanel.add(btnXoaKhoiPhieu);
-        actionPanel.add(btnSuaSoLuong);
-        leftPanel.add(actionPanel, BorderLayout.SOUTH);
-
-        JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
+        JPanel pnlFormSouth = new JPanel(new GridLayout(2, 1, 5, 5)); 
+        pnlFormSouth.setBackground(UIConstants.MAIN_BACKGROUND);
+        JPanel pnl1 = new JPanel(new FlowLayout(FlowLayout.CENTER,25,5)); 
+        btnXoaKhoiPhieu = new UIButton("delete", "XÓA KHỎI PHIẾU", 130, 30);
+        btnSuaSoLuong = new UIButton("edit", "SỬA SỐ LƯỢNG", 130, 30);
+        pnl1.setBackground(UIConstants.MAIN_BACKGROUND);
+        pnl1.add(btnXoaKhoiPhieu);
+        pnl1.add(btnSuaSoLuong);
+        JPanel pnl2 = new JPanel(new BorderLayout());
+        pnl2.setBorder(BorderFactory.createEmptyBorder(0,10,5,10));
+        pnl2.setBackground(UIConstants.MAIN_BACKGROUND);
+        JPanel pnlGroupTongTien = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        pnlGroupTongTien.add(new UILabel("Tổng tiền:",160,25));
+        pnlGroupTongTien.setBackground(UIConstants.MAIN_BACKGROUND);
+        txtTongTien = new UITextField(330, 25);
+        txtTongTien.setEditable(false); 
+        pnlGroupTongTien.add(txtTongTien);
+        pnl2.add(pnlGroupTongTien, BorderLayout.WEST);
+        pnlFormSouth.add(pnl1);
+        pnlFormSouth.add(pnl2);
+        leftPanel.add(pnlFormSouth, BorderLayout.SOUTH);
+        
+        JPanel rightPanel = new JPanel(new BorderLayout(5,5));
         rightPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-        centerPanel.add(rightPanel);
+        rightPanel.setPreferredSize(new Dimension(550, 0));
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
         searchPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-        txtSearch = new UITextField(400, 30);
+        txtSearch = new UITextField(420, 30);
         btnLoc = new UIButton("add","Tìm Kiếm",100, 30);
         btnLoc.setBackground(UIConstants.MAIN_BUTTON);
         btnLoc.setForeground(Color.WHITE);
@@ -98,38 +112,32 @@ public class ExportProductMainContentGUI extends JPanel {
         String[] productCols = {"MÃ SẢN PHẨM", "TÊN SẢN PHẨM", "ĐƠN GIÁ", "SỐ LƯỢNG"};
         modelProduct = new DefaultTableModel(productCols, 0);
         tableProduct = new JTable(modelProduct);
-        
         tableProduct.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableProduct.setRowSelectionAllowed(true);
-
-        tableProduct.setSelectionBackground(Color.CYAN);
-        tableProduct.setSelectionForeground(Color.BLACK);
-
         UIScrollPane productScroll = new UIScrollPane(tableProduct);
-        productScroll.setPreferredSize(new Dimension(400, 250));
         rightPanel.add(productScroll, BorderLayout.CENTER);
-
 
         JPanel quantityAndAddPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         quantityAndAddPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-
         UILabel lblSoLuong = new UILabel("Số lượng:", 80, 30);
         txtSoLuong = new UITextField(50,30);
         quantityAndAddPanel.add(lblSoLuong);
         quantityAndAddPanel.add(txtSoLuong);
-
         btnThemVaoPhieu = new UIButton("add" ,"THÊM VÀO PHIẾU", 200, 30);
         quantityAndAddPanel.add(btnThemVaoPhieu);
-
         rightPanel.add(quantityAndAddPanel, BorderLayout.SOUTH);
 
         String[] cols = {"MÃ PHIẾU XUẤT", "MÃ NHÂN VIÊN", "MÃ KHÁCH HÀNG", "TỔNG TIỀN", "NGÀY XUẤT"};
         tableModel = new DefaultTableModel(cols, 0);
         table = new JTable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(800, 200));
-        add(scrollPane, BorderLayout.SOUTH);
-
+        scrollPane.setPreferredSize(new Dimension(0, 200));
+        
+        
+        this.add(topPanel, BorderLayout.NORTH);
+        this.add(leftPanel, BorderLayout.CENTER);
+        this.add(rightPanel, BorderLayout.EAST);
+        this.add(scrollPane, BorderLayout.SOUTH);
         initializeData();
         addEventHandlers();
     }
