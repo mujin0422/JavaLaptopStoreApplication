@@ -25,21 +25,22 @@ public class NhanVienDAO {
         return 0;
     }
 
-    public int update(NhanVienDTO obj) {
-        String sql = "UPDATE nhanvien SET  tenNV=?, email=?, sdt=? WHERE maNV=?";
+    public static int update(NhanVienDTO nv) {
+        String sql = "UPDATE NhanVien SET tenNV = ?, sdt = ?, email = ? WHERE maNV = ?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-             ps.setString(1, obj.getTenNV());
-            ps.setString(3, obj.getEmail());
-            ps.setString(3, obj.getSdt());
-            ps.setInt(4, obj.getMaNV());
-            return ps.executeUpdate();
-            
-        } catch (SQLException e) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, nv.getTenNV());
+            stmt.setString(2, nv.getSdt());
+            stmt.setString(3, nv.getEmail());
+            stmt.setInt(4, nv.getMaNV());
+    
+            return stmt.executeUpdate();
+        } catch (Exception e) {
             e.printStackTrace();
+            return 0;
         }
-        return 0;
     }
+    
 
     public int delete(int maNhanVien) {
         String sql = "UPDATE nhanvien SET trangThaiXoa=1 WHERE maNV=?";

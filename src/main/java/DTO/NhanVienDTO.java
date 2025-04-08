@@ -9,7 +9,7 @@ public class NhanVienDTO {
 
     public NhanVienDTO() {}
 
-    public NhanVienDTO(int maNV, String tenNV, String email, String sdt) {
+    public NhanVienDTO(int maNV, String tenNV, String sdt, String email) {
         this.maNV = maNV;
         this.tenNV = tenNV;
         this.email = email;

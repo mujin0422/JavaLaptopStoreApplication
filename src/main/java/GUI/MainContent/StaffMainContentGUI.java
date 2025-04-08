@@ -1,17 +1,24 @@
 package GUI.MainContent;
 
 import BUS.NhanVienBUS;
+import DTO.KhachHangDTO;
 import DTO.NhanVienDTO;
+import GUI.MainContentDiaLog.AddAndEditCostumerGUI;
+import GUI.MainContentDiaLog.AddAndEditStaffGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class StaffMainContentGUI extends JPanel{
@@ -37,8 +44,11 @@ public class StaffMainContentGUI extends JPanel{
         pnlHeader.setPreferredSize(new Dimension(this.getWidth(), 50));
 
         btnAdd = new UIButton("menuButton", "THÊM", 100, 30, "/Icon/them_icon.png");
+        btnAdd.addActionListener(e -> addStaff());
         btnDelete = new UIButton("menuButton", "XÓA", 100, 30, "/Icon/xoa_icon.png");
+        btnDelete.addActionListener(e -> deleteStaff());
         btnEdit = new UIButton("menuButton", "SỬA", 100, 30, "/Icon/sua_icon.png");
+        btnEdit.addActionListener(e -> editStaff());
         btnAdd.setBounds(5, 5, 90, 40);
         btnDelete.setBounds(105, 5, 90, 40);
         btnEdit.setBounds(210, 5, 90, 40);
@@ -63,7 +73,7 @@ public class StaffMainContentGUI extends JPanel{
         pnlContent = new JPanel();
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
-        String[] columnNames = {"MÃ NHÂN VIÊN", "TÊN NHÂN VIÊN", "EMAIL", "SỐ ĐIỆN THOẠI"};
+        String[] columnNames = {"MÃ NHÂN VIÊN", "TÊN NHÂN VIÊN", "SỐ ĐIỆN THOẠI", "EMAIL"};
         tableModel = new DefaultTableModel(columnNames, 0); 
         tblContent = new JTable(tableModel);
         tblContent.setDefaultEditor(Object.class, null);
@@ -95,5 +105,51 @@ public class StaffMainContentGUI extends JPanel{
             });
         }
     }
+
+    private void addStaff(){
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditStaffGUI((JFrame) window, nhanVienBUS, "Thêm nhân viên", "add");
+        loadTableData();
+    }
+
+    private void editStaff(){
+        int selectedRow = tblContent.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+    
+        int maNV = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+        String tenNV = tableModel.getValueAt(selectedRow, 1).toString();
+        String sdt = tableModel.getValueAt(selectedRow, 2).toString();
+        String email = tableModel.getValueAt(selectedRow, 3).toString();
+    
+        NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, sdt, email);
+    
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditStaffGUI((JFrame) window, nhanVienBUS, "Chỉnh sửa nhân viên", "save", nv);
+        loadTableData();
+    }
+    
+    
+    private void deleteStaff(){
+        int selectedRow = tblContent.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để xoa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn không", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            String maNV = tableModel.getValueAt(selectedRow, 0).toString();
+            int maNVInt = Integer.parseInt(maNV);
+            if (nhanVienBUS.deleteNhanVien(maNVInt)) { 
+                JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                loadTableData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Xóa nhân viên thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
 
 }
