@@ -6,6 +6,7 @@ import GUI.MainContentDiaLog.AddAndEditSupplierGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
+import Utils.UITable;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Window;
@@ -23,7 +24,7 @@ public class SupplierMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit;
     private JTextField txtSearch;
     private JComboBox<String> cbFilter;
-    private JTable tblContent;
+    private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
     
     private DefaultTableModel tableModel;
@@ -70,14 +71,8 @@ public class SupplierMainContentGUI extends JPanel{
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
         String[] columnNames = {"MÃ NHÀ CUNG CÁP", "TÊN NHÀ CUNG CẤP", "ĐỊA CHỈ", "SỐ ĐIỆN THOẠI"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        tblContent = new JTable(tableModel);
-        tblContent.setDefaultEditor(Object.class, null);
-        tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblContent.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblContent.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblContent.setRowHeight(30);
+        tblContent = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
-        
         pnlContent.add(scrollPane, BorderLayout.CENTER);
         //===============================( End Panel Content )===========================//
         

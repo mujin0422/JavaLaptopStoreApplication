@@ -9,25 +9,23 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import BUS.KhachHangBUS;
-import BUS.SanPhamBUS;
 import DTO.KhachHangDTO;
 import GUI.MainContentDiaLog.AddAndEditCostumerGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
+import Utils.UITable;
 
 public class CustomerMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit;
     private JTextField txtSearch;
     private JComboBox<String> cbFilter;
-    private JTable tblContent;
+    private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
     private KhachHangBUS khachHangBUS;
@@ -76,18 +74,8 @@ public class CustomerMainContentGUI extends JPanel{
             // Tạo bảng dữ liệu
         String[] columnNames = {"MÃ KHÁCH HÀNG", "TÊN KHÁCH HÀNG", "SỐ ĐIỆN THOẠI", "EMAIL"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        tblContent = new JTable(tableModel);
-        tblContent.setDefaultEditor(Object.class, null);
-        
-            // Thiết lập header của bảng
-        tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblContent.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblContent.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblContent.setRowHeight(25);
-            // Đặt bảng vào JScrollPane
+        tblContent = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
-        scrollPane.getViewport().setBackground(UIConstants.MAIN_BACKGROUND);
-            // Thêm JScrollPane vào pnlContent
         pnlContent.add(scrollPane, BorderLayout.CENTER);
         //===============================( End Panel Content )===========================//
 

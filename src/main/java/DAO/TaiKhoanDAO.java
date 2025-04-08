@@ -115,4 +115,38 @@ public class TaiKhoanDAO {
         return null;
     }
     
+    public String getTenNvByUserName(String username) {
+        String sql = "SELECT nv.tenNV FROM nhanvien nv "
+                   + "JOIN taikhoan tk ON nv.maNV = tk.maNV "
+                   + "WHERE tk.trangThaiXoa = 0 AND tk.tenDangNhap = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("tenNV");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getTenQuyenByUserName(String username) {
+        String sql = "SELECT q.tenQuyen FROM quyen q "
+                   + "JOIN taikhoan tk ON q.maQuyen = tk.maQuyen "
+                   + "WHERE tk.trangThaiXoa = 0 AND tk.tenDangNhap = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("tenQuyen");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+}
+
 }   

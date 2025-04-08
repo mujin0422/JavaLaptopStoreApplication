@@ -11,6 +11,7 @@ import Utils.Session;
 import Utils.UIButton;
 import Utils.UILabel;
 import Utils.UIScrollPane;
+import Utils.UITable;
 import Utils.UITextField;
 
 import javax.swing.*;
@@ -20,7 +21,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class ExportProductMainContentGUI extends JPanel {
-    private JTable table, tableProduct, tableCart;
+    private UITable table;
+    private JTable tableProduct, tableCart;
     private DefaultTableModel tableModel, modelProduct, modelCart;
     private JTextField txtMaPhieu, txtTenNV;
     private UITextField txtSearch, txtSoLuong, txtTongTien;
@@ -129,7 +131,7 @@ public class ExportProductMainContentGUI extends JPanel {
 
         String[] cols = {"MÃ PHIẾU XUẤT", "MÃ NHÂN VIÊN", "MÃ KHÁCH HÀNG", "TỔNG TIỀN", "NGÀY XUẤT"};
         tableModel = new DefaultTableModel(cols, 0);
-        table = new JTable(tableModel);
+        table = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(0, 200));
         

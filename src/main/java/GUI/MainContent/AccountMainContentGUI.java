@@ -10,32 +10,26 @@ import GUI.MainContentDiaLog.AddAndEditAccountGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
+import Utils.UITable;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Window;
 import java.util.ArrayList;
-import java.util.HashMap;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Dell Vostro
- */
 public class AccountMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit;
     private JTextField txtSearch;
     private JComboBox<String> cbFilter;
-    private JTable tblContent;
+    private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
-    
     private DefaultTableModel tableModel;
     private TaiKhoanBUS taiKhoanBUS;
 
@@ -84,17 +78,8 @@ public class AccountMainContentGUI extends JPanel{
         // Tạo bảng dữ liệu
         String[] columnNames = {"NHÂN VIÊN", "TÊN ĐĂNG NHẬP", "MẬT KHẨU", "QUYỀN"};
         tableModel = new DefaultTableModel(columnNames, 0); 
-        tblContent = new JTable(tableModel);
-        tblContent.setDefaultEditor(Object.class, null);
-        // Thiết lập header của bảng
-        tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblContent.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblContent.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblContent.getTableHeader().setPreferredSize(new Dimension(0,30));
-        tblContent.setRowHeight(30);
-        // Đặt bảng vào JScrollPane
+        tblContent = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
-        // Thêm JScrollPane vào pnlContent
         pnlContent.add(scrollPane, BorderLayout.CENTER);
         //===============================( End Panel Content )===========================//
         
@@ -107,25 +92,14 @@ public class AccountMainContentGUI extends JPanel{
     
     private void loadTableData(){
         tableModel.setRowCount(0);
-        NhanVienBUS nvBus = new NhanVienBUS();
-        HashMap<Integer,String> nvMap = new HashMap<>();
-        for(NhanVienDTO nv : nvBus.getAllNhanVien()){
-            nvMap.put(nv.getMaNV(), nv.getTenNV());
-        }
-        QuyenBUS quyenBus = new QuyenBUS();
-        HashMap<Integer,String> quyenMap = new HashMap<>();
-        for(QuyenDTO quyen : quyenBus.getAllQuyen()){
-            quyenMap.put(quyen.getMaQuyen(), quyen.getTenQuyen());
-        }
         ArrayList<TaiKhoanDTO> listTK = taiKhoanBUS.getAllTaiKhoan();
         for(TaiKhoanDTO tk : listTK){
-            String tenNV = nvMap.get(tk.getMaNV());
-            String tenQuyen = quyenMap.get(tk.getMaQuyen());
+            
             tableModel.addRow(new Object[]{
-                tenNV,
+                taiKhoanBUS.getTenNvByUsername(tk.getTenDangNhap()),
                 tk.getTenDangNhap(),
                 tk.getMatKhau(),
-                tenQuyen
+                taiKhoanBUS.getTenQuyenByUsername(tk.getTenDangNhap())
             });
         }
     }

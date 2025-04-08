@@ -2,8 +2,8 @@ package Utils;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Insets;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 public class UITextField extends JTextField{
@@ -14,7 +14,7 @@ public class UITextField extends JTextField{
     private void initComponent(int width, int height){
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(UIConstants.WHITE_FONT);
-        this.setMargin(new Insets(0, 10, 0, 0));
+        this.setBorder(new EmptyBorder(0, 5, 0, 0));
     }
     
    

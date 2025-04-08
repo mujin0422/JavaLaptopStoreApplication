@@ -85,45 +85,44 @@ public class AddAndEditStaffGUI extends JDialog{
     
 
     private void addStaff(){
-    if(!CheckFormInput()) return;
-    try {
-        int maNV = Integer.parseInt(txtMaNV.getText().trim());
-        String tenNV = txtTenNV.getText().trim();
-        String soDT = txtSDT.getText().trim();
-        String email = txtEmail.getText().trim();
+        if(!CheckFormInput()) return;
+        try {
+            int maNV = Integer.parseInt(txtMaNV.getText().trim());
+            String tenNV = txtTenNV.getText().trim();
+            String soDT = txtSDT.getText().trim();
+            String email = txtEmail.getText().trim();
 
-        NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email);
-        if(nhanVienBus.addNhanVien(nv)){
-            JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Mã nhân viên đã tồn tại hoặc dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email);
+            if(nhanVienBus.addNhanVien(nv)){
+                JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Mã nhân viên đã tồn tại hoặc dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (HeadlessException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (HeadlessException | NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-}
 
-private void saveStaff(){
-    if(!CheckFormInput()) return;
-    try {
-        int maNV = Integer.parseInt(txtMaNV.getText().trim());
-        String tenNV = txtTenNV.getText().trim();
-        String soDT = txtSDT.getText().trim();
-        String email = txtEmail.getText().trim();
-        
-        NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email);
-        if(nhanVienBus.updateNhanVien(nv)){
-            JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công!");
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    private void saveStaff(){
+        if(!CheckFormInput()) return;
+        try {
+            int maNV = Integer.parseInt(txtMaNV.getText().trim());
+            String tenNV = txtTenNV.getText().trim();
+            String soDT = txtSDT.getText().trim();
+            String email = txtEmail.getText().trim();
+
+            NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email);
+            if(nhanVienBus.updateNhanVien(nv)){
+                JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công!");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (HeadlessException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (HeadlessException | NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
-}
-
 
     private boolean CheckFormInput() {
         try {

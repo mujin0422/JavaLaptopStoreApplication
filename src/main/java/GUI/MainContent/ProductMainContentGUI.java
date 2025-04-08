@@ -9,7 +9,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -20,13 +19,14 @@ import GUI.MainContentDiaLog.AddAndEditProductGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
+import Utils.UITable;
 
 public class ProductMainContentGUI extends JPanel {
     private SanPhamBUS sanPhamBUS;
     private UIButton btnAdd, btnDelete, btnEdit;
     private JTextField txtSearch;
     private JComboBox<String> cbFilter;
-    private JTable tblContent;
+    private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
 
@@ -72,13 +72,7 @@ public class ProductMainContentGUI extends JPanel {
         
         String[] columnNames = {"MÃ SẢN PHẨM", "TÊN SẢN PHÂM", "GIÁ SẢN PHẨM", "TỒN KHO", "Ma CPU", "MÃ RAM", "MÃ ROM", "MÃ DP", "MÃ LOẠI", "MÃ TH", "THỜI GIAN BH"};
         tableModel = new DefaultTableModel(columnNames, 0); 
-        tblContent = new JTable(tableModel);
-        tblContent.setDefaultEditor(Object.class, null);
-  
-        tblContent.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblContent.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblContent.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblContent.setRowHeight(30);
+        tblContent = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
 
         pnlContent.add(scrollPane, BorderLayout.CENTER);

@@ -28,10 +28,12 @@ import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
 import Utils.UIScrollPane;
+import Utils.UITable;
 import Utils.UITextField;
 
 public class ImportProductMainContentGUI extends JPanel {
-    private JTable table, tableProduct, tableCart;
+    private UITable table;
+    private JTable tableProduct, tableCart;
     private DefaultTableModel tableModel, modelProduct, modelCart;
     private JTextField txtMaPhieu, txtMaNV;
     private UITextField txtSearch, txtSoLuong, txtTongTien;
@@ -143,7 +145,7 @@ public class ImportProductMainContentGUI extends JPanel {
 
         String[] cols = {"MÃ PHIẾU NHẬP", "MÃ NHÂN VIÊN", "TÊN NCC", "TỔNG TIỀN", "NGÀY NHẬP"};
         tableModel = new DefaultTableModel(cols, 0);
-        table = new JTable(tableModel);
+        table = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(table);
         scrollPane.setPreferredSize(new Dimension(0, 200));
 

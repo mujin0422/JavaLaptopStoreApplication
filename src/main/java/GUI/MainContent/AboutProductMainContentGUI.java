@@ -22,6 +22,7 @@ import Utils.UIAboutPanel;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
+import Utils.UITable;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -30,15 +31,12 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class AboutProductMainContentGUI extends JPanel{
     private UIAboutPanel pnlRAM, pnlROM, pnlCPU, pnlThuongHieu, pnlDoPhanGiai, pnlPhanLoai;
-    private JTable tblRAM, tblROM, tblCPU, tblThuongHieu, tblDoPhanGiai, tblPhanLoai;
-    
+    private UITable tblRAM, tblROM, tblCPU, tblThuongHieu, tblDoPhanGiai, tblPhanLoai;
     private DefaultTableModel tblModelRAM, tblModelROM, tblModelCPU, tblModelThuongHieu, tblModelDoPhanGiai, tblModelPhanLoai;
     private RamBUS ramBus;
     private RomBUS romBus;
@@ -70,12 +68,7 @@ public class AboutProductMainContentGUI extends JPanel{
         
         String[] columnRAMNames = {"MÃ RAM", "DUNG LƯỢNG RAM"};
         tblModelRAM = new DefaultTableModel(columnRAMNames,0);
-        tblRAM = new JTable(tblModelRAM);
-        tblRAM.setDefaultEditor(Object.class,null);
-        tblRAM.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblRAM.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblRAM.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblRAM.setRowHeight(30);
+        tblRAM = new UITable(tblModelRAM);
         UIScrollPane scrollRAM = new UIScrollPane(tblRAM);
         pnlRAM.getPnlContent().add(scrollRAM, BorderLayout.CENTER);
         //===============================( End Panel RAM )==============================//
@@ -97,12 +90,7 @@ public class AboutProductMainContentGUI extends JPanel{
         
         String[] columnROMNames = {"MÃ ROM", "DUNG LƯỢNG ROM"};
         tblModelROM = new DefaultTableModel(columnROMNames,0);
-        tblROM = new JTable(tblModelROM);
-        tblROM.setDefaultEditor(Object.class,null);
-        tblROM.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblROM.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblROM.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblROM.setRowHeight(30);
+        tblROM = new UITable(tblModelROM);
         UIScrollPane scrollROM = new UIScrollPane(tblROM);
         pnlROM.getPnlContent().add(scrollROM, BorderLayout.CENTER);
         //===============================( End Panel ROM )==============================//
@@ -124,12 +112,7 @@ public class AboutProductMainContentGUI extends JPanel{
         
         String[] columnCPUNames = {"MÃ CPU", "TÊN CPU"};
         tblModelCPU = new DefaultTableModel(columnCPUNames,0);
-        tblCPU = new JTable(tblModelCPU);
-        tblCPU.setDefaultEditor(Object.class,null);
-        tblCPU.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblCPU.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblCPU.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblCPU.setRowHeight(30);
+        tblCPU = new UITable(tblModelCPU);
         UIScrollPane scrollCPU = new UIScrollPane(tblCPU);
         pnlCPU.getPnlContent().add(scrollCPU, BorderLayout.CENTER);
         //===============================( End Panel CPU )==============================//
@@ -151,12 +134,7 @@ public class AboutProductMainContentGUI extends JPanel{
         
         String[] columnBrandNames = {"MÃ THƯƠNG HIỆU", "TÊN THƯƠNG HIỆU"};
         tblModelThuongHieu = new DefaultTableModel(columnBrandNames,0);
-        tblThuongHieu = new JTable(tblModelThuongHieu);
-        tblThuongHieu.setDefaultEditor(Object.class,null);
-        tblThuongHieu.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblThuongHieu.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblThuongHieu.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblThuongHieu.setRowHeight(30);
+        tblThuongHieu = new UITable(tblModelThuongHieu);
         UIScrollPane scrollBrand = new UIScrollPane(tblThuongHieu);
         pnlThuongHieu.getPnlContent().add(scrollBrand, BorderLayout.CENTER);
         //===========================( End Panel Thuong Hieu )==========================//
@@ -178,12 +156,7 @@ public class AboutProductMainContentGUI extends JPanel{
         
         String[] columnResolutionNames = {"MÃ ĐỘ PHÂN GIẢI", "ĐỘ PHÂN GIẢI"};
         tblModelDoPhanGiai = new DefaultTableModel(columnResolutionNames,0);
-        tblDoPhanGiai = new JTable(tblModelDoPhanGiai);
-        tblDoPhanGiai.setDefaultEditor(Object.class,null);      
-        tblDoPhanGiai.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblDoPhanGiai.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblDoPhanGiai.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblDoPhanGiai.setRowHeight(30);  
+        tblDoPhanGiai = new UITable(tblModelDoPhanGiai); 
         UIScrollPane scrollResolution = new UIScrollPane(tblDoPhanGiai);
         pnlDoPhanGiai.getPnlContent().add(scrollResolution, BorderLayout.CENTER);
         //===========================( End Panel Do Phan Giai )=========================//
@@ -205,15 +178,8 @@ public class AboutProductMainContentGUI extends JPanel{
         
         String[] columnCategoryNames = {"MÃ LOẠI", "TÊN LOẠI"};
         tblModelPhanLoai = new DefaultTableModel(columnCategoryNames,0);
-        tblPhanLoai = new JTable(tblModelPhanLoai);
-        tblPhanLoai.setDefaultEditor(Object.class,null);      
-        tblPhanLoai.getTableHeader().setFont(UIConstants.SUBTITLE_FONT);
-        tblPhanLoai.getTableHeader().setBackground(UIConstants.MAIN_BUTTON);
-        tblPhanLoai.getTableHeader().setForeground(UIConstants.WHITE_FONT);
-        tblPhanLoai.setRowHeight(30);
+        tblPhanLoai = new UITable(tblModelPhanLoai);
         UIScrollPane scrollCategory = new UIScrollPane(tblPhanLoai);
-        scrollCategory.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        scrollCategory.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         pnlPhanLoai.getPnlContent().add(scrollCategory, BorderLayout.CENTER);
         //============================( End Panel Phan Loai )===========================//
         
