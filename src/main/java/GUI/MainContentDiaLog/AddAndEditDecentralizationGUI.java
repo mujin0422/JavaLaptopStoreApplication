@@ -14,7 +14,6 @@ import Utils.UILabel;
 import Utils.UITextField;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.*;
 
 public class AddAndEditDecentralizationGUI extends JDialog {
@@ -29,30 +28,42 @@ public class AddAndEditDecentralizationGUI extends JDialog {
     private HanhDongBUS hanhDongBUS;
     private ChiTietChucNangBUS chiTietChucNangBUS;
     private QuyenDTO quyen;
-    private List<ChucNangDTO> danhSachChucNang;
 
-    public AddAndEditDecentralizationGUI(JFrame parent, QuyenBUS quyenBUS, ChucNangBUS chucNangBUS, String title, String type) {
+    public AddAndEditDecentralizationGUI(JFrame parent, QuyenBUS quyenBUS, String title, String type) {
         super(parent, title, true);
         this.quyenBUS = quyenBUS;
-        this.chucNangBUS = chucNangBUS;
         initComponent(type);
+        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
-    public AddAndEditDecentralizationGUI(JFrame parent, QuyenBUS quyenBUS, ChucNangBUS chucNangBUS, String title, String type, QuyenDTO quyen) {
+    public AddAndEditDecentralizationGUI(JFrame parent, QuyenBUS quyenBUS, String title, String type, QuyenDTO quyen) {
         super(parent, title, true);
         this.quyenBUS = quyenBUS;
-        this.chucNangBUS = chucNangBUS;
         this.quyen = quyen;
         initComponent(type);
-        
         if (quyen != null) {
             txtMaQuyen.setText(String.valueOf(quyen.getMaQuyen()));
             txtTenQuyen.setText(quyen.getTenQuyen());
             txtMaQuyen.setEnabled(false);
+            
+            ArrayList<ChiTietChucNangDTO> dsCTCN = chiTietChucNangBUS.getChiTietChucNangByMaQuyen(quyen.getMaQuyen());
+            for (int i = 0; i < rowCkc; i++) {
+                for (int j = 0; j < colCkc; j++) {
+                    int maCN = danhMucChucNang.get(i).getMaCN();
+                    String maHD = danhMucHanhDong.get(j).getMaHD();
+                    for (ChiTietChucNangDTO ct : dsCTCN) {
+                        if (ct.getMaCN() == maCN && ct.getMaHD().equals(maHD)) {
+                            ckbChucNang[i][j].setSelected(true);
+                            break;
+                        }
+                    }
+                }
+            
+            }
         }
-        this.setLocationRelativeTo(parent);
+       this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
 
@@ -171,7 +182,11 @@ public class AddAndEditDecentralizationGUI extends JDialog {
                         boolean isChecked = ckbChucNang[i][j].isSelected();
                         boolean exists = chiTietChucNangBUS.existsChiTietChucNang(maCN, maQuyen, maHD);
 
-                        if (isChecked && !exists) {
+                        if (isChecked && exists) {
+                            if (!chiTietChucNangBUS.activeChiTietChucNang(maCN, maQuyen, maHD)) {
+                                return;
+                            }
+                        } else if(isChecked && !exists) {
                             ChiTietChucNangDTO ctn = new ChiTietChucNangDTO(maCN, maQuyen, maHD);
                             if (!chiTietChucNangBUS.addChiTietChucNang(ctn)) {
                                 return;
@@ -183,6 +198,8 @@ public class AddAndEditDecentralizationGUI extends JDialog {
                         }
                     }
                 }
+                JOptionPane.showMessageDialog(this, "Lưu phân quyền thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Cập nhật quyền thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }

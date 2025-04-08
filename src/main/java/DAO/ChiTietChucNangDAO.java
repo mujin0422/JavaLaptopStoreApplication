@@ -39,7 +39,21 @@ public class ChiTietChucNangDAO {
     }
     
     public int delete(int maCN, int maQuyen, String maHD) {
-        String sql = "UPDATE chitietchucnang trangThaiXoa=1 WHERE maCN=? AND maQuyen=? AND maHD=?" ;
+        String sql = "UPDATE chitietchucnang SET trangThaiXoa=1 WHERE maCN=? AND maQuyen=? AND maHD=?" ;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maCN);
+            ps.setInt(2, maQuyen);
+            ps.setString(3, maHD);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public int active(int maCN, int maQuyen, String maHD){
+        String sql = "UPDATE chitietchucnang SET trangThaiXoa=0 WHERE maCN=? AND maQuyen=? AND maHD=?" ;
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maCN);
@@ -83,6 +97,26 @@ public class ChiTietChucNangDAO {
                 ));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsChiTietCN;
+    }
+    
+    public ArrayList<ChiTietChucNangDTO> getById(int maQuyen){
+        ArrayList<ChiTietChucNangDTO> dsChiTietCN = new ArrayList<>();
+        String sql = "SELECT * FROM chitietchucnang WHERE trangThaiXoa=0 AND maQuyen=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {  
+           ps.setInt(1, maQuyen);  
+           ResultSet rs = ps.executeQuery();
+           while (rs.next()) {
+               dsChiTietCN.add(new ChiTietChucNangDTO(
+                   rs.getInt("maCN"),
+                   rs.getInt("maQuyen"),
+                   rs.getString("maHD")
+               ));
+           }
+        }catch (SQLException e) {
             e.printStackTrace();
         }
         return dsChiTietCN;
