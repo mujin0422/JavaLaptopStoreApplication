@@ -1,267 +1,746 @@
-﻿CREATE TABLE QUYEN (
-    maQuyen INT NOT NULL PRIMARY KEY,
-    tenQuyen NVARCHAR(50) NOT NULL
-);
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th4 08, 2025 lúc 08:48 AM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
-CREATE TABLE CHUCNANG (
-    maCN INT NOT NULL PRIMARY KEY,
-    tenCN NVARCHAR(50) NOT NULL
-);
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
-CREATE TABLE CHITIETCHUCNANG (
-    maCN INT NOT NULL,
-    maQuyen INT NOT NULL,
-    PRIMARY KEY (maCN, maQuyen),
-    FOREIGN KEY (maCN) REFERENCES CHUCNANG(maCN),
-    FOREIGN KEY (maQuyen) REFERENCES QUYEN(maQuyen)
-);
 
-CREATE TABLE NHANVIEN (
-    maNV INT NOT NULL PRIMARY KEY,
-    tenNV NVARCHAR(50) NOT NULL,
-    sdt VARCHAR(11),
-    email VARCHAR(100)
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-CREATE TABLE TAIKHOAN (
-    tenDangNhap NVARCHAR(50) NOT NULL PRIMARY KEY,
-    matKhau VARCHAR(50) NOT NULL,
-    maQuyen INT NOT NULL,
-    maNV INT NOT NULL,
-    FOREIGN KEY (maQuyen) REFERENCES QUYEN(maQuyen),
-    FOREIGN KEY (maNV) REFERENCES NHANVIEN(maNV)
-);
+--
+-- Cơ sở dữ liệu: `quanlibanlaptop`
+--
 
-CREATE TABLE KHACHHANG (
-    maKH INT NOT NULL PRIMARY KEY,
-    tenKH NVARCHAR(50) NOT NULL,
-    sdt VARCHAR(11),
-    email VARCHAR(100)
-);
+-- --------------------------------------------------------
 
-CREATE TABLE NHACUNGCAP (
-    maNCC INT NOT NULL PRIMARY KEY,
-    tenNCC NVARCHAR(100) NOT NULL,
-    diaChi NVARCHAR(100) NOT NULL,
-    sdt VARCHAR(11) NOT NULL
-);
+--
+-- Cấu trúc bảng cho bảng `chitietchucnang`
+--
 
-CREATE TABLE PHANLOAI (
-    maLoai INT NOT NULL PRIMARY KEY,
-    tenLoai NVARCHAR(50) NOT NULL
-);
+CREATE TABLE `chitietchucnang` (
+  `maCN` int(11) NOT NULL,
+  `maQuyen` int(11) NOT NULL,
+  `maHD` varchar(10) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE THUONGHIEU (
-    maTH INT NOT NULL PRIMARY KEY,
-    tenTH NVARCHAR(100) NOT NULL
-);
+--
+-- Đang đổ dữ liệu cho bảng `chitietchucnang`
+--
 
-CREATE TABLE DOPHANGIAI (
-    maDPG INT NOT NULL PRIMARY KEY,
-    tenDPG VARCHAR(50) NOT NULL
-);
+INSERT INTO `chitietchucnang` (`maCN`, `maQuyen`, `maHD`, `trangThaiXoa`) VALUES
+(1, 1, 'add', 0),
+(1, 1, 'delete', 0),
+(1, 1, 'edit', 0),
+(1, 1, 'view', 0),
+(2, 1, 'add', 0),
+(2, 1, 'delete', 0),
+(2, 1, 'edit', 0),
+(2, 1, 'view', 0),
+(3, 1, 'add', 0),
+(3, 1, 'delete', 0),
+(3, 1, 'edit', 0),
+(3, 1, 'view', 0),
+(4, 1, 'add', 0),
+(4, 1, 'delete', 0),
+(4, 1, 'edit', 0),
+(4, 1, 'view', 0),
+(5, 1, 'add', 0),
+(5, 1, 'delete', 0),
+(5, 1, 'edit', 0),
+(5, 1, 'view', 0),
+(6, 1, 'add', 0),
+(6, 1, 'delete', 0),
+(6, 1, 'edit', 0),
+(6, 1, 'view', 0),
+(7, 1, 'add', 0),
+(7, 1, 'delete', 0),
+(7, 1, 'edit', 0),
+(7, 1, 'view', 0),
+(8, 1, 'add', 0),
+(8, 1, 'delete', 0),
+(8, 1, 'edit', 0),
+(8, 1, 'view', 0),
+(9, 1, 'add', 0),
+(9, 1, 'delete', 0),
+(9, 1, 'edit', 0),
+(9, 1, 'view', 0),
+(10, 1, 'add', 0),
+(10, 1, 'delete', 0),
+(10, 1, 'edit', 0),
+(10, 1, 'view', 0);
 
-CREATE TABLE CPU (
-    maCPU INT NOT NULL PRIMARY KEY,
-    tenCPU VARCHAR(50) NOT NULL
-);
+-- --------------------------------------------------------
 
-CREATE TABLE RAM (
-    maRAM INT NOT NULL PRIMARY KEY,
-    dungLuongRAM VARCHAR(50) NOT NULL
-);
+--
+-- Cấu trúc bảng cho bảng `chitietphieunhap`
+--
 
-CREATE TABLE ROM (
-    maROM INT NOT NULL PRIMARY KEY,
-    dungLuongROM VARCHAR(50) NOT NULL
-);
+CREATE TABLE `chitietphieunhap` (
+  `maSP` int(11) NOT NULL,
+  `maPN` int(11) NOT NULL,
+  `soLuongSP` int(11) NOT NULL,
+  `giaNhap` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE SANPHAM (
-    maSP INT NOT NULL PRIMARY KEY,
-    tenSP VARCHAR(50) NOT NULL,
-    giaSP INT NOT NULL,
-    soLuongTon INT NOT NULL,
-    maCPU INT NOT NULL,
-    maRAM INT NOT NULL,
-    maROM INT NOT NULL,
-    maTH INT NOT NULL,
-    maDPG INT NOT NULL,
-    maLoai INT NOT NULL,
-    thoigianBH INT NOT NULL,
-    FOREIGN KEY (maCPU) REFERENCES CPU(maCPU),
-    FOREIGN KEY (maRAM) REFERENCES RAM(maRAM),
-    FOREIGN KEY (maROM) REFERENCES ROM(maROM),
-    FOREIGN KEY (maTH) REFERENCES THUONGHIEU(maTH),
-    FOREIGN KEY (maDPG) REFERENCES DOPHANGIAI(maDPG),
-    FOREIGN KEY (maLoai) REFERENCES PHANLOAI(maLoai)
-);
+-- --------------------------------------------------------
 
-CREATE TABLE PHIEUNHAP (
-    maPN INT NOT NULL PRIMARY KEY,
-    maNV INT NOT NULL,
-    maNCC INT NOT NULL,
-    tongTien INT NOT NULL,
-    ngayNhap DATE NOT NULL,
-    FOREIGN KEY (maNV) REFERENCES NHANVIEN(maNV),
-    FOREIGN KEY (maNCC) REFERENCES NHACUNGCAP(maNCC)
-);
+--
+-- Cấu trúc bảng cho bảng `chitietphieuxuat`
+--
 
-CREATE TABLE CHITIETPHIEUNHAP (
-    maSP INT NOT NULL,
-    maPN INT NOT NULL,
-    soLuongSP INT NOT NULL,
-    giaNhap INT NOT NULL,
-    PRIMARY KEY (maSP, maPN),
-    FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
-    FOREIGN KEY (maPN) REFERENCES PHIEUNHAP(maPN)
-);
+CREATE TABLE `chitietphieuxuat` (
+  `maSP` int(11) NOT NULL,
+  `maPX` int(11) NOT NULL,
+  `giaBan` int(11) NOT NULL,
+  `soLuongSP` int(11) NOT NULL,
+  `serialSP` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE PHIEUXUAT (
-    maPX INT NOT NULL PRIMARY KEY,
-    maNV INT NOT NULL,
-    maKH INT NULL,
-    tongTien INT NOT NULL,
-    ngayXuat DATE NOT NULL,
-    FOREIGN KEY (maNV) REFERENCES NHANVIEN(maNV),
-    FOREIGN KEY (maKH) REFERENCES KHACHHANG(maKH)
-);
+-- --------------------------------------------------------
 
-CREATE TABLE CHITIETPHIEUXUAT (
-    maSP INT NOT NULL,
-    maPX INT NOT NULL,
-    giaBan INT NOT NULL,
-    soLuongSP INT NOT NULL,
-    serialSP VARCHAR(50) NOT NULL,
-    PRIMARY KEY (maSP, maPX),
-    FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
-    FOREIGN KEY (maPX) REFERENCES PHIEUXUAT(maPX)
-);
+--
+-- Cấu trúc bảng cho bảng `chucnang`
+--
 
-CREATE TABLE PHIEUBAOHANH (
-    maPBH INT NOT NULL PRIMARY KEY,
-    maSP INT NOT NULL,
-    maPX INT NULL,
-    ngayTiepNhan DATE NOT NULL,
-    moTaLoi NVARCHAR(100) NOT NULL,
-    trangThaiBH INT NOT NULL,
-    maNVBH INT NOT NULL,
-    FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
-    FOREIGN KEY (maPX) REFERENCES PHIEUXUAT(maPX),
-    FOREIGN KEY (maNVBH) REFERENCES NHANVIEN(maNV)
-);
+CREATE TABLE `chucnang` (
+  `maCN` int(11) NOT NULL,
+  `tenCN` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO QUYEN (maQuyen, tenQuyen) VALUES
-(1, N'Quản trị viên (admin)'),
-(2, N'Nhân viên bán hàng'),
-(3, N'kế toán');
+--
+-- Đang đổ dữ liệu cho bảng `chucnang`
+--
 
-INSERT INTO NHANVIEN (maNV, tenNV, sdt, email) VALUES
-(1, N'Phạm Đình Duy Thái', '0912345678', 'dthai@gmail.com'),
-(2, N'Lê Văn Nhất', '0923456789', 'nhat@gmail.com'),
-(3, N'Mai Thành Trung', '0934567890', 'trung@gmail.com'),
-(4, N'Hồ Minh TIến', '0945678901', 'tien@gmail.com'),
-(5, N'Đặng Thái Tú', '0956789012', 'tututu@gmail.com');
+INSERT INTO `chucnang` (`maCN`, `tenCN`, `trangThaiXoa`) VALUES
+(1, 'Quản Lí Sản Phẩm', 0),
+(2, 'Quản Lí Cấu Hình', 0),
+(3, 'Quản Lí Khách Hàng', 0),
+(4, 'Quản Lí Nhân Viên', 0),
+(5, 'Quản Lí Tài Khoản', 0),
+(6, 'Quản Lí Nhà Cung Cấp', 0),
+(7, 'Quản Lí Nhập Hàng', 0),
+(8, 'Quản Lí Xuất Hàng', 0),
+(9, 'Quản Lí Phân Quyền', 0),
+(10, 'Quản Lí Thống Kê', 0);
 
-INSERT INTO TAIKHOAN (tenDangNhap, matKhau, maQuyen, maNV) VALUES
-('admin1', '123456', 1, 1),
-('banhang1', '123456', 2, 2),
-('banhang2', '123456', 2, 3),
-('banhang3', '123456', 2, 4),
-('ketoan1', '123456', 3, 5);
+-- --------------------------------------------------------
 
-INSERT INTO PHANLOAI (maLoai, tenLoai) VALUES
-(1, N'Laptop Văn Phòng - Học Tập'),
-(2, N'Laptop Gaming'),
-(3, N'Laptop Đồ Họa - Kỹ Thuật');
+--
+-- Cấu trúc bảng cho bảng `cpu`
+--
 
-INSERT INTO THUONGHIEU (maTH, tenTH) VALUES
-(1, N'Dell'),
-(2, N'HP'),
-(3, N'Asus'),
-(4, N'Acer'),
-(5, N'Lenovo'),
-(6, N'MSI');
+CREATE TABLE `cpu` (
+  `maCPU` int(11) NOT NULL,
+  `tenCPU` varchar(50) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO DOPHANGIAI (maDPG, tenDPG) VALUES
-(1, 'HD'),
-(2, 'Full HD'),
-(3, '2K (Quad HD)'),
-(4, '3K'),
-(5, 'WUXGA'),
-(6, 'WQXGA'),
-(7, 'WQUXGA'),
-(8, '4K (Ultra HD)');
+--
+-- Đang đổ dữ liệu cho bảng `cpu`
+--
 
-INSERT INTO CPU (maCPU, tenCPU) VALUES
-(1, 'Intel Core i3'),
-(2, 'Intel Core i5'),
-(3, 'Intel Core i7'),
-(4, 'Intel Core i9'),
-(5, 'AMD Ryzen 5'),
-(6, 'AMD Ryzen 7'),
-(7, 'AMD Ryzen 9'),
-(8, 'Qualcomm Snapdragon'),
-(9, 'Snapdragon X Plus');
+INSERT INTO `cpu` (`maCPU`, `tenCPU`, `trangThaiXoa`) VALUES
+(1, 'Intel Core i3', 0),
+(2, 'Intel Core i5', 0),
+(3, 'Intel Core i7', 0),
+(4, 'Intel Core i9', 0),
+(5, 'AMD Ryzen 5', 0),
+(6, 'AMD Ryzen 7', 0),
+(7, 'AMD Ryzen 9', 0),
+(8, 'Qualcomm Snapdragon', 0),
+(9, 'Snapdragon X Plus', 0);
 
-INSERT INTO RAM (maRAM, dungLuongRAM) VALUES
-(1, '4GB'),
-(2, '8GB'),
-(3, '12GB'),
-(4, '16GB'),
-(5, '18GB'),
-(6, '24GB'),
-(7, '32GB'),
-(8, '36GB'),
-(9, '48GB'),
-(10, '64GB');
+-- --------------------------------------------------------
 
-INSERT INTO ROM (maROM, dungLuongROM) VALUES
-(1, '128GB'),
-(2, '256GB'),
-(3, '512GB'),
-(4, '1TB'),
-(5, '2TB'),
-(6, '3TB'),
-(7, '4TB'),
-(8, '6TB');
+--
+-- Cấu trúc bảng cho bảng `dophangiai`
+--
 
-INSERT INTO NHACUNGCAP (maNCC, tenNCC, diaChi, sdt) VALUES
-(1, N'Công ty TNHH Công Nghệ Việt', N'12 Nguyễn Văn Bảo, Gò Vấp, TP.HCM', '0912345678'),
-(2, N'Công ty Cổ phần Phát Triển Tin Học', N'45 Lý Tự Trọng, Quận 1, TP.HCM', '0923456789'),
-(3, N'Công ty TNHH Linh Kiện Máy Tính', N'89 Trường Chinh, Tân Bình, TP.HCM', '0934567890'),
-(4, N'Công ty Cổ phần Máy Tính Toàn Cầu', N'56 Nguyễn Huệ, Quận 1, TP.HCM', '0945678901'),
-(5, N'Công ty TNHH Thương Mại Điện Tử', N'101 Cách Mạng Tháng 8, Quận 10, TP.HCM', '0956789012');
+CREATE TABLE `dophangiai` (
+  `maDPG` int(11) NOT NULL,
+  `tenDPG` varchar(50) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO KHACHHANG (maKH, tenKH, sdt, email) VALUES
-(1, N'Nguyễn Văn An', '0911000001', 'an.nguyen@gmail.com'),
-(2, N'Lê Thị Bích', '0911000002', 'bich.le@gmail.com'),
-(3, N'Trần Hoàng Nam', '0911000003', 'nam.tran@gmail.com'),
-(4, N'Phạm Minh Khoa', '0911000004', 'khoa.pham@gmail.com'),
-(5, N'Vũ Thị Hồng', '0911000005', 'hong.vu@gmail.com'),
-(6, N'Đặng Quốc Bảo', '0911000006', 'bao.dang@gmail.com'),
-(7, N'Hồ Văn Tú', '0911000007', 'tu.ho@gmail.com'),
-(8, N'Bùi Ngọc Lan', '0911000008', 'lan.bui@gmail.com'),
-(9, N'Hoàng Anh Dũng', '0911000009', 'dung.hoang@gmail.com'),
-(10, N'Ngô Thị Thanh', '0911000010', 'thanh.ngo@gmail.com');
+--
+-- Đang đổ dữ liệu cho bảng `dophangiai`
+--
 
-INSERT INTO SANPHAM (maSP, tenSP, giaSP, soLuongTon, maCPU, maRAM, maROM, maTH, maDPG, maLoai, thoigianBH) VALUES
-(1, N'Dell Inspiron 15', 15000000, 10, 2, 2, 2, 1, 2, 1, 24),
-(2, N'Dell XPS 13', 32000000, 5, 4, 4, 3, 1, 5, 1, 36),
-(3, N'Dell Latitude 7420', 28000000, 7, 3, 3, 2, 1, 2, 1, 24),
-(4, N'HP Pavilion 14', 14000000, 12, 2, 2, 2, 2, 2, 1, 24),
-(5, N'HP Envy x360', 26000000, 6, 3, 4, 3, 2, 3, 1, 36),
-(6, N'HP Omen 16', 37000000, 4, 4, 5, 4, 2, 8, 2, 24),
-(7, N'Asus ZenBook 14', 18000000, 8, 2, 3, 2, 3, 2, 1, 24),
-(8, N'Asus ROG Zephyrus G14', 42000000, 3, 6, 6, 4, 3, 8, 2, 36),
-(9, N'Asus TUF Gaming F15', 25000000, 9, 5, 4, 3, 3, 2, 2, 24),
-(10, N'Acer Aspire 5', 13000000, 11, 1, 2, 2, 4, 2, 1, 24),
-(11, N'Acer Predator Helios 300', 35000000, 5, 4, 5, 4, 4, 8, 2, 36),
-(12, N'Acer Swift 3', 16000000, 7, 3, 3, 2, 4, 3, 1, 24),
-(13, N'Lenovo IdeaPad 5', 14500000, 10, 2, 3, 2, 5, 2, 1, 24),
-(14, N'Lenovo ThinkPad X1 Carbon', 33000000, 4, 3, 5, 3, 5, 5, 1, 36),
-(15, N'Lenovo Legion 5 Pro', 40000000, 3, 6, 6, 4, 5, 8, 2, 24),
-(16, N'MSI Modern 14', 17000000, 9, 2, 3, 2, 6, 2, 1, 24),
-(17, N'MSI Stealth 15M', 39000000, 5, 4, 6, 4, 6, 8, 2, 36),
-(18, N'MSI GF63 Thin', 23000000, 6, 3, 4, 3, 6, 2, 2, 24),
-(19, N'Asus VivoBook 15', 13500000, 10, 1, 2, 1, 3, 2, 1, 24),
-(20, N'Dell G15', 28000000, 8, 5, 5, 4, 1, 8, 2, 36);
+INSERT INTO `dophangiai` (`maDPG`, `tenDPG`, `trangThaiXoa`) VALUES
+(1, 'HD', 0),
+(2, 'Full HD', 0),
+(3, '2K (Quad HD)', 0),
+(4, '3K', 0),
+(5, 'WUXGA', 0),
+(6, 'WQXGA', 0),
+(7, 'WQUXGA', 0),
+(8, '4K (Ultra HD)', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `hanhdong`
+--
+
+CREATE TABLE `hanhdong` (
+  `maHD` varchar(10) NOT NULL,
+  `tenHD` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `hanhdong`
+--
+
+INSERT INTO `hanhdong` (`maHD`, `tenHD`, `trangThaiXoa`) VALUES
+('add', 'THÊM', 0),
+('delete', 'XÓA', 0),
+('edit', 'SỬA', 0),
+('view', 'XEM', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `khachhang`
+--
+
+CREATE TABLE `khachhang` (
+  `maKH` int(11) NOT NULL,
+  `tenKH` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sdt` varchar(11) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `khachhang`
+--
+
+INSERT INTO `khachhang` (`maKH`, `tenKH`, `sdt`, `email`, `trangThaiXoa`) VALUES
+(1, 'Nguyễn Văn An', '0911000001', 'an.nguyen@gmail.com', 0),
+(2, 'Lê Thị Bích', '0911000002', 'bich.le@gmail.com', 0),
+(3, 'Trần Hoàng Nam', '0911000003', 'nam.tran@gmail.com', 0),
+(4, 'Phạm Minh Khoa', '0911000004', 'khoa.pham@gmail.com', 0),
+(5, 'Vũ Thị Hồng', '0911000005', 'hong.vu@gmail.com', 0),
+(6, 'Đặng Quốc Bảo', '0911000006', 'bao.dang@gmail.com', 0),
+(7, 'Hồ Văn Tú', '0911000007', 'tu.ho@gmail.com', 0),
+(8, 'Bùi Ngọc Lan', '0911000008', 'lan.bui@gmail.com', 0),
+(9, 'Hoàng Anh Dũng', '0911000009', 'dung.hoang@gmail.com', 0),
+(10, 'Ngô Thị Thanh', '0911000010', 'thanh.ngo@gmail.com', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `nhacungcap`
+--
+
+CREATE TABLE `nhacungcap` (
+  `maNCC` int(11) NOT NULL,
+  `tenNCC` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `diaChi` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sdt` varchar(11) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `nhacungcap`
+--
+
+INSERT INTO `nhacungcap` (`maNCC`, `tenNCC`, `diaChi`, `sdt`, `trangThaiXoa`) VALUES
+(1, 'Công ty TNHH Công Nghệ Việt', '12 Nguyễn Văn Bảo, Gò Vấp, TP.HCM', '0912345678', 0),
+(2, 'Công ty Cổ phần Phát Triển Tin Học', '45 Lý Tự Trọng, Quận 1, TP.HCM', '0923456789', 0),
+(3, 'Công ty TNHH Linh Kiện Máy Tính', '89 Trường Chinh, Tân Bình, TP.HCM', '0934567890', 0),
+(4, 'Công ty Cổ phần Máy Tính Toàn Cầu', '56 Nguyễn Huệ, Quận 1, TP.HCM', '0945678901', 0),
+(5, 'Công ty TNHH Thương Mại Điện Tử', '101 Cách Mạng Tháng 8, Quận 10, TP.HCM', '0956789012', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `nhanvien`
+--
+
+CREATE TABLE `nhanvien` (
+  `maNV` int(11) NOT NULL,
+  `tenNV` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `sdt` varchar(11) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `nhanvien`
+--
+
+INSERT INTO `nhanvien` (`maNV`, `tenNV`, `sdt`, `email`, `trangThaiXoa`) VALUES
+(1, 'Phạm Đình Duy Thái', '0912345678', 'dthai@gmail.com', 0),
+(2, 'Lê Văn Nhất', '0923456789', 'nhat@gmail.com', 0),
+(3, 'Mai Thành Trung', '0934567890', 'trung@gmail.com', 0),
+(4, 'Hồ Minh TIến', '0945678901', 'tien@gmail.com', 0),
+(5, 'Đặng Thái Tú', '0956789012', 'tututu@gmail.com', 0),
+(6, 'uytre', '0987654321', 'fhsfu@gmail.com', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `phanloai`
+--
+
+CREATE TABLE `phanloai` (
+  `maLoai` int(11) NOT NULL,
+  `tenLoai` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `phanloai`
+--
+
+INSERT INTO `phanloai` (`maLoai`, `tenLoai`, `trangThaiXoa`) VALUES
+(1, 'Laptop Văn Phòng - Học Tập', 0),
+(2, 'Laptop Gaming', 0),
+(3, 'Laptop Đồ Họa - Kỹ Thuật', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `phieubaohanh`
+--
+
+CREATE TABLE `phieubaohanh` (
+  `maPBH` int(11) NOT NULL,
+  `maSP` int(11) NOT NULL,
+  `maPX` int(11) DEFAULT NULL,
+  `ngayTiepNhan` date NOT NULL,
+  `moTaLoi` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `trangThaiBH` int(11) NOT NULL,
+  `maNVBH` int(11) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `phieunhap`
+--
+
+CREATE TABLE `phieunhap` (
+  `maPN` int(11) NOT NULL,
+  `maNV` int(11) NOT NULL,
+  `maNCC` int(11) NOT NULL,
+  `tongTien` int(11) NOT NULL,
+  `ngayNhap` date NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `phieuxuat`
+--
+
+CREATE TABLE `phieuxuat` (
+  `maPX` int(11) NOT NULL,
+  `maNV` int(11) NOT NULL,
+  `maKH` int(11) DEFAULT NULL,
+  `tongTien` int(11) NOT NULL,
+  `ngayXuat` date NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `quyen`
+--
+
+CREATE TABLE `quyen` (
+  `maQuyen` int(11) NOT NULL,
+  `tenQuyen` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `quyen`
+--
+
+INSERT INTO `quyen` (`maQuyen`, `tenQuyen`, `trangThaiXoa`) VALUES
+(1, 'Quản trị viên (admin)', 0),
+(2, 'Nhân viên bán hàng', 0),
+(3, 'Kế toán', 0),
+(4, 'Quản lý', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `ram`
+--
+
+CREATE TABLE `ram` (
+  `maRAM` int(11) NOT NULL,
+  `dungLuongRAM` varchar(50) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `ram`
+--
+
+INSERT INTO `ram` (`maRAM`, `dungLuongRAM`, `trangThaiXoa`) VALUES
+(1, '4GB', 0),
+(2, '8GB', 0),
+(3, '12GB', 0),
+(4, '16GB', 0),
+(5, '18GB', 0),
+(6, '24GB', 0),
+(7, '32GB', 0),
+(8, '36GB', 0),
+(9, '48GB', 0),
+(10, '64GB', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `rom`
+--
+
+CREATE TABLE `rom` (
+  `maROM` int(11) NOT NULL,
+  `dungLuongROM` varchar(50) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `rom`
+--
+
+INSERT INTO `rom` (`maROM`, `dungLuongROM`, `trangThaiXoa`) VALUES
+(1, '128GB', 0),
+(2, '256GB', 0),
+(3, '512GB', 0),
+(4, '1TB', 0),
+(5, '2TB', 0),
+(6, '3TB', 0),
+(7, '4TB', 0),
+(8, '6TB', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `sanpham`
+--
+
+CREATE TABLE `sanpham` (
+  `maSP` int(11) NOT NULL,
+  `tenSP` varchar(50) NOT NULL,
+  `giaSP` int(11) NOT NULL,
+  `soLuongTon` int(11) NOT NULL,
+  `maCPU` int(11) NOT NULL,
+  `maRAM` int(11) NOT NULL,
+  `maROM` int(11) NOT NULL,
+  `maTH` int(11) NOT NULL,
+  `maDPG` int(11) NOT NULL,
+  `maLoai` int(11) NOT NULL,
+  `thoigianBH` int(11) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `sanpham`
+--
+
+INSERT INTO `sanpham` (`maSP`, `tenSP`, `giaSP`, `soLuongTon`, `maCPU`, `maRAM`, `maROM`, `maTH`, `maDPG`, `maLoai`, `thoigianBH`, `trangThaiXoa`) VALUES
+(1, 'Dell Inspiron 15', 15000000, 0, 2, 2, 2, 1, 2, 1, 24, 0),
+(2, 'Dell XPS 13', 32000000, 0, 4, 4, 3, 1, 5, 1, 36, 0),
+(3, 'Dell Latitude 7420', 28000000, 0, 3, 3, 2, 1, 2, 1, 24, 0),
+(4, 'HP Pavilion 14', 14000000, 0, 2, 2, 2, 2, 2, 1, 24, 0),
+(5, 'HP Envy x360', 26000000, 0, 3, 4, 3, 2, 3, 1, 36, 0),
+(6, 'HP Omen 16', 37000000, 0, 4, 5, 4, 2, 8, 2, 24, 0),
+(7, 'Asus ZenBook 14', 18000000, 0, 2, 3, 2, 3, 2, 1, 24, 0),
+(8, 'Asus ROG Zephyrus G14', 42000000, 8, 6, 6, 4, 3, 8, 2, 36, 0),
+(9, 'Asus TUF Gaming F15', 25000000, 0, 5, 4, 3, 3, 2, 2, 24, 0),
+(10, 'Acer Aspire 5', 13000000, 0, 1, 2, 2, 4, 2, 1, 24, 0),
+(11, 'Acer Predator Helios 300', 35000000, 0, 4, 5, 4, 4, 8, 2, 36, 0),
+(12, 'Acer Swift 3', 16000000, 0, 3, 3, 2, 4, 3, 1, 24, 0),
+(13, 'Lenovo IdeaPad 5', 14500000, 0, 2, 3, 2, 5, 2, 1, 24, 0),
+(14, 'Lenovo ThinkPad X1 Carbon', 33000000, 0, 3, 5, 3, 5, 5, 1, 36, 0),
+(15, 'Lenovo Legion 5 Pro', 40000000, 0, 6, 6, 4, 5, 8, 2, 24, 0),
+(16, 'MSI Modern 14', 17000000, 0, 2, 3, 2, 6, 2, 1, 24, 0),
+(17, 'MSI Stealth 15M', 39000000, 0, 4, 6, 4, 6, 8, 2, 36, 0),
+(18, 'MSI GF63 Thin', 23000000, 0, 3, 4, 3, 6, 2, 2, 24, 0),
+(19, 'Asus VivoBook 15', 13500000, 0, 1, 2, 1, 3, 2, 1, 24, 0),
+(20, 'Dell G15', 28000000, 0, 5, 5, 4, 1, 8, 2, 36, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `taikhoan`
+--
+
+CREATE TABLE `taikhoan` (
+  `tenDangNhap` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `matKhau` varchar(50) NOT NULL,
+  `maQuyen` int(11) NOT NULL,
+  `maNV` int(11) NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `taikhoan`
+--
+
+INSERT INTO `taikhoan` (`tenDangNhap`, `matKhau`, `maQuyen`, `maNV`, `trangThaiXoa`) VALUES
+('admin1', '123456', 1, 1, 0),
+('banhang1', '123456', 2, 2, 0),
+('banhang2', '123456', 2, 3, 0),
+('banhang3', '123456', 2, 4, 0),
+('ketoan1', '123456', 3, 5, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `thuonghieu`
+--
+
+CREATE TABLE `thuonghieu` (
+  `maTH` int(11) NOT NULL,
+  `tenTH` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `trangThaiXoa` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `thuonghieu`
+--
+
+INSERT INTO `thuonghieu` (`maTH`, `tenTH`, `trangThaiXoa`) VALUES
+(1, 'Dell', 0),
+(2, 'HP', 0),
+(3, 'Asus', 0),
+(4, 'Acer', 0),
+(5, 'Lenovo', 0),
+(6, 'MSI', 0);
+
+--
+-- Chỉ mục cho các bảng đã đổ
+--
+
+--
+-- Chỉ mục cho bảng `chitietchucnang`
+--
+ALTER TABLE `chitietchucnang`
+  ADD PRIMARY KEY (`maCN`,`maQuyen`,`maHD`),
+  ADD KEY `maQuyen` (`maQuyen`),
+  ADD KEY `maHD` (`maHD`);
+
+--
+-- Chỉ mục cho bảng `chitietphieunhap`
+--
+ALTER TABLE `chitietphieunhap`
+  ADD PRIMARY KEY (`maSP`,`maPN`),
+  ADD KEY `maPN` (`maPN`);
+
+--
+-- Chỉ mục cho bảng `chitietphieuxuat`
+--
+ALTER TABLE `chitietphieuxuat`
+  ADD PRIMARY KEY (`maSP`,`maPX`),
+  ADD KEY `maPX` (`maPX`);
+
+--
+-- Chỉ mục cho bảng `chucnang`
+--
+ALTER TABLE `chucnang`
+  ADD PRIMARY KEY (`maCN`);
+
+--
+-- Chỉ mục cho bảng `cpu`
+--
+ALTER TABLE `cpu`
+  ADD PRIMARY KEY (`maCPU`);
+
+--
+-- Chỉ mục cho bảng `dophangiai`
+--
+ALTER TABLE `dophangiai`
+  ADD PRIMARY KEY (`maDPG`);
+
+--
+-- Chỉ mục cho bảng `hanhdong`
+--
+ALTER TABLE `hanhdong`
+  ADD PRIMARY KEY (`maHD`);
+
+--
+-- Chỉ mục cho bảng `khachhang`
+--
+ALTER TABLE `khachhang`
+  ADD PRIMARY KEY (`maKH`);
+
+--
+-- Chỉ mục cho bảng `nhacungcap`
+--
+ALTER TABLE `nhacungcap`
+  ADD PRIMARY KEY (`maNCC`);
+
+--
+-- Chỉ mục cho bảng `nhanvien`
+--
+ALTER TABLE `nhanvien`
+  ADD PRIMARY KEY (`maNV`);
+
+--
+-- Chỉ mục cho bảng `phanloai`
+--
+ALTER TABLE `phanloai`
+  ADD PRIMARY KEY (`maLoai`);
+
+--
+-- Chỉ mục cho bảng `phieubaohanh`
+--
+ALTER TABLE `phieubaohanh`
+  ADD PRIMARY KEY (`maPBH`),
+  ADD KEY `maSP` (`maSP`),
+  ADD KEY `maPX` (`maPX`),
+  ADD KEY `maNVBH` (`maNVBH`);
+
+--
+-- Chỉ mục cho bảng `phieunhap`
+--
+ALTER TABLE `phieunhap`
+  ADD PRIMARY KEY (`maPN`),
+  ADD KEY `maNV` (`maNV`),
+  ADD KEY `maNCC` (`maNCC`);
+
+--
+-- Chỉ mục cho bảng `phieuxuat`
+--
+ALTER TABLE `phieuxuat`
+  ADD PRIMARY KEY (`maPX`),
+  ADD KEY `maNV` (`maNV`),
+  ADD KEY `maKH` (`maKH`);
+
+--
+-- Chỉ mục cho bảng `quyen`
+--
+ALTER TABLE `quyen`
+  ADD PRIMARY KEY (`maQuyen`);
+
+--
+-- Chỉ mục cho bảng `ram`
+--
+ALTER TABLE `ram`
+  ADD PRIMARY KEY (`maRAM`);
+
+--
+-- Chỉ mục cho bảng `rom`
+--
+ALTER TABLE `rom`
+  ADD PRIMARY KEY (`maROM`);
+
+--
+-- Chỉ mục cho bảng `sanpham`
+--
+ALTER TABLE `sanpham`
+  ADD PRIMARY KEY (`maSP`),
+  ADD KEY `maCPU` (`maCPU`),
+  ADD KEY `maRAM` (`maRAM`),
+  ADD KEY `maROM` (`maROM`),
+  ADD KEY `maTH` (`maTH`),
+  ADD KEY `maDPG` (`maDPG`),
+  ADD KEY `maLoai` (`maLoai`);
+
+--
+-- Chỉ mục cho bảng `taikhoan`
+--
+ALTER TABLE `taikhoan`
+  ADD PRIMARY KEY (`tenDangNhap`),
+  ADD KEY `maQuyen` (`maQuyen`),
+  ADD KEY `maNV` (`maNV`);
+
+--
+-- Chỉ mục cho bảng `thuonghieu`
+--
+ALTER TABLE `thuonghieu`
+  ADD PRIMARY KEY (`maTH`);
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `chitietchucnang`
+--
+ALTER TABLE `chitietchucnang`
+  ADD CONSTRAINT `chitietchucnang_ibfk_1` FOREIGN KEY (`maCN`) REFERENCES `chucnang` (`maCN`),
+  ADD CONSTRAINT `chitietchucnang_ibfk_2` FOREIGN KEY (`maQuyen`) REFERENCES `quyen` (`maQuyen`),
+  ADD CONSTRAINT `chitietchucnang_ibfk_3` FOREIGN KEY (`maHD`) REFERENCES `hanhdong` (`maHD`);
+
+--
+-- Các ràng buộc cho bảng `chitietphieunhap`
+--
+ALTER TABLE `chitietphieunhap`
+  ADD CONSTRAINT `chitietphieunhap_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
+  ADD CONSTRAINT `chitietphieunhap_ibfk_2` FOREIGN KEY (`maPN`) REFERENCES `phieunhap` (`maPN`);
+
+--
+-- Các ràng buộc cho bảng `chitietphieuxuat`
+--
+ALTER TABLE `chitietphieuxuat`
+  ADD CONSTRAINT `chitietphieuxuat_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
+  ADD CONSTRAINT `chitietphieuxuat_ibfk_2` FOREIGN KEY (`maPX`) REFERENCES `phieuxuat` (`maPX`);
+
+--
+-- Các ràng buộc cho bảng `phieubaohanh`
+--
+ALTER TABLE `phieubaohanh`
+  ADD CONSTRAINT `phieubaohanh_ibfk_1` FOREIGN KEY (`maSP`) REFERENCES `sanpham` (`maSP`),
+  ADD CONSTRAINT `phieubaohanh_ibfk_2` FOREIGN KEY (`maPX`) REFERENCES `phieuxuat` (`maPX`),
+  ADD CONSTRAINT `phieubaohanh_ibfk_3` FOREIGN KEY (`maNVBH`) REFERENCES `nhanvien` (`maNV`);
+
+--
+-- Các ràng buộc cho bảng `phieunhap`
+--
+ALTER TABLE `phieunhap`
+  ADD CONSTRAINT `phieunhap_ibfk_1` FOREIGN KEY (`maNV`) REFERENCES `nhanvien` (`maNV`),
+  ADD CONSTRAINT `phieunhap_ibfk_2` FOREIGN KEY (`maNCC`) REFERENCES `nhacungcap` (`maNCC`);
+
+--
+-- Các ràng buộc cho bảng `phieuxuat`
+--
+ALTER TABLE `phieuxuat`
+  ADD CONSTRAINT `phieuxuat_ibfk_1` FOREIGN KEY (`maNV`) REFERENCES `nhanvien` (`maNV`),
+  ADD CONSTRAINT `phieuxuat_ibfk_2` FOREIGN KEY (`maKH`) REFERENCES `khachhang` (`maKH`);
+
+--
+-- Các ràng buộc cho bảng `sanpham`
+--
+ALTER TABLE `sanpham`
+  ADD CONSTRAINT `sanpham_ibfk_1` FOREIGN KEY (`maCPU`) REFERENCES `cpu` (`maCPU`),
+  ADD CONSTRAINT `sanpham_ibfk_2` FOREIGN KEY (`maRAM`) REFERENCES `ram` (`maRAM`),
+  ADD CONSTRAINT `sanpham_ibfk_3` FOREIGN KEY (`maROM`) REFERENCES `rom` (`maROM`),
+  ADD CONSTRAINT `sanpham_ibfk_4` FOREIGN KEY (`maTH`) REFERENCES `thuonghieu` (`maTH`),
+  ADD CONSTRAINT `sanpham_ibfk_5` FOREIGN KEY (`maDPG`) REFERENCES `dophangiai` (`maDPG`),
+  ADD CONSTRAINT `sanpham_ibfk_6` FOREIGN KEY (`maLoai`) REFERENCES `phanloai` (`maLoai`);
+
+--
+-- Các ràng buộc cho bảng `taikhoan`
+--
+ALTER TABLE `taikhoan`
+  ADD CONSTRAINT `taikhoan_ibfk_1` FOREIGN KEY (`maQuyen`) REFERENCES `quyen` (`maQuyen`),
+  ADD CONSTRAINT `taikhoan_ibfk_2` FOREIGN KEY (`maNV`) REFERENCES `nhanvien` (`maNV`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
