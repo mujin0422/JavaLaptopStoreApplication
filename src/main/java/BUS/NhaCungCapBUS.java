@@ -1,8 +1,9 @@
 package BUS;
 
+import java.util.ArrayList;
+
 import DAO.NhaCungCapDAO;
 import DTO.NhaCungCapDTO;
-import java.util.ArrayList;
 
 public class NhaCungCapBUS {
     private NhaCungCapDAO nhaCungCapDAO;
@@ -12,7 +13,7 @@ public class NhaCungCapBUS {
     }
 
     public ArrayList<NhaCungCapDTO> getAllNhaCungCap() {
-        return nhaCungCapDAO.getAll();
+        return nhaCungCapDAO.getAllNhaCungCap();
     }
 
     public NhaCungCapDTO getNhaCungCapById(int id) {

@@ -1,11 +1,12 @@
 package DAO;
 
-import DTO.PhieuNhapDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import DTO.PhieuNhapDTO;
 
 public class PhieuNhapDAO {
     public int add(PhieuNhapDTO obj) {
@@ -16,7 +17,7 @@ public class PhieuNhapDAO {
             ps.setInt(2, obj.getMaNV());
             ps.setInt(3, obj.getMaNCC());
             ps.setInt(4, obj.getTongTien());
-            ps.setDate(5, new java.sql.Date(obj.getNgayNhap().getTime()));
+            ps.setString(5,obj.getNgayNhap());
             return ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -31,7 +32,7 @@ public class PhieuNhapDAO {
             ps.setInt(1, obj.getMaNV());
             ps.setInt(2, obj.getMaNCC());
             ps.setInt(3, obj.getTongTien());
-            ps.setDate(5, new java.sql.Date(obj.getNgayNhap().getTime()));
+            ps.setString(4,obj.getNgayNhap());
             ps.setInt(5, obj.getMaPN()); 
             return ps.executeUpdate();
         } catch (SQLException e) {
@@ -64,7 +65,7 @@ public class PhieuNhapDAO {
                     rs.getInt("maNV"),
                     rs.getInt("maNCC"),
                     rs.getInt("tongTien"),
-                    rs.getDate("ngayNhap")
+                    rs.getString("ngayNhap")
                 );
                 dspn.add(obj);
             }
@@ -86,7 +87,7 @@ public class PhieuNhapDAO {
                         rs.getInt("maNV"),
                         rs.getInt("maNCC"),
                         rs.getInt("tongTien"),
-                        rs.getDate("ngayNhap")
+                        rs.getString("ngayNhap")
                     );
                 }
             }
@@ -94,6 +95,19 @@ public class PhieuNhapDAO {
             e.printStackTrace();
         }
         return null;
+    }
+    public int demSoPhieuNhap() {
+        String sql = "SELECT COUNT(*) FROM phieunhap";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);  
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;  
     }
 
 }

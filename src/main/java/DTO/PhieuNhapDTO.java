@@ -1,16 +1,14 @@
 package DTO;
 
-import java.util.Date;
-
 public class PhieuNhapDTO {
     private int maPN;
     private int maNV;
     private int maNCC;
     private int tongTien;
-    private Date ngayNhap;
+    private String ngayNhap;
     private int trangThaiXoa;
 
-    public PhieuNhapDTO(int maPN, int maNV, int maNCC, int tongTien, Date ngayNhap) {
+    public PhieuNhapDTO(int maPN, int maNV, int maNCC, int tongTien, String ngayNhap) {
         this.maPN = maPN;
         this.maNV = maNV;
         this.maNCC = maNCC;
@@ -45,7 +43,7 @@ public class PhieuNhapDTO {
         return tongTien;
     }
 
-    public Date getNgayNhap() {
+    public String getNgayNhap() {
         return ngayNhap;
     }
 
@@ -65,7 +63,7 @@ public class PhieuNhapDTO {
         this.tongTien = tongTien;
     }
 
-    public void setNgayNhap(Date ngayNhap) {
+    public void setNgayNhap(String ngayNhap) {
         this.ngayNhap = ngayNhap;
     }
 }

@@ -1,8 +1,9 @@
 package BUS;
 
-import DTO.PhieuNhapDTO;
-import DAO.PhieuNhapDAO;
 import java.util.ArrayList;
+
+import DAO.PhieuNhapDAO;
+import DTO.PhieuNhapDTO;
 
 public class PhieuNhapBUS {
     private PhieuNhapDAO phieuNhapDAO;
@@ -45,5 +46,9 @@ public class PhieuNhapBUS {
             }
         }
         return ketQua;
+    }
+    public String getMaPhieuNhapTiepTheo() {
+        int soLuongHienTai = phieuNhapDAO.demSoPhieuNhap();
+        return "PN" + String.format("%03d", soLuongHienTai + 1);
     }
 }

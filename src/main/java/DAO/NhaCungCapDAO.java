@@ -1,12 +1,13 @@
 package DAO;
 
-import DTO.NhaCungCapDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import DTO.NhaCungCapDTO;
 
 public class NhaCungCapDAO {
 
@@ -52,7 +53,7 @@ public class NhaCungCapDAO {
         return 0;
     }
 
-    public ArrayList<NhaCungCapDTO> getAll() {
+    public ArrayList<NhaCungCapDTO> getAllNhaCungCap() {
         ArrayList<NhaCungCapDTO> dsNCC = new ArrayList<>();
         String sql = "SELECT * FROM nhacungcap WHERE trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
