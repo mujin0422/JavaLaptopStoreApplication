@@ -147,6 +147,26 @@ public class TaiKhoanDAO {
             e.printStackTrace();
         }
         return null;
-}
+    }
+    
+    public ArrayList<Integer> getDanhSachMaCnByUsername(String username){
+        ArrayList<Integer> ds = new ArrayList<>();
+        String sql = "SELECT ctcn.maCN "
+                + "FROM taikhoan tk "
+                + "JOIN quyen q ON tk.maQuyen = q.maQuyen "
+                + "JOIN chitietchucnang ctcn ON q.maQuyen = ctcn.maQuyen "
+                + "WHERE ctcn.trangThaiXoa = 0 AND ctcn.maHD = 'view' AND tk.tenDangNhap = ? ";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ds.add(rs.getInt("maCN"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ds;   
+    }
 
 }   

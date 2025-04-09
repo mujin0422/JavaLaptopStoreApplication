@@ -35,4 +35,7 @@ public class TaiKhoanBUS {
         return TaiKhoanDAO.getTenQuyenByUserName(username);
     }
     
+    public ArrayList<Integer> getDanhSachMaCnByUsername(String username){
+        return TaiKhoanDAO.getDanhSachMaCnByUsername(username);
+    }
 }

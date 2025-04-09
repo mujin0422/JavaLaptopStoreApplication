@@ -124,7 +124,6 @@ public final class LoginGUI extends JFrame {
                     return;
                 }
 
-                // Sử dụng DAO để kiểm tra tài khoản
                 TaiKhoanDTO taiKhoan = taiKhoanDAO.getByUsername(tenDangNhap);
 
                 if (taiKhoan == null) {
@@ -136,8 +135,8 @@ public final class LoginGUI extends JFrame {
                     Session.setUser(taiKhoan);
 
                     JOptionPane.showMessageDialog(LoginGUI.this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    new MainLayoutGUI();  // Hiển thị giao diện chính sau khi đăng nhập thành công
-                    dispose(); // Đóng cửa sổ đăng nhập
+                    new MainLayoutGUI(taiKhoan);  
+                    dispose(); 
                 }
             }
         });
