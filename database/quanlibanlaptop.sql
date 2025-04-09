@@ -5,9 +5,10 @@
 );
 INSERT INTO QUYEN (maQuyen, tenQuyen) VALUES
 (1, N'Quản trị viên (admin)'),
-(2, N'Nhân viên bán hàng'),
-(3, N'Kế toán'),
-(4, N'Quản lý');
+(2, N'Quản lý'),
+(3, N'Nhân viên bán hàng'),
+(4, N'Nhân viên kế toán'),
+(5, N'Nhân viên bảo hành');
 
 CREATE TABLE CHUCNANG (
     maCN INT NOT NULL PRIMARY KEY,
@@ -24,7 +25,8 @@ INSERT INTO CHUCNANG (maCN, tenCN) VALUES
 (7, N'Quản Lí Nhập Hàng'),
 (8, N'Quản Lí Xuất Hàng'),
 (9, N'Quản Lí Phân Quyền'),
-(10, N'Quản Lí Thống Kê');
+(10, N'Quẩn Lí Bảo Hành'),
+(11, N'Quản Lí Thống Kê');
 
 CREATE TABLE HANHDONG (
 	maHD VARCHAR(10) PRIMARY KEY,
@@ -57,7 +59,8 @@ INSERT INTO CHITIETCHUCNANG(maCN, maQuyen, maHD) VALUES
 (7, 1, 'view'), (7, 1, 'add'), (7, 1, 'edit'), (7, 1, 'delete'),
 (8, 1, 'view'), (8, 1, 'add'), (8, 1, 'edit'), (8, 1, 'delete'),
 (9, 1, 'view'), (9, 1, 'add'), (9, 1, 'edit'), (9, 1, 'delete'),
-(10, 1, 'view'), (10, 1, 'add'), (10, 1, 'edit'), (10, 1, 'delete');
+(10, 1, 'view'), (10, 1, 'add'), (10, 1, 'edit'), (10, 1, 'delete'),
+(11, 1, 'view'), (11, 1, 'add'), (11, 1, 'edit'), (11, 1, 'delete');
 
 CREATE TABLE NHANVIEN (
     maNV INT NOT NULL PRIMARY KEY,
@@ -85,10 +88,10 @@ CREATE TABLE TAIKHOAN (
 );
 INSERT INTO TAIKHOAN (tenDangNhap, matKhau, maQuyen, maNV) VALUES
 ('admin1', '123456', 1, 1),
-('banhang1', '123456', 2, 2),
-('banhang2', '123456', 2, 3),
-('banhang3', '123456', 2, 4),
-('ketoan1', '123456', 3, 5);
+('banhang1', '123456', 3, 2),
+('banhang2', '123456', 3, 3),
+('banhang3', '123456', 3, 4),
+('ketoan1', '123456', 4, 5);
 
 
 CREATE TABLE KHACHHANG (
@@ -99,16 +102,26 @@ CREATE TABLE KHACHHANG (
 	trangThaiXoa INT NOT NULL DEFAULT 0
 );
 INSERT INTO KHACHHANG (maKH, tenKH, sdt, email) VALUES
-(1, N'Nguyễn Văn An', '0911000001', 'an.nguyen@gmail.com'),
-(2, N'Lê Thị Bích', '0911000002', 'bich.le@gmail.com'),
-(3, N'Trần Hoàng Nam', '0911000003', 'nam.tran@gmail.com'),
-(4, N'Phạm Minh Khoa', '0911000004', 'khoa.pham@gmail.com'),
-(5, N'Vũ Thị Hồng', '0911000005', 'hong.vu@gmail.com'),
-(6, N'Đặng Quốc Bảo', '0911000006', 'bao.dang@gmail.com'),
-(7, N'Hồ Văn Tú', '0911000007', 'tu.ho@gmail.com'),
-(8, N'Bùi Ngọc Lan', '0911000008', 'lan.bui@gmail.com'),
-(9, N'Hoàng Anh Dũng', '0911000009', 'dung.hoang@gmail.com'),
-(10, N'Ngô Thị Thanh', '0911000010', 'thanh.ngo@gmail.com');
+(1, N'Nguyễn Văn An', '0911000001', 'annguyen@gmail.com'),
+(2, N'Lê Thị Bích', '0911000002', 'bichle@gmail.com'),
+(3, N'Trần Hoàng Nam', '0911000003', 'namtran@gmail.com'),
+(4, N'Phạm Minh Khoa', '0911000004', 'khoapham@gmail.com'),
+(5, N'Vũ Thị Hồng', '0911000005', 'hongvu@gmail.com'),
+(6, N'Đặng Quốc Bảo', '0911000006', 'baodang@gmail.com'),
+(7, N'Hồ Văn Tú', '0911000007', 'tuho@gmail.com'),
+(8, N'Bùi Ngọc Lan', '0911000008', 'lanbui@gmail.com'),
+(9, N'Hoàng Anh Dũng', '0911000009', 'dunghoang@gmail.com'),
+(10, N'Ngô Thị Thanh', '0911000010', 'thanhngo@gmail.com'),
+(11, N'Trịnh Công Sơn', '0911000011', 'sontrinh@gmail.com'),
+(12, N'Nguyễn Thị Mai', '0911000012', 'mainuyen@gmail.com'),
+(13, N'Phan Văn Hùng', '0911000013', 'hungphan@gmail.com'),
+(14, N'Lý Kim Chi', '0911000014', 'chily@gmail.com'),
+(15, N'Đỗ Quang Khải', '0911000015', 'khaido@gmail.com'),
+(16, N'Tống Thị Yến', '0911000016', 'yentong@gmail.com'),
+(17, N'Cao Minh Tâm', '0911000017', 'tamcao@gmail.com'),
+(18, N'Nguyễn Hữu Tài', '0911000018', 'tainh@gmail.com'),
+(19, N'Lâm Ngọc Diễm', '0911000019', 'diemlam@gmail.com'),
+(20, N'Trương Quốc Vinh', '0911000020', 'vinhtruong@gmail.com');
 
 
 CREATE TABLE NHACUNGCAP (
@@ -299,7 +312,7 @@ CREATE TABLE CHITIETPHIEUXUAT (
     giaBan INT NOT NULL,
     soLuongSP INT NOT NULL,
     serialSP VARCHAR(50) NOT NULL,
-    PRIMARY KEY (maSP, maPX),
+    PRIMARY KEY (maSP, maPX, serialSP),
     FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
     FOREIGN KEY (maPX) REFERENCES PHIEUXUAT(maPX)
 );

@@ -1,5 +1,7 @@
 package GUI.MainContent;
 
-public class GuaranteeMainContentGUI{
+import javax.swing.JPanel;
+
+public class GuaranteeMainContentGUI extends JPanel{
     
 }

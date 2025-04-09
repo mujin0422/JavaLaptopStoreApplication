@@ -21,28 +21,22 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 
 public class ExportProductMainContentGUI extends JPanel{
-    private UIButton btnAdd, btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnAddToPX, btnSavePX;
+    private UIButton btnAdd, btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnNhapSerial, btnAddToPX, btnSavePX;
     private UITextField txtSearch, txtSoLuong, txtMaPX, txtMaNV, txtTongTien ,txtSearchSach;
     private JComboBox<String> cbMaKH;
     private UITable tblContent, tblForProduct , tblForForm;
@@ -118,7 +112,7 @@ public class ExportProductMainContentGUI extends JPanel{
         }
         pnlFormNorth.add(cbMaKH);
             //CENTER
-        String[] columns = {"MÃ", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN"};
+        String[] columns = {"MÃ", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN", "SERIAL"};
         tableModelForForm = new DefaultTableModel(columns, 0);
         tblForForm = new UITable(tableModelForForm);
         tblForForm.getTableHeader().setBackground(UIConstants.MAIN_BACKGROUND);
@@ -132,11 +126,11 @@ public class ExportProductMainContentGUI extends JPanel{
         JPanel pnl1 = new JPanel(new FlowLayout(FlowLayout.CENTER,25,5)); 
         btnXoaKhoiPhieu = new UIButton("delete", "XÓA KHỎI PHIẾU", 130, 30);
         btnXoaKhoiPhieu.addActionListener(e -> removeFromTableForForm());
-        btnSuaSoLuong = new UIButton("edit", "SỬA SỐ LƯỢNG", 130, 30);
-        btnSuaSoLuong.addActionListener(e -> editSoLuongInFromTableForForm());
+        btnNhapSerial = new UIButton("add", "NHẬP SERIAL", 130, 30);
+        btnNhapSerial.addActionListener(e -> addSerial());
         pnl1.setBackground(UIConstants.MAIN_BACKGROUND);
         pnl1.add(btnXoaKhoiPhieu);
-        pnl1.add(btnSuaSoLuong);
+        pnl1.add(btnNhapSerial);
         JPanel pnl2 = new JPanel(new BorderLayout());
         pnl2.setBorder(BorderFactory.createEmptyBorder(0,10,5,10));
         pnl2.setBackground(UIConstants.MAIN_BACKGROUND);
@@ -147,7 +141,7 @@ public class ExportProductMainContentGUI extends JPanel{
         txtTongTien.setEditable(false); 
         pnlGroupTongTien.add(txtTongTien);
         btnAddToPX = new UIButton("add", "THÊM", 100, 25);
-        //btnAddToPX.addActionListener(e -> addPhieuXuat());
+        btnAddToPX.addActionListener(e -> addPhieuXuat());
         pnl2.add(pnlGroupTongTien, BorderLayout.WEST);
         pnl2.add(btnAddToPX, BorderLayout.EAST);
         pnlFormSouth.add(pnl1);
@@ -179,6 +173,8 @@ public class ExportProductMainContentGUI extends JPanel{
         pnlSouthOfproduct.add(lblSoLuong);
         txtSoLuong = new UITextField(40, 30);
         txtSoLuong.setHorizontalAlignment(JTextField.CENTER);
+        txtSoLuong.setText("1");
+        txtSoLuong.setEditable(false);
         pnlSouthOfproduct.add(txtSoLuong);
         btnThemVaoPhieu = new UIButton("add","THÊM VÀO PHIẾU", 140, 30);
         btnThemVaoPhieu.addActionListener(e -> addToTableForForm());
@@ -241,31 +237,19 @@ public class ExportProductMainContentGUI extends JPanel{
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để thêm vào phiếu", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (soLuongText.isEmpty() || !soLuongText.matches("\\d+") || Integer.parseInt(soLuongText) <= 0) {
-            JOptionPane.showMessageDialog(this, "Số lượng không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
         if (Integer.parseInt(soLuongText) > sanPhamBUS.getSoLuongTonSanPham(Integer.parseInt(tblForProduct.getValueAt(selectedRow, 0).toString()))){
-            JOptionPane.showMessageDialog(this, "Số lượng sách bán ra không đuọc lớn hơn số lượng sách trong kho", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "San phẩm đã hết", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
         int soLuong = Integer.parseInt(soLuongText);
         String maSach = tblForProduct.getValueAt(selectedRow, 0).toString();
         String tenSach = tblForProduct.getValueAt(selectedRow, 1).toString();
         int giaBan = Integer.parseInt(tblForProduct.getValueAt(selectedRow, 2).toString());
-        int thanhTien = giaBan * soLuong;
+        
         DefaultTableModel model = (DefaultTableModel) tblForForm.getModel();
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String maSachTrongBang = model.getValueAt(i, 0).toString();
-            if (maSach.equals(maSachTrongBang)) {
-                JOptionPane.showMessageDialog(this, "Sản phẩm đã có trong phiếu", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-        }
-        model.addRow(new Object[]{maSach, tenSach, soLuong, thanhTien});
+        model.addRow(new Object[]{maSach, tenSach, soLuong, giaBan});
         
         calcTongTien();
-        txtSoLuong.setText("");
     }
     
     private void removeFromTableForForm(){
@@ -277,39 +261,32 @@ public class ExportProductMainContentGUI extends JPanel{
         tableModelForForm.removeRow(selectedRow);
     }
     
-    private void editSoLuongInFromTableForForm(){
+    private void addSerial() {
         int selectedRow = tblForForm.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trong phiếu để sửa số lượng", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm để nhập Serial!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        Window window = SwingUtilities.getWindowAncestor(this);
-        JDialog dialog = new JDialog((Frame) window, "Sửa Số Lượng", true);
-        dialog.setSize(300, 150);
-        dialog.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 15));
-        UITextField txtSoLuong = new UITextField(50, 30);
-        dialog.add(new UILabel("Số lượng mới: ", 150, 30));
-        dialog.add(txtSoLuong);
-        UIButton btnSave = new UIButton("add","Lưu", 100, 30);
-        dialog.add(btnSave);
-
-        btnSave.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String soLuongText = txtSoLuong.getText().trim();
-                if (soLuongText.isEmpty() || !soLuongText.matches("\\d+") || Integer.parseInt(soLuongText) <= 0) {
-                    JOptionPane.showMessageDialog(dialog, "Số lượng không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                // kiểm tra số lượng lớn hơn kho
-                int soLuong = Integer.parseInt(soLuongText);
-                tblForForm.setValueAt(soLuong, selectedRow, 2); 
-                dialog.dispose(); 
+        String serial = JOptionPane.showInputDialog(this, "Nhập Serial:");
+        if (serial != null && !serial.trim().isEmpty()) {
+            serial = serial.trim().toUpperCase();
+            if (!serial.matches("^[A-Z0-9]{7,20}$")) {
+                JOptionPane.showMessageDialog(this, "Serial phải từ 7 đến 20 ký tự, chỉ bao gồm chữ in hoa và số, không chứa khoảng trắng hay ký tự đặc biệt!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-        });
-        dialog.setLocationRelativeTo(this); 
-        dialog.setVisible(true);
+            for (int i = 0; i < tblForForm.getRowCount(); i++) {
+                if (i != selectedRow) {
+                    Object existingSerial = tblForForm.getValueAt(i, 4);
+                    if (serial.equals(existingSerial)) {
+                        JOptionPane.showMessageDialog(this, "Serial này đã được sử dụng cho sản phẩm khác trong phiếu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+            tableModelForForm.setValueAt(serial, selectedRow, 4);
+        }
     }
+
     
     private void calcTongTien() {
         int tongTien = 0;
@@ -352,6 +329,14 @@ public class ExportProductMainContentGUI extends JPanel{
                 JOptionPane.showMessageDialog(this, "Chưa có sản phẩm nào trong phiếu xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
+            int serialColumnIndex = 4; 
+            for (int i = 0; i < tblForForm.getRowCount(); i++) {
+                Object serialObj = tblForForm.getValueAt(i, serialColumnIndex);
+                if (serialObj == null || serialObj.toString().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Dòng " + (i + 1) + " chưa nhập serial!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Dữ liệu nhập vào không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -359,40 +344,41 @@ public class ExportProductMainContentGUI extends JPanel{
         return true;
     }
     
-//    private void addPhieuXuat(){
-//        if(!checkFormInput()) return;
-//        int maPX = Integer.parseInt(txtMaPX.getText().trim());
-//        int maNV = nhanVienBUS.getMaNvByTenNv(txtMaNV.getText().trim());
-//        int maNCC = khachHangBUS.getMaKhByTenKh(cbMaKH.getSelectedItem().toString());
-//        int tongTien = Integer.parseInt(txtTongTien.getText().trim());
-//        Date ngayXuat = getCurrentDate();
-//        if (phieuXuatBUS.existsPhieuXuat(maPX)) {
-//            JOptionPane.showMessageDialog(this, "Mã phiếu xuất đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
-//        PhieuXuatDTO phieuXuat = new PhieuXuatDTO(maPX, maNV, maNCC, tongTien, ngayXuat);
-//        if (phieuXuatBUS.addPhieuXuat(phieuXuat)) {
-//            tableModelForForm = (DefaultTableModel) tblForForm.getModel();
-//            for (int i = 0; i < tableModelForForm.getRowCount(); i++) {
-//                int maSp = Integer.parseInt(tableModelForForm.getValueAt(i, 0).toString());
-//                int soluong = Integer.parseInt(tableModelForForm.getValueAt(i, 2).toString());
-//                int giaBan = Integer.parseInt(tableModelForForm.getValueAt(i, 3).toString());
-//                ChiTietPhieuXuatDTO chiTietPhieuXuat = new ChiTietPhieuXuatDTO(maPX, maSp, soluong, giaBan);
-//                boolean isChiTietAdded = chiTietPhieuXuatBUS.addChiTietPhieuXuat(chiTietPhieuXuat);
-//                if (!isChiTietAdded) {
-//                    JOptionPane.showMessageDialog(this, "Thêm chi tiết phiếu xuất thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                    return;
-//                }
-//                    //cap nhat so lai so luong ton
-//                int soLuongHienTai = sanPhamBUS.getSoLuongTonSanPham(maSp); 
-//                int soLuongMoi = soLuongHienTai - soluong;
-//                sanPhamBUS.updateSoLuongTonSanPham(maSp, soLuongMoi);
-//            }
-//        }
-//        JOptionPane.showMessageDialog(this, "Thêm phiếu xuất thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-//        loadTableData();
-//        resetFormInput();
-//    }
+    private void addPhieuXuat(){
+        if(!checkFormInput()) return;
+        int maPX = Integer.parseInt(txtMaPX.getText().trim());
+        int maNV = nhanVienBUS.getMaNvByTenNv(txtMaNV.getText().trim());
+        int maNCC = khachHangBUS.getMaKhByTenKh(cbMaKH.getSelectedItem().toString());
+        int tongTien = Integer.parseInt(txtTongTien.getText().trim());
+        Date ngayXuat = getCurrentDate();
+        if (phieuXuatBUS.existsPhieuXuat(maPX)) {
+            JOptionPane.showMessageDialog(this, "Mã phiếu xuất đã tồn tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        PhieuXuatDTO phieuXuat = new PhieuXuatDTO(maPX, maNV, maNCC, tongTien, ngayXuat);
+        if (phieuXuatBUS.addPhieuXuat(phieuXuat)) {
+            tableModelForForm = (DefaultTableModel) tblForForm.getModel();
+            for (int i = 0; i < tableModelForForm.getRowCount(); i++) {
+                int maSp = Integer.parseInt(tableModelForForm.getValueAt(i, 0).toString());
+                int soluong = Integer.parseInt(tableModelForForm.getValueAt(i, 2).toString());
+                int giaBan = Integer.parseInt(tableModelForForm.getValueAt(i, 3).toString());
+                String serialSP = tableModelForForm.getValueAt(i, 4).toString();
+                ChiTietPhieuXuatDTO chiTietPhieuXuat = new ChiTietPhieuXuatDTO(maPX, maSp, soluong, giaBan, serialSP);
+                boolean isChiTietAdded = chiTietPhieuXuatBUS.addChiTietPhieuXuat(chiTietPhieuXuat);
+                if (!isChiTietAdded) {
+                    JOptionPane.showMessageDialog(this, "Thêm chi tiết phiếu xuất thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                    //cap nhat so lai so luong ton
+                int soLuongHienTai = sanPhamBUS.getSoLuongTonSanPham(maSp); 
+                int soLuongMoi = soLuongHienTai - soluong;
+                sanPhamBUS.updateSoLuongTonSanPham(maSp, soLuongMoi);
+            }
+        }
+        JOptionPane.showMessageDialog(this, "Thêm phiếu xuất thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        loadTableData();
+        resetFormInput();
+    }
     
     private void addSearchFunctionality() {
         txtSearchSach.getDocument().addDocumentListener(new DocumentListener() {

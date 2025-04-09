@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import BUS.SanPhamBUS;
 import BUS.ThuongHieuBUS;
 import DTO.SanPhamDTO;
+import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditProductGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
@@ -40,7 +41,7 @@ public class ProductMainContentGUI extends JPanel {
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
 
-    public ProductMainContentGUI() {
+    public ProductMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.sanPhamBUS = new SanPhamBUS();
         this.romBUS = new RomBUS();
         this.ramBUS = new RamBUS();

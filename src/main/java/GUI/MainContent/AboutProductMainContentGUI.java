@@ -11,6 +11,7 @@ import DTO.DoPhanGiaiDTO;
 import DTO.PhanLoaiDTO;
 import DTO.RamDTO;
 import DTO.RomDTO;
+import DTO.TaiKhoanDTO;
 import DTO.ThuongHieuDTO;
 import GUI.MainContentDiaLog.AddAndEditBrandGUI;
 import GUI.MainContentDiaLog.AddAndEditCategoryGUI;
@@ -45,7 +46,7 @@ public class AboutProductMainContentGUI extends JPanel{
     private DoPhanGiaiBUS doPhanGiaiBus;
     private PhanLoaiBUS phanLoaiBus;
     
-    public AboutProductMainContentGUI(){
+    public AboutProductMainContentGUI(TaiKhoanDTO taiKhoan){
         this.setBackground(UIConstants.MAIN_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
         this.setLayout(new FlowLayout(10));

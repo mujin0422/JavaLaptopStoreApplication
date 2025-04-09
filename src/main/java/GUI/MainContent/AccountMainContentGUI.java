@@ -33,7 +33,7 @@ public class AccountMainContentGUI extends JPanel{
     private DefaultTableModel tableModel;
     private TaiKhoanBUS taiKhoanBUS;
 
-    public AccountMainContentGUI() {
+    public AccountMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.taiKhoanBUS = new TaiKhoanBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));

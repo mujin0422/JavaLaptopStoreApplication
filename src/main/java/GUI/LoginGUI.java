@@ -7,7 +7,6 @@ import javax.swing.*;
 import Utils.UIButton;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import Utils.Session;
 
 public final class LoginGUI extends JFrame {
     private JTextField txtAccount;
@@ -58,25 +57,21 @@ public final class LoginGUI extends JFrame {
         pnlCenter.setBackground(Color.LIGHT_GRAY);
         this.getContentPane().add(pnlCenter, BorderLayout.CENTER);
 
-            // Tiêu đề
         lblTitle = new JLabel("ĐĂNG NHẬP VÀO HỆ THỐNG");
         lblTitle.setFont(new Font("Roboto", Font.BOLD, 20));
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitle.setBounds(100, 50, 300, 40);
 
-            // Label Tài khoản
         lblAccount = new JLabel("Tài khoản: ");
         lblAccount.setFont(new Font("Roboto", Font.BOLD, 18));
         lblAccount.setBounds(40, 120, 100, 35);
 
-            // Icon người dùng cho ô tài khoản
         ImageIcon userIcon = new ImageIcon(getClass().getResource("/Icon/login_user_icon.png"));
         Image userImg = userIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         userIcon = new ImageIcon(userImg);
         JLabel lblUserIcon = new JLabel(userIcon);
         lblUserIcon.setPreferredSize(new Dimension(35, 35));
 
-            // Panel chứa icon và account field
         JPanel accountPanel = new JPanel(new BorderLayout());
         accountPanel.setBounds(180, 120, 250, 35);
         accountPanel.setBackground(Color.WHITE);
@@ -87,19 +82,16 @@ public final class LoginGUI extends JFrame {
         accountPanel.add(lblUserIcon, BorderLayout.WEST);
         accountPanel.add(txtAccount, BorderLayout.CENTER);
 
-            // Label Mật khẩu
         lblPassword = new JLabel("Mật khẩu: ");
         lblPassword.setFont(new Font("Roboto", Font.BOLD, 18));
         lblPassword.setBounds(40, 180, 100, 35);
 
-            // Icon khóa cho ô mật khẩu
         ImageIcon lockIcon = new ImageIcon(getClass().getResource("/Icon/login_lock_icon.png"));
         Image lockImg = lockIcon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         lockIcon = new ImageIcon(lockImg);
         JLabel lblLockIcon = new JLabel(lockIcon);
         lblLockIcon.setPreferredSize(new Dimension(35, 35));
 
-            // Panel chứa icon và password field
         JPanel passwordPanel = new JPanel(new BorderLayout());
         passwordPanel.setBounds(180, 180, 250, 35);
         passwordPanel.setBackground(Color.WHITE);
@@ -110,36 +102,9 @@ public final class LoginGUI extends JFrame {
         passwordPanel.add(lblLockIcon, BorderLayout.WEST);
         passwordPanel.add(txtPassword, BorderLayout.CENTER);
 
-            // Nút đăng nhập
         btnLogin = new UIButton("confirm", "ĐĂNG NHẬP", 160, 35, "/Icon/login_key_icon.png");
-        btnLogin.setBounds(150, 240, 160, 40 );
-        btnLogin.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String tenDangNhap = txtAccount.getText();
-                String matKhau = new String(txtPassword.getPassword());
-
-                if (tenDangNhap.isEmpty() || matKhau.isEmpty()) {
-                    JOptionPane.showMessageDialog(LoginGUI.this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                TaiKhoanDTO taiKhoan = taiKhoanDAO.getByUsername(tenDangNhap);
-
-                if (taiKhoan == null) {
-                    JOptionPane.showMessageDialog(LoginGUI.this, "Tài khoản không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                } else if (!taiKhoan.getMatKhau().equals(matKhau)) {
-                    JOptionPane.showMessageDialog(LoginGUI.this, "Mật khẩu không chính xác!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    // Đăng nhập thành công, lưu thông tin người dùng vào session
-                    Session.setUser(taiKhoan);
-
-                    JOptionPane.showMessageDialog(LoginGUI.this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                    new MainLayoutGUI(taiKhoan);  
-                    dispose(); 
-                }
-            }
-        });
+        btnLogin.setBounds(160, 240, 140, 40 );
+        btnLogin.addActionListener(e -> login());
 
         //=============================( End panel Center )=============================//
         pnlCenter.add(lblTitle);
@@ -155,5 +120,26 @@ public final class LoginGUI extends JFrame {
 
     public static void main(String[] args) {
         new LoginGUI();
+    }
+    public void login(){
+        String tenDangNhap = txtAccount.getText();
+        String matKhau = new String(txtPassword.getPassword());
+
+        if (tenDangNhap.isEmpty() || matKhau.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ tài khoản và mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        TaiKhoanDTO taiKhoan = taiKhoanDAO.getByUsername(tenDangNhap);
+
+        if (taiKhoan == null) {
+            JOptionPane.showMessageDialog(this, "Tài khoản không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } else if (!taiKhoan.getMatKhau().equals(matKhau)) {
+            JOptionPane.showMessageDialog(this, "Mật khẩu không chính xác!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            new MainLayoutGUI(taiKhoan);
+            this.dispose();
+        }
+        
     }
 }

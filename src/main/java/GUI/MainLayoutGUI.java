@@ -21,6 +21,7 @@ public final class MainLayoutGUI extends JFrame {
     private ImportProductMainContentGUI importProductPanel; 
     private ExportProductMainContentGUI exportProductPanel;
     private AccountMainContentGUI accountPanel;
+    private GuaranteeMainContentGUI guaranteePanel;
     
     private ArrayList<UIButton> buttons; 
     private TaiKhoanDTO taiKhoan;
@@ -38,6 +39,7 @@ public final class MainLayoutGUI extends JFrame {
         {"NHẬP HÀNG", "/Icon/NhapHang_icon.png"},
         {"XUẤT HÀNG", "/Icon/XuatHang_icon.png"},
         {"PHÂN QUYỀN", "/Icon/PhanQuyen_icon.png"},
+        {"BẢO HÀNH", "/Icon/TaiKhoan_icon.png"},
         {"THỐNG KÊ", "/Icon/ThongKe_icon.png"},
     };
     
@@ -110,17 +112,18 @@ public final class MainLayoutGUI extends JFrame {
         
         buttons = new ArrayList<>();
         statisticsPanel = new StatisticsMainContentGUI();
-        productPanel = new ProductMainContentGUI();
-        customerPanel = new CustomerMainContentGUI();
-        staffPanel = new StaffMainContentGUI();
-        aboutProductPanel = new AboutProductMainContentGUI();
-        supplierPanel = new SupplierMainContentGUI();
-        decentralizationPanel = new DecentralizationMainContentGUI();
+        productPanel = new ProductMainContentGUI(taiKhoan);
+        customerPanel = new CustomerMainContentGUI(taiKhoan);
+        staffPanel = new StaffMainContentGUI(taiKhoan);
+        aboutProductPanel = new AboutProductMainContentGUI(taiKhoan);
+        supplierPanel = new SupplierMainContentGUI(taiKhoan);
+        decentralizationPanel = new DecentralizationMainContentGUI(taiKhoan);
         importProductPanel = new ImportProductMainContentGUI(taiKhoan);
         exportProductPanel = new ExportProductMainContentGUI(taiKhoan);
-        accountPanel = new AccountMainContentGUI();
+        accountPanel = new AccountMainContentGUI(taiKhoan);
+        guaranteePanel = new GuaranteeMainContentGUI();
         
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 11; i++) {
             String label = buttonInfo[i - 1][0];
             String iconPath = buttonInfo[i - 1][1];
             UIButton button = new UIButton("menuButton", label, 180, 40);
@@ -136,8 +139,9 @@ public final class MainLayoutGUI extends JFrame {
                 case 6 -> targetPanel = supplierPanel;           
                 case 7 -> targetPanel = importProductPanel;         
                 case 8 -> targetPanel = exportProductPanel;        
-                case 9 -> targetPanel = decentralizationPanel;  
-                case 10 -> targetPanel = statisticsPanel;       
+                case 9 -> targetPanel = decentralizationPanel; 
+                case 10 -> targetPanel = guaranteePanel;
+                case 11 -> targetPanel = statisticsPanel;       
                 default -> targetPanel = null;
             }
             button.addActionListener(e -> switchPanel(targetPanel));

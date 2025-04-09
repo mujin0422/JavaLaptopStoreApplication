@@ -2,6 +2,7 @@ package GUI.MainContent;
 
 import BUS.NhaCungCapBUS;
 import DTO.NhaCungCapDTO;
+import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditSupplierGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
@@ -28,7 +29,7 @@ public class SupplierMainContentGUI extends JPanel{
     private DefaultTableModel tableModel;
     private NhaCungCapBUS nhaCungCapBus;
     
-    public SupplierMainContentGUI(){
+    public SupplierMainContentGUI(TaiKhoanDTO taiKhoan){
         this.nhaCungCapBus = new NhaCungCapBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));

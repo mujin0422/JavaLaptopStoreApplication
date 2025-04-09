@@ -2,6 +2,7 @@ package GUI.MainContent;
 
 import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
+import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditStaffGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
@@ -27,7 +28,7 @@ public class StaffMainContentGUI extends JPanel{
     private DefaultTableModel tableModel;
     private NhanVienBUS nhanVienBUS;
 
-    public StaffMainContentGUI() {
+    public StaffMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.nhanVienBUS= new NhanVienBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));

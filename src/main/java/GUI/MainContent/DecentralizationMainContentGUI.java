@@ -2,6 +2,7 @@ package GUI.MainContent;
 
 import BUS.QuyenBUS;
 import DTO.QuyenDTO;
+import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditDecentralizationGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
@@ -26,7 +27,7 @@ public class DecentralizationMainContentGUI extends JPanel{
     private DefaultTableModel tableModel;
     private QuyenBUS quyenBUS;
 
-    public DecentralizationMainContentGUI() {
+    public DecentralizationMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.quyenBUS = new QuyenBUS();
      
         this.setBackground(UIConstants.SUB_BACKGROUND);

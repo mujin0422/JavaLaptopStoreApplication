@@ -2,6 +2,7 @@ package GUI.MainContent;
 
 import BUS.KhachHangBUS;
 import DTO.KhachHangDTO;
+import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditCostumerGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
@@ -30,7 +31,7 @@ public class CustomerMainContentGUI extends JPanel{
     private DefaultTableModel tableModel;
     private KhachHangBUS khachHangBUS;
     
-    public CustomerMainContentGUI() {
+    public CustomerMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.khachHangBUS = new KhachHangBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
