@@ -16,27 +16,42 @@ public class NhanVienBUS {
     }
 
     public boolean addNhanVien(NhanVienDTO nhanVien) {       
-        if (nhanVien == null || nhanVien.getMaNV() <= 0 || nhanVien.getTenNV().isEmpty() || nhanVien.getEmail().isEmpty() || nhanVien.getSdt().isEmpty()){
-            System.err.println("Thông tin nhân viên không hợp lệ !");
-            return false;
-        } 
-        return  NhanVienDAO.add(nhanVien) > 0; 
+        return NhanVienDAO.add(nhanVien) > 0;
     }
 
     public boolean updateNhanVien(NhanVienDTO nhanVien) {
-        if (nhanVien == null || nhanVien.getMaNV() <= 0 || nhanVien.getTenNV().isEmpty() || nhanVien.getEmail().isEmpty() || nhanVien.getSdt().isEmpty()){
-            return false;
-        } 
         return NhanVienDAO.update(nhanVien) > 0; 
     }
 
     public boolean deleteNhanVien(int maNV) {
-        if (maNV <= 0) {
-            return false;
-        }
-        return NhanVienDAO.delete(maNV) > 0;
+        return NhanVienDAO.delete(maNV) > 0;  
     }
     
+    public NhanVienDTO getCurrentStaffByUserName(String username) {
+        return NhanVienDAO.getCurrentStaffByUserName(username);
+    }
     
-
+    public int getMaNvByTenNv(String tenNv){
+        return NhanVienDAO.getMaNvByTenNv(tenNv);
+    }
+    
+    public String getTenNvByMaNv(int maNv){
+        return NhanVienDAO.getTenNvByMaNv(maNv);
+    }
+    
+    public ArrayList<NhanVienDTO> searchNhanVien(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return NhanVienDAO.getAll();
+        }
+        ArrayList<NhanVienDTO> ketQua = new ArrayList<>();
+        keyword = keyword.toLowerCase(); 
+        ArrayList<NhanVienDTO> danhSach = NhanVienDAO.getAll();
+        if (danhSach != null) {
+            for (NhanVienDTO nv : danhSach) {
+                if (nv.getTenNV().toLowerCase().contains(keyword))
+                    ketQua.add(nv);
+            }
+        }
+        return ketQua;
+    }
 }

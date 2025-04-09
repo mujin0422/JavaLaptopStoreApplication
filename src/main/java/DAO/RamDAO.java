@@ -84,4 +84,20 @@ public class RamDAO {
         }
         return null;
     }
+    
+    public int getMaRamByDungLuongRam(String dungLuongRam) {
+        String sql = "SELECT maRAM FROM ram WHERE dungLuongRAM=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, dungLuongRam);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("maRAM");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

@@ -39,9 +39,9 @@ public class AddAndEditProductGUI extends JDialog {
             txtMaLoai.setText(String.valueOf(sanPham.getMaLoai()));
             txtMaTH.setText(String.valueOf(sanPham.getMaTH()));
             txtThoiGianBH.setText(String.valueOf(sanPham.getThoiGianBH()));
-            txtMaSP.setEnabled(false); // Không sửa mã sản phẩm
+            txtMaSP.setEnabled(false);
+            txtGiaSP.setEnabled(false);
         }
-        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }

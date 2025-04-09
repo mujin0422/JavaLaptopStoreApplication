@@ -7,23 +7,21 @@ import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
 import Utils.UITable;
+import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Window;
 import java.util.ArrayList;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class SupplierMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit;
-    private JTextField txtSearch;
-    private JComboBox<String> cbFilter;
+    private UITextField txtSearch;
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
     
@@ -37,31 +35,29 @@ public class SupplierMainContentGUI extends JPanel{
         this.setLayout(new BorderLayout(5, 5));
         
         //===============================( Panel Header )================================//
-        pnlHeader = new JPanel();
-        pnlHeader.setLayout(null); 
+        pnlHeader = new JPanel(new BorderLayout());
         pnlHeader.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlHeader.setPreferredSize(new Dimension(this.getWidth(), 50));
 
-        btnAdd = new UIButton("menuButton", "THÊM", 100, 35, "/Icon/them_icon.png");
-        btnAdd.addActionListener(e -> addNhaCungCap());
-        btnDelete = new UIButton("menuButton", "XÓA", 100, 35, "/Icon/xoa_icon.png");
-        btnDelete.addActionListener(e -> deleteNhaCungCap());
-        btnEdit = new UIButton("menuButton", "SỬA", 100, 35, "/Icon/sua_icon.png");
-        btnEdit.addActionListener(e -> editNhaCungCap());
-        btnAdd.setBounds(5, 5, 90, 40);
-        btnDelete.setBounds(105, 5, 90, 40);
-        btnEdit.setBounds(210, 5, 90, 40);
-        int panelWidth = this.getPreferredSize().width; 
-        cbFilter = new JComboBox<>(new String[]{"Lọc"});
-        cbFilter.setBounds(panelWidth - 320, 10, 100, 30);
-        txtSearch = new JTextField();
-        txtSearch.setBounds(panelWidth - 210, 10, 190, 30);
-            
-        pnlHeader.add(btnAdd);
-        pnlHeader.add(btnDelete);
-        pnlHeader.add(btnEdit);
-        pnlHeader.add(cbFilter);
-        pnlHeader.add(txtSearch);
+        JPanel pnlButton = new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
+        pnlButton.setBackground(UIConstants.MAIN_BACKGROUND);
+        btnAdd = new UIButton("menuButton", "THÊM", 90, 40, "/Icon/them_icon.png");
+        btnAdd.addActionListener(e -> addSupplier());
+        btnDelete = new UIButton("menuButton", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        btnDelete.addActionListener(e -> deleteSupplier());
+        btnEdit = new UIButton("menuButton", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        btnEdit.addActionListener(e -> editSupplier());
+        pnlButton.add(btnAdd);
+        pnlButton.add(btnDelete);
+        pnlButton.add(btnEdit);
+        
+        JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
+        pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
+        txtSearch = new UITextField(190 ,30);
+        pnlSearchFilter.add(txtSearch);
+
+        pnlHeader.add(pnlButton, BorderLayout.WEST);
+        pnlHeader.add(pnlSearchFilter, BorderLayout.CENTER);
         //==============================( End Panel Header )============================//
         
         
@@ -94,13 +90,13 @@ public class SupplierMainContentGUI extends JPanel{
         }
     }
     
-    private void addNhaCungCap(){
+    private void addSupplier(){
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditSupplierGUI((JFrame) window, nhaCungCapBus, "Thêm Nhà Cung Cấp", "add");
         loadTableData();
     }
     
-    private void editNhaCungCap(){
+    private void editSupplier(){
         int selectedRow = tblContent.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một NCC để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -116,7 +112,7 @@ public class SupplierMainContentGUI extends JPanel{
         loadTableData();
     }
     
-    private void deleteNhaCungCap(){
+    private void deleteSupplier(){
         int selectedRow = tblContent.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một NCC để xoa!", "Thông báo", JOptionPane.WARNING_MESSAGE);

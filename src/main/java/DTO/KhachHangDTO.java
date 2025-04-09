@@ -1,15 +1,19 @@
 package DTO;
 
+import java.util.Objects;
+
+
 public class KhachHangDTO {
-    private String maKH;
+    private int maKH;
     private String tenKH;
     private String sdt;
     private String email;
     private int trangThaiXoa;
 
-    public KhachHangDTO() {}
+    public KhachHangDTO() {
+    }
 
-    public KhachHangDTO(String maKH, String tenKH, String sdt, String email) {
+    public KhachHangDTO(int maKH, String tenKH, String sdt, String email) {
         this.maKH = maKH;
         this.tenKH = tenKH;
         this.sdt = sdt;
@@ -17,32 +21,32 @@ public class KhachHangDTO {
         this.trangThaiXoa = 0;
     }
 
-    public String getMaKH() {
+    public int getMaKH() {
         return maKH;
-    }
-
-    public void setMaKH(String maKH) {
-        this.maKH = maKH;
     }
 
     public String getTenKH() {
         return tenKH;
     }
 
-    public void setTenKH(String tenKH) {
-        this.tenKH = tenKH;
-    }
-
     public String getSdt() {
         return sdt;
     }
 
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
     public String getEmail() {
         return email;
+    }
+
+    public void setMaKH(int maKH) {
+        this.maKH = maKH;
+    }
+
+    public void setTenKH(String tenKH) {
+        this.tenKH = tenKH;
+    }
+
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
     }
 
     public void setEmail(String email) {
@@ -56,5 +60,6 @@ public class KhachHangDTO {
     public void setTrangThaiXoa(int trangThaiXoa) {
         this.trangThaiXoa = trangThaiXoa;
     }
-    
+
+   
 }

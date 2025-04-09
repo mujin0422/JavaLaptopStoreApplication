@@ -30,4 +30,8 @@ public class DoPhanGiaiBUS {
     public DoPhanGiaiDTO getDoPhanGiaiById(int maDPG) {
         return doPhanGiaiDAO.getById(maDPG);
     }
+    
+    public int getMaDpgByTenDpg(String tenDpg){
+        return doPhanGiaiDAO.getMaDpgByTenDpg(tenDpg);
+    }
 }

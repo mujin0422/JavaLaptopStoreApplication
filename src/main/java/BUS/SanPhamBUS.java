@@ -28,7 +28,55 @@ public class SanPhamBUS {
         return sanPhamDAO.delete(maSP) > 0;
     }
 
+    public int getSoLuongTonSanPham(int maSp){
+        return sanPhamDAO.getSoLuongTonSanPham(maSp);
+    }
+    
+    public boolean updateSoLuongTonSanPham(int maSp, int soLuongTon){
+        return sanPhamDAO.updateSoLuongTonSanPham(maSp, soLuongTon) > 0;
+    }
+    
     public SanPhamDTO getSanPhamById(int maSP) {
         return sanPhamDAO.getById(maSP);
+    }
+    
+     public String getTenThByMaSp(int maSp) {
+        return sanPhamDAO.getTenThByMaSp(maSp);
+    }
+
+    public String getTenCpuByMaSp(int maSp) {
+        return sanPhamDAO.getTenCpuByMaSp(maSp);
+    }
+
+    public String getTenDpgByMaSp(int maSp) {
+        return sanPhamDAO.getTenDpgByMaSp(maSp);
+    }
+
+    public String getTenLoaiByMaSp(int maSp) {
+        return sanPhamDAO.getTenLoaiByMaSp(maSp);
+    }
+
+    public String getDungLuongRamByMaSp(int maSp) {
+        return sanPhamDAO.getDungLuongRamByMaSp(maSp);
+    }
+
+    public String getDungLuongRomByMaSp(int maSp) {
+        return sanPhamDAO.getDungLuongRomByMaSp(maSp);
+    }
+    
+    public ArrayList<SanPhamDTO> searchSanPham(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return sanPhamDAO.getAll();
+        }
+        ArrayList<SanPhamDTO> ketQua = new ArrayList<>();
+        keyword = keyword.toLowerCase(); 
+        ArrayList<SanPhamDTO> danhSach = sanPhamDAO.getAll();
+        if (danhSach != null) {
+            for (SanPhamDTO sp : danhSach) {
+                if (sp.getTenSP().toLowerCase().contains(keyword))
+                    ketQua.add(sp);
+            }
+        }
+        return ketQua;
     }
 }

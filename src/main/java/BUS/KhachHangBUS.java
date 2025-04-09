@@ -12,42 +12,40 @@ public class KhachHangBUS {
     }
 
     public ArrayList<KhachHangDTO> getAllKhachHang() {
-        return khachHangDAO.getAllKhachHang();
+        return khachHangDAO.getAll();
     }
 
     public boolean addKhachHang(KhachHangDTO khachHang) {
-        if (khachHang == null || khachHang.getTenKH().isEmpty() || khachHang.getSdt().isEmpty()) {
-            return false;
-        }
         return khachHangDAO.add(khachHang) > 0;
     }
 
     public boolean updateKhachHang(KhachHangDTO khachHang) {
-        if (khachHang == null || khachHang.getMaKH().isEmpty() || khachHang.getTenKH().isEmpty() || khachHang.getSdt().isEmpty()) {
-            return false;
-        }
         return khachHangDAO.update(khachHang) > 0;
     }
 
-    public boolean deleteKhachHang(String maKH) {
-        if (maKH == null || maKH.isEmpty()) {
-            return false;
-        }
+    public boolean deleteKhachHang(int maKH) {
         return khachHangDAO.delete(maKH) > 0;
+    }
+    
+    public int getMaKhByTenKh(String tenKh){
+        return khachHangDAO.getMaKhByTenKh(tenKh);
+    }
+    
+    public String getTenKhByMaKh(int maKh){
+        return khachHangDAO.getTenKhByMaKh(maKh);
     }
 
     public ArrayList<KhachHangDTO> searchKhachHang(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return khachHangDAO.getAllKhachHang();
+            return khachHangDAO.getAll();
         }
         ArrayList<KhachHangDTO> ketQua = new ArrayList<>();
         keyword = keyword.toLowerCase();
-        for (KhachHangDTO kh : khachHangDAO.getAllKhachHang()) {
-            if (kh.getMaKH().toLowerCase().contains(keyword) ||
-                kh.getTenKH().toLowerCase().contains(keyword) ||
-                kh.getSdt().contains(keyword) ||
-                (kh.getEmail() != null && kh.getEmail().toLowerCase().contains(keyword))) {
-                ketQua.add(kh);
+        ArrayList<KhachHangDTO> ds = khachHangDAO.getAll();
+        if(ds != null){
+            for(KhachHangDTO kh : ds){
+                if(kh.getTenKH().toLowerCase().contains(keyword)) 
+                    ketQua.add(kh);      
             }
         }
         return ketQua;

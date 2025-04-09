@@ -26,4 +26,8 @@ public class ThuongHieuBUS {
     public boolean deleteThuongHieu(int maTH) {
         return thuongHieuDAO.delete(maTH) > 0;
     }
+    
+    public int getMaThByTenTh(String tenTh){
+        return thuongHieuDAO.getMaThByTenTh(tenTh);
+    }
 }

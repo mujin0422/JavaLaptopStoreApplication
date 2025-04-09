@@ -145,4 +145,130 @@ public class SanPhamDAO {
         }
         return null;
     }
+    
+    public int getSoLuongTonSanPham(int maSp){
+        String sql = "SELECT soLuongTon FROM sanpham WHERE maSP=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("soLuongTon");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public int updateSoLuongTonSanPham(int maSp, int soLuongTon) {
+        String sql = "UPDATE sanpham SET soLuongTon = ? WHERE maSP = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, soLuongTon);
+            ps.setInt(2, maSp);
+            return ps.executeUpdate(); 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public String getTenThByMaSp(int maSp) {
+        String sql = "SELECT tenTH FROM sanpham sp JOIN thuonghieu th ON sp.maTH=th.maTH WHERE maSP=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenTH");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getTenCpuByMaSp(int maSp) {
+        String sql = "SELECT tenCPU FROM sanpham sp JOIN cpu ON sp.maCPU=cpu.maCPU WHERE maSP=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenCPU");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getTenDpgByMaSp(int maSp) {
+        String sql = "SELECT tenDPG FROM sanpham sp JOIN dophangiai dpg ON sp.maDPG=dpg.maDPG WHERE maSP=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenDPG");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getTenLoaiByMaSp(int maSp) {
+        String sql = "SELECT tenLoai FROM sanpham sp JOIN phanloai pl ON sp.maLoai=pl.maLoai WHERE maSP=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenLoai");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getDungLuongRamByMaSp(int maSp) {
+        String sql = "SELECT dungLuongRAM FROM sanpham sp JOIN ram ON sp.maRAM=ram.maRAM WHERE maSP=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("dungLuongRAM");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getDungLuongRomByMaSp(int maSp) {
+        String sql = "SELECT dungLuongROM FROM sanpham sp JOIN rom ON sp.maROM=rom.maROM WHERE maSP=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("dungLuongROM");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

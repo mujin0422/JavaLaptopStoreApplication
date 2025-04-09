@@ -60,10 +60,10 @@ public final class MainLayoutGUI extends JFrame {
         pnlTitle.setBackground(UIConstants.MAIN_BUTTON);
         pnlTitle.setPreferredSize(new Dimension(UIConstants.WIDTH_TITLE, UIConstants.HEIGHT_TITLE));
 
-        JLabel lblTitle = new JLabel("QUẢN LÝ CỬA HÀNG SÁCH");
+        JLabel lblTitle = new JLabel("QUẢN LÝ CỬA HÀNG BÁN LAPTOP");
         lblTitle.setFont(UIConstants.TITLE_FONT);
         lblTitle.setForeground(UIConstants.WHITE_FONT);
-        lblTitle.setBounds(10, 5, 300, 40);
+        lblTitle.setBounds(10, 5, 450, 40);
 
         ImageIcon minimizeIcon = new ImageIcon(getClass().getResource("/Icon/minimize_icon.png"));
         ImageIcon closeIcon = new ImageIcon(getClass().getResource("/Icon/close_icon.png"));
@@ -89,14 +89,14 @@ public final class MainLayoutGUI extends JFrame {
 
         
         //================================( PANEL MENU )================================//
-         pnlMenu = new JPanel(new BorderLayout());
+        pnlMenu = new JPanel(new BorderLayout());
         pnlMenu.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlMenu.setPreferredSize(new Dimension(UIConstants.WIDTH_MENU, UIConstants.HEIGHT_MENU));
 
         pnlChucNang = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        btnLogout = new UIButton("menuButton", "ĐĂNG XUẤT", 0, 40, "/Icon/logout_icon.png");
+        pnlChucNang.setBackground(UIConstants.MAIN_BACKGROUND);
+        btnLogout = new UIButton("menuButton", "ĐĂNG XUẤT", 0, 50, "/Icon/logout_icon.png");
         btnLogout.setHorizontalAlignment(SwingConstants.CENTER);
-        
         btnLogout.addActionListener(e -> logout());
          
         pnlMenu.add(pnlChucNang, BorderLayout.CENTER);
@@ -116,8 +116,8 @@ public final class MainLayoutGUI extends JFrame {
         aboutProductPanel = new AboutProductMainContentGUI();
         supplierPanel = new SupplierMainContentGUI();
         decentralizationPanel = new DecentralizationMainContentGUI();
-        importProductPanel = new ImportProductMainContentGUI();
-        exportProductPanel = new ExportProductMainContentGUI();
+        importProductPanel = new ImportProductMainContentGUI(taiKhoan);
+        exportProductPanel = new ExportProductMainContentGUI(taiKhoan);
         accountPanel = new AccountMainContentGUI();
         
         for (int i = 1; i <= 10; i++) {

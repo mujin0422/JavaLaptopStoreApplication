@@ -84,4 +84,20 @@ public class PhanLoaiDAO {
         }
         return null;
     }
+    
+    public int getMaLoaiByTenLoai(String tenLoai) {
+        String sql = "SELECT maLoai FROM phanloai WHERE tenLoai=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tenLoai);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("maLoai");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

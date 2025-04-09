@@ -84,4 +84,19 @@ public class DoPhanGiaiDAO {
         }
         return null;
     }
+    
+    public int getMaDpgByTenDpg(String tenDpg) {
+        String sql = "SELECT maDPG FROM dophangiai WHERE tenDPG=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tenDpg);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("maDPG");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

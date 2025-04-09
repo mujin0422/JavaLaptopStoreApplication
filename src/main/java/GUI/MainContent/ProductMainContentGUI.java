@@ -1,30 +1,40 @@
 package GUI.MainContent;
 
+import BUS.CpuBUS;
+import BUS.DoPhanGiaiBUS;
+import BUS.PhanLoaiBUS;
+import BUS.RamBUS;
+import BUS.RomBUS;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Window;
-import java.util.ArrayList;
-
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-
 import BUS.SanPhamBUS;
+import BUS.ThuongHieuBUS;
 import DTO.SanPhamDTO;
 import GUI.MainContentDiaLog.AddAndEditProductGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
 import Utils.UITable;
+import Utils.UITextField;
+import java.awt.FlowLayout;
 
 public class ProductMainContentGUI extends JPanel {
     private SanPhamBUS sanPhamBUS;
+    private RamBUS ramBUS;
+    private RomBUS romBUS;
+    private CpuBUS cpuBUS;
+    private DoPhanGiaiBUS doPhanGiaiBUS;
+    private PhanLoaiBUS phanLoaiBUS;
+    private ThuongHieuBUS thuongHieuBUS;
     private UIButton btnAdd, btnDelete, btnEdit;
-    private JTextField txtSearch;
+    private UITextField txtSearch;
     private JComboBox<String> cbFilter;
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
@@ -32,45 +42,49 @@ public class ProductMainContentGUI extends JPanel {
 
     public ProductMainContentGUI() {
         this.sanPhamBUS = new SanPhamBUS();
+        this.romBUS = new RomBUS();
+        this.ramBUS = new RamBUS();
+        this.cpuBUS = new CpuBUS();
+        this.doPhanGiaiBUS = new DoPhanGiaiBUS();
+        this.phanLoaiBUS = new PhanLoaiBUS();
+        this.thuongHieuBUS = new ThuongHieuBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH - 200 - 10, UIConstants.HEIGHT - 200 - 10));
         this.setLayout(new BorderLayout(5, 5));
 
         //=========================== Panel Header =============================
-        pnlHeader = new JPanel();
-        pnlHeader.setLayout(null); 
+        pnlHeader = new JPanel(new BorderLayout());
         pnlHeader.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlHeader.setPreferredSize(new Dimension(this.getWidth(), 50));
 
-        btnAdd = new UIButton("menuButton", "THÊM", 100, 35, "/Icon/them_icon.png");
+        JPanel pnlButton = new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
+        pnlButton.setBackground(UIConstants.MAIN_BACKGROUND);
+        btnAdd = new UIButton("menuButton", "THÊM", 90, 40, "/Icon/them_icon.png");
         btnAdd.addActionListener(e -> addProduct()); 
-        btnDelete = new UIButton("menuButton", "XÓA", 100, 35, "/Icon/xoa_icon.png");
+        btnDelete = new UIButton("menuButton", "XÓA", 90, 40, "/Icon/xoa_icon.png");
         btnDelete.addActionListener(e -> deleteProduct());
-        btnEdit = new UIButton("menuButton", "SỬA", 100, 35, "/Icon/sua_icon.png");
+        btnEdit = new UIButton("menuButton", "SỬA", 90, 40, "/Icon/sua_icon.png");
         btnEdit.addActionListener(e -> editProduct());
+        pnlButton.add(btnAdd);
+        pnlButton.add(btnDelete);
+        pnlButton.add(btnEdit);
 
-        btnAdd.setBounds(10, 10, 100, 30);
-        btnDelete.setBounds(120, 10, 100, 30);
-        btnEdit.setBounds(230, 10, 100, 30);
+        JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
+        cbFilter = new JComboBox<>();
+        cbFilter.setPreferredSize(new Dimension(150,30));
+        cbFilter.addItem("Tất cả");
+        txtSearch = new UITextField(190,30);
+        pnlSearchFilter.add(cbFilter);
+        pnlSearchFilter.add(txtSearch);
 
-        int panelWidth = this.getPreferredSize().width; 
-        cbFilter = new JComboBox<>(new String[]{"Lọc"});
-        cbFilter.setBounds(panelWidth - 310, 10, 100, 30);
-        txtSearch = new JTextField();
-        txtSearch.setBounds(panelWidth - 200, 10, 190, 30);
-
-        pnlHeader.add(btnAdd);
-        pnlHeader.add(btnDelete);
-        pnlHeader.add(btnEdit);
-        pnlHeader.add(cbFilter);
-        pnlHeader.add(txtSearch);
-        
+        pnlHeader.add(pnlButton, BorderLayout.WEST);
+        pnlHeader.add(pnlSearchFilter, BorderLayout.CENTER);
         //============================ Panel Content ===========================
         pnlContent = new JPanel();
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
         
-        String[] columnNames = {"MÃ SẢN PHẨM", "TÊN SẢN PHÂM", "GIÁ SẢN PHẨM", "TỒN KHO", "Ma CPU", "MÃ RAM", "MÃ ROM", "MÃ DP", "MÃ LOẠI", "MÃ TH", "THỜI GIAN BH"};
+        String[] columnNames = {"MÃ", "TÊN SẢN PHÂM", "GIÁ", "TỒN KHO", "CPU", "RAM", "ROM", "ĐỘ PHÂN GIẢI", "THƯƠNG HIỆU", "THỜI GIAN BH"};
         tableModel = new DefaultTableModel(columnNames, 0); 
         tblContent = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
@@ -81,22 +95,19 @@ public class ProductMainContentGUI extends JPanel {
         loadTableData();
     }
     
-
     private void loadTableData() { 
         tableModel.setRowCount(0); 
-        ArrayList<SanPhamDTO> dsSanPham = sanPhamBUS.getAllSanPham();
-        for (SanPhamDTO sp : dsSanPham) {
+        for (SanPhamDTO sp : sanPhamBUS.getAllSanPham()) {
             tableModel.addRow(new Object[] {
                 sp.getMaSP(),
                 sp.getTenSP(),
                 sp.getGiaSP(),
                 sp.getSoLuongTon(),
-                sp.getMaCPU(),
-                sp.getMaRAM(),
-                sp.getMaROM(),
-                sp.getMaDPG(),
-                sp.getMaLoai(),
-                sp.getMaTH(),
+                sanPhamBUS.getTenCpuByMaSp(sp.getMaSP()),
+                sanPhamBUS.getDungLuongRamByMaSp(sp.getMaSP()) ,
+                sanPhamBUS.getDungLuongRomByMaSp(sp.getMaSP()),
+                sanPhamBUS.getTenDpgByMaSp(sp.getMaSP()),
+                sanPhamBUS.getTenThByMaSp(sp.getMaSP()),
                 sp.getThoiGianBH()
             });
         }
@@ -113,24 +124,21 @@ public class ProductMainContentGUI extends JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
         int maSP = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
         String tenSP = tableModel.getValueAt(selectedRow, 1).toString();
         int giaSP = Integer.parseInt((tableModel.getValueAt(selectedRow, 2).toString()));
         int soLuongTon = Integer.parseInt(tableModel.getValueAt(selectedRow, 3).toString());
-        int maCPU = Integer.parseInt(tableModel.getValueAt(selectedRow, 4).toString());
-        int maRam = Integer.parseInt(tableModel.getValueAt(selectedRow, 5).toString());
-        int maRom = Integer.parseInt(tableModel.getValueAt(selectedRow, 6).toString());
-        int maDPG = Integer.parseInt(tableModel.getValueAt(selectedRow, 7).toString());
-        int maLoai = Integer.parseInt(tableModel.getValueAt(selectedRow, 8).toString());
-        int maTH = Integer.parseInt(tableModel.getValueAt(selectedRow, 9).toString());
-        int thoiGianBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 10).toString());
-
+        int maCPU = cpuBUS.getMaCpuByTenCpu(tableModel.getValueAt(selectedRow, 4).toString());
+        int maRam = ramBUS.getMaRamByDungLuongRam(tableModel.getValueAt(selectedRow, 5).toString());
+        int maRom = romBUS.getMaRomByDungLuongRom(tableModel.getValueAt(selectedRow, 6).toString());
+        int maDPG = doPhanGiaiBUS.getMaDpgByTenDpg(tableModel.getValueAt(selectedRow, 7).toString());
+        int maLoai = phanLoaiBUS.getMaLoaiByTenLoai(sanPhamBUS.getTenLoaiByMaSp(maSP));
+        int maTH = thuongHieuBUS.getMaThByTenTh(tableModel.getValueAt(selectedRow, 8).toString());
+        int thoiGianBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 9).toString());
 
         SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
-        Window window1 = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditProductGUI((JFrame) window1, sanPhamBUS, "Chỉnh sửa sản phẩm", "save", sp);
-        window1.setVisible(true); 
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Chỉnh sửa sản phẩm", "save", sp);
         loadTableData();
     }
     private void deleteProduct(){

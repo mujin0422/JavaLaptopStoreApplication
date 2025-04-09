@@ -83,4 +83,19 @@ public class RomDAO {
         }
         return null;
     }
+    
+    public int getMaRomByDungLuongRom(String dungLuongRom) {
+        String sql = "SELECT maROM FROM rom WHERE dungLuongROM=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, dungLuongRom);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("maROM");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+}
 }

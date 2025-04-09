@@ -30,4 +30,8 @@ public class PhanLoaiBUS {
     public PhanLoaiDTO getPhanLoaiById(int maLoai) {
         return phanLoaiDAO.getById(maLoai);
     }
+    
+    public int getMaLoaiByTenLoai(String tenLoai){
+        return phanLoaiDAO.getMaLoaiByTenLoai(tenLoai);
+    }
 }

@@ -26,4 +26,8 @@ public class RamBUS {
     public boolean deleteRAM(int maRAM) {
         return ramDAO.delete(maRAM) > 0;
     }
+    
+    public int getMaRamByDungLuongRam(String dungLuongRam){
+        return ramDAO.getMaRamByDungLuongRam(dungLuongRam);
+    }
 }

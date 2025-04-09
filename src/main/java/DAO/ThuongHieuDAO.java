@@ -84,4 +84,20 @@ public class ThuongHieuDAO {
         }
         return null;
     }
+    
+    public int getMaThByTenTh(String tenTh) {
+        String sql = "SELECT maTH FROM thuonghieu WHERE tenTH=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tenTh);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("maTH");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package GUI.MainContentDiaLog;
 
 import BUS.KhachHangBUS;
@@ -93,12 +89,12 @@ public class AddAndEditCostumerGUI extends JDialog{
     private void saveCostumer(){
         if(!CheckFormInput()) return;
         try {
-            String maKH = txtMaKH.getText().trim();
+            int maKH = Integer.parseInt(txtMaKH.getText().trim());
             String tenKH = txtTenKH.getText().trim();
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();
             KhachHangDTO kh = new KhachHangDTO(maKH, tenKH, soDT, email);
-            if(khachHangBus.updateKhachHang(kh)){
+            if(khachHangBus.addKhachHang(kh)){
                 JOptionPane.showMessageDialog(this, "Cập nhật khach hang thành công!");
                 dispose();
             } else {
@@ -112,7 +108,7 @@ public class AddAndEditCostumerGUI extends JDialog{
     private void addCostumer(){
         if(!CheckFormInput()) return;
         try {
-            String maKH = txtMaKH.getText().trim();
+            int maKH = Integer.parseInt(txtMaKH.getText().trim());
             String tenKH = txtTenKH.getText().trim();
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();

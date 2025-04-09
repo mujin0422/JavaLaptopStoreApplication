@@ -17,7 +17,7 @@ public class PhieuXuatDAO {
             ps.setInt(2, obj.getMaNV());
             ps.setInt(3, obj.getMaKH());
             ps.setInt(4, obj.getTongTien());
-            ps.setString(5, obj.getNgayXuat());
+            ps.setDate(5, new java.sql.Date(obj.getNgayXuat().getTime()));
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -32,7 +32,7 @@ public class PhieuXuatDAO {
             ps.setInt(1, obj.getMaNV());
             ps.setInt(2, obj.getMaKH());
             ps.setInt(3, obj.getTongTien());
-            ps.setString(5, obj.getNgayXuat());
+            ps.setDate(4, new java.sql.Date(obj.getNgayXuat().getTime()));
             ps.setInt(5, obj.getMaPX());
             return ps.executeUpdate();
         } catch (SQLException e) {
@@ -42,7 +42,7 @@ public class PhieuXuatDAO {
     }
 
     public int delete(int maPX) {
-        String sql = "UPDATE phieuxuat trangThaiXoa=1 WHERE maPX=?";
+        String sql = "UPDATE phieuxuat SET trangThaiXoa=1 WHERE maPX=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPX);
@@ -52,6 +52,21 @@ public class PhieuXuatDAO {
         }
         return 0;
     }
+    
+    public int exists(int maPX) {
+        String sql = "SELECT COUNT(*) FROM phieuxuat WHERE maPX=?";
+        try (Connection conn = DatabaseConnection.getConnection(); 
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, maPX);  
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);  
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;  
+    }
 
     public ArrayList<PhieuXuatDTO> getAll() {
         ArrayList<PhieuXuatDTO> list = new ArrayList<>();
@@ -59,13 +74,14 @@ public class PhieuXuatDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+            
             while (rs.next()) {
                 PhieuXuatDTO obj = new PhieuXuatDTO(
                     rs.getInt("maPX"),
                     rs.getInt("maNV"),
                     rs.getInt("maKH"),
                     rs.getInt("tongTien"),
-                    rs.getString("ngayXuat")
+                    rs.getDate("ngayXuat")
                 );
                 list.add(obj);
             }
@@ -76,7 +92,7 @@ public class PhieuXuatDAO {
     }
 
     public PhieuXuatDTO getById(int maPX) {
-        String sql = "SELECT * FROM phieuxuat WHERE maPX=? AND trangThaiXoa=0";
+        String sql = "SELECT * FROM phieuxuat WHERE maPX=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maPX);
@@ -87,7 +103,7 @@ public class PhieuXuatDAO {
                         rs.getInt("maNV"),
                         rs.getInt("maKH"),
                         rs.getInt("tongTien"),
-                        rs.getString("ngayXuat")
+                        rs.getDate("ngayXuat")
                     );
                 }
             }
@@ -95,19 +111,5 @@ public class PhieuXuatDAO {
             e.printStackTrace();
         }
         return null;
-    }
-    
-    public int demSoPhieuXuat() {
-        String sql = "SELECT COUNT(*) FROM phieuxuat";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                return rs.getInt(1);  
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;  
     }
 }

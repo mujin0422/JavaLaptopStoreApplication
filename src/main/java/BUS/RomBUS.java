@@ -26,4 +26,8 @@ public class RomBUS {
     public boolean deleteROM(int maROM) {
         return romDAO.delete(maROM) > 0;  
     }
+    
+    public int getMaRomByDungLuongRom(String dungLuongRom){
+        return romDAO.getMaRomByDungLuongRom(dungLuongRom);
+    }
 }

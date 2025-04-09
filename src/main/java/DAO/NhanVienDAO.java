@@ -25,22 +25,20 @@ public class NhanVienDAO {
         return 0;
     }
 
-    public static int update(NhanVienDTO nv) {
-        String sql = "UPDATE NhanVien SET tenNV = ?, sdt = ?, email = ? WHERE maNV = ?";
+    public int update(NhanVienDTO obj) {
+        String sql = "UPDATE nhanvien SET  tenNV=?, email=?, sdt=? WHERE maNV=?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, nv.getTenNV());
-            stmt.setString(2, nv.getSdt());
-            stmt.setString(3, nv.getEmail());
-            stmt.setInt(4, nv.getMaNV());
-    
-            return stmt.executeUpdate();
-        } catch (Exception e) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, obj.getTenNV());
+            ps.setString(2, obj.getEmail());
+            ps.setString(3, obj.getSdt());
+            ps.setInt(4, obj.getMaNV());
+            return ps.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
-            return 0;
         }
+        return 0;
     }
-    
 
     public int delete(int maNhanVien) {
         String sql = "UPDATE nhanvien SET trangThaiXoa=1 WHERE maNV=?";
@@ -75,10 +73,64 @@ public class NhanVienDAO {
     }
 
     public NhanVienDTO getById(int id) {
-        String sql = "SELECT * FROM nhanvien WHERE maNV=? AND trangThaiXoa=0";
+        String sql = "SELECT * FROM nhanvien WHERE maNV=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new NhanVienDTO(
+                        rs.getInt("maNV"),
+                        rs.getString("tenNV"),
+                        rs.getString("email"),
+                        rs.getString("sdt")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public int getMaNvByTenNv(String tenNv) {
+        String sql = "SELECT maNV FROM nhanvien WHERE tenNV=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tenNv); 
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("maNV"); 
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; 
+    }
+    
+    public String getTenNvByMaNv(int maNv) {
+        String sql = "SELECT tenNV FROM nhanvien WHERE maNV=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maNv); 
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenNV"); 
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; 
+    }
+    
+    public NhanVienDTO getCurrentStaffByUserName(String username){
+        String sql = "SELECT * FROM taikhoan tk JOIN nhanvien nv "
+                + "WHERE nv.maNV = tk.maNV AND tk.tenDangNhap=? ";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new NhanVienDTO(
