@@ -30,4 +30,8 @@ public class ChiTietPhieuNhapBUS {
     public ChiTietPhieuNhapDTO getChiTietPhieuNhap(int maPN, int maSP) {
         return chiTietPhieuNhapDAO.getById(maPN, maSP);
     }
+    
+    public ArrayList<ChiTietPhieuNhapDTO> getAllChiTietPhieuNhapByMaPn(int maPn){
+        return chiTietPhieuNhapDAO.getAllChiTietPhieuNhapByMaPn(maPn);
+    }
 }

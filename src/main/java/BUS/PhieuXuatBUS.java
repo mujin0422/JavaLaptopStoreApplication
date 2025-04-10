@@ -50,5 +50,13 @@ public class PhieuXuatBUS {
         }
         return ketQua;
     }
+    
+    public PhieuXuatDTO getById(int maPX){
+        return phieuXuatDAO.getById(maPX);
+    }
+    
+    public int countPhieuXuatByMaKh(int maKh){
+        return phieuXuatDAO.countPhieuXuatByMaKh(maKh);
+    }
 
 }

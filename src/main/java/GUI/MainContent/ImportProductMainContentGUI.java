@@ -21,6 +21,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Window;
@@ -30,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -40,7 +42,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
-public class ImportProductMainContentGUI extends JPanel{
+public class ImportProductMainContentGUI extends JPanel implements ReloadablePanel{
     private UIButton btnAdd ,btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnAddToPN, btnSavePN;
     private UITextField txtSearch, txtSoLuong, txtMaPN, txtMaNV, txtTongTien, txtSearchSach;
     private JComboBox<String> cbMaNCC;
@@ -74,6 +76,7 @@ public class ImportProductMainContentGUI extends JPanel{
         btnAdd = new UIButton("menuButton", "THÊM", 90, 40, "/Icon/them_icon.png");
         btnAdd.addActionListener(e -> resetFormInput());
         btnView = new UIButton("menuButton", "XEM", 90, 40, "/Icon/chitiet_icon.png");
+        btnView.addActionListener(e -> viewChiTietPhieuNhap());
         pnlButton.add(btnAdd);
         pnlButton.add(btnView);
         
@@ -213,7 +216,7 @@ public class ImportProductMainContentGUI extends JPanel{
         addSearchFunctionality();
     }
     
-    private void loadTableData(){
+    public void loadTableData(){
         tableModel.setRowCount(0);
         for(PhieuNhapDTO pn : phieuNhapBUS.getAllPhieuNhap()){
             tableModel.addRow(new Object[]{
@@ -226,13 +229,70 @@ public class ImportProductMainContentGUI extends JPanel{
         }   
         tableModelForProduct.setRowCount(0);
         for(SanPhamDTO sp : sanPhamBUS.getAllSanPham()){
+            long giaNhap = (long) sp.getGiaSP() * 85 / 100; 
             tableModelForProduct.addRow(new Object[]{
                 sp.getMaSP(),
                 sp.getTenSP(),
-                sp.getGiaSP(),
+                (int)giaNhap,
                 sp.getSoLuongTon()
             });
         }
+    }
+    
+    private void viewChiTietPhieuNhap() {
+        int selectedRow = tblContent.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xem chi tiết.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int maPN = Integer.parseInt(tblContent.getValueAt(selectedRow, 0).toString());
+        PhieuNhapDTO pn = phieuNhapBUS.getById(maPN);
+
+        Window window = SwingUtilities.getWindowAncestor(this);
+        JDialog dialog = new JDialog((Frame) window, "Chi tiết phiếu nhập", true);
+        dialog.setLayout(new BorderLayout());
+
+        JPanel panelThongTin = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        panelThongTin.setPreferredSize(new Dimension(600, 125));
+        panelThongTin.add(new UILabel("PHIẾU NHẬP " + pn.getMaPN(), 550, 25));
+        panelThongTin.add(new UILabel("NHÂN VIÊN NHẬP HÀNG: " + nhanVienBUS.getTenNvByMaNv(pn.getMaNV()), 550, 25));
+        panelThongTin.add(new UILabel("NHÀ CUNG CẤP: " + nhaCungCapBUS.getTenNccByMaNcc(pn.getMaNCC()), 550, 25));
+        panelThongTin.add(new UILabel("NGÀY GHI PHIẾU: " + pn.getNgayNhap().toString(), 550, 25));
+        panelThongTin.add(new UILabel("TỔNG TIỀN: " + pn.getTongTien(), 550, 25));
+
+        JPanel panelChiTiet = new JPanel();
+        panelChiTiet.setLayout(new BoxLayout(panelChiTiet, BoxLayout.Y_AXIS));
+        panelChiTiet.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+
+        Font monoFont = new Font("Monospaced", Font.PLAIN, 14);
+        UILabel lblTitle = new UILabel("CHI TIẾT PHIẾU NHẬP:", 550, 25);
+        panelChiTiet.add(lblTitle);
+
+        UILabel lblHeader = new UILabel(String.format("%-40s %-10s %-15s", "SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN"), 600, 25);
+        lblHeader.setFont(monoFont);
+        panelChiTiet.add(lblHeader);
+
+        for (ChiTietPhieuNhapDTO ct : chiTietPhieuNhapBUS.getAllChiTietPhieuNhapByMaPn(maPN)) {
+            UILabel lblRow = new UILabel(String.format("%-40s %-10s %-15s", sanPhamBUS.getTenSanPhamByMaSanPham(ct.getMaSP()), ct.getSoLuongSP(),ct.getGiaNhap()), 600, 25);
+            lblRow.setFont(monoFont);
+            panelChiTiet.add(lblRow);
+        }
+
+        JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        UIButton btnClose = new UIButton("add", "Đóng", 100, 30);
+        btnClose.addActionListener(e -> dialog.dispose());
+        panelButton.add(btnClose);
+
+        dialog.add(panelThongTin, BorderLayout.NORTH);
+        dialog.add(panelChiTiet, BorderLayout.CENTER);
+        dialog.add(panelButton, BorderLayout.SOUTH);
+
+        dialog.pack();
+        int preferredHeight = dialog.getHeight(); 
+        dialog.setSize(650, preferredHeight);   
+        dialog.setLocationRelativeTo(null);   
+        dialog.setVisible(true);
     }
     
     private void addToTableForForm() {

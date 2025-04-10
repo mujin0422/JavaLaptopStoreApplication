@@ -93,4 +93,27 @@ public class ChiTietPhieuNhapDAO {
         }
         return null;
     }
+    
+    public ArrayList<ChiTietPhieuNhapDTO> getAllChiTietPhieuNhapByMaPn(int maPN) {
+        ArrayList<ChiTietPhieuNhapDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM chitietphieunhap WHERE maPN = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maPN);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ChiTietPhieuNhapDTO ct = new ChiTietPhieuNhapDTO(
+                        rs.getInt("maPN"),
+                        rs.getInt("maSP"),
+                        rs.getInt("soLuongSP"),
+                        rs.getInt("giaNhap")
+                    );
+                    list.add(ct);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

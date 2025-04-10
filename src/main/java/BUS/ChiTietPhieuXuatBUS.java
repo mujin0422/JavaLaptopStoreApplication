@@ -30,4 +30,8 @@ public class ChiTietPhieuXuatBUS {
     public ChiTietPhieuXuatDTO getChiTietPhieuXuat(int maPX, int maSP) {
         return chiTietPhieuXuatDAO.getById(maPX, maSP);
     }
+    
+    public ArrayList<ChiTietPhieuXuatDTO> getAllChiTietPhieuXuatByMaPx(int maPX){
+        return chiTietPhieuXuatDAO.getAllChiTietPhieuXuatByMaPx(maPX);
+    }
 }

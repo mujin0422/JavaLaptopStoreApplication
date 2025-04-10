@@ -26,7 +26,7 @@ import Utils.UITable;
 import Utils.UITextField;
 import java.awt.FlowLayout;
 
-public class ProductMainContentGUI extends JPanel {
+public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
     private SanPhamBUS sanPhamBUS;
     private RamBUS ramBUS;
     private RomBUS romBUS;
@@ -96,7 +96,7 @@ public class ProductMainContentGUI extends JPanel {
         loadTableData();
     }
     
-    private void loadTableData() { 
+    public void loadTableData() { 
         tableModel.setRowCount(0); 
         for (SanPhamDTO sp : sanPhamBUS.getAllSanPham()) {
             tableModel.addRow(new Object[] {

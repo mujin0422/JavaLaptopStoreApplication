@@ -144,7 +144,12 @@ public final class MainLayoutGUI extends JFrame {
                 case 11 -> targetPanel = statisticsPanel;       
                 default -> targetPanel = null;
             }
-            button.addActionListener(e -> switchPanel(targetPanel));
+            button.addActionListener(e -> {
+                switchPanel(targetPanel);
+                if (targetPanel instanceof ReloadablePanel reloadablePanel) {
+                    reloadablePanel.loadTableData();
+                }
+            });
         }
         addChucNang();
         //==============================( End Panel Content )===========================//

@@ -11,6 +11,10 @@ public class PhieuNhapBUS{
         phieuNhapDAO = new PhieuNhapDAO();
     }
 
+    public PhieuNhapDTO getById(int maPn){
+        return phieuNhapDAO.getById(maPn);
+    }
+    
     public ArrayList<PhieuNhapDTO> getAllPhieuNhap(){
         return phieuNhapDAO.getAll();
     }
@@ -44,4 +48,5 @@ public class PhieuNhapBUS{
         }
         return ketQua;
     }
+    
 }

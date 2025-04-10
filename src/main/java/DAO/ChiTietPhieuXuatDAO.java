@@ -98,4 +98,28 @@ public class ChiTietPhieuXuatDAO {
         }
         return null;
     }
+    
+    public ArrayList<ChiTietPhieuXuatDTO> getAllChiTietPhieuXuatByMaPx(int maPX) {
+        ArrayList<ChiTietPhieuXuatDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM chitietphieuxuat WHERE maPX = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maPX);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ChiTietPhieuXuatDTO ct = new ChiTietPhieuXuatDTO(
+                        rs.getInt("maPX"),
+                        rs.getInt("maSP"),
+                        rs.getInt("giaBan"),
+                        rs.getInt("soLuongSP"),
+                        rs.getString("serialSP")
+                    );
+                    list.add(ct);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

@@ -112,4 +112,19 @@ public class PhieuXuatDAO {
         }
         return null;
     }
+    
+    public int countPhieuXuatByMaKh(int maKh) {
+        String sql = "SELECT COUNT(*) AS total FROM phieuxuat WHERE maKH = ? AND trangThaiXoa = 0";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maKh);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total");
+                }
+            }
+        } catch (SQLException e) {
+        }
+        return 0;
+    }
 }

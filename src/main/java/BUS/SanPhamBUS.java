@@ -79,4 +79,8 @@ public class SanPhamBUS {
         }
         return ketQua;
     }
+    
+    public String getTenSanPhamByMaSanPham(int maSp){
+        return sanPhamDAO.getTenSanPhamByMaSanPham(maSp);
+    }
 }

@@ -175,6 +175,22 @@ public class SanPhamDAO {
         return 0;
     }
     
+    public String getTenSanPhamByMaSanPham(int maSp){
+        String sql ="SELECT tenSP FROM sanpham WHERE maSP =?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenSP");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public String getTenThByMaSp(int maSp) {
         String sql = "SELECT tenTH FROM sanpham sp JOIN thuonghieu th ON sp.maTH=th.maTH WHERE maSP=?";
         try (Connection conn = DatabaseConnection.getConnection();
