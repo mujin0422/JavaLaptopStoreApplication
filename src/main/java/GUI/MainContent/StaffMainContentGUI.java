@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Window;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -67,7 +68,8 @@ public class StaffMainContentGUI extends JPanel{
         pnlContent = new JPanel();
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
-        String[] columnNames = {"MÃ NHÂN VIÊN", "TÊN NHÂN VIÊN", "SỐ ĐIỆN THOẠI", "EMAIL"};
+        pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        String[] columnNames = {"MÃ NHÂN VIÊN", "TÊN NHÂN VIÊN", "SỐ ĐIỆN THOẠI", "EMAIL", "VAI TRÒ"};
         tableModel = new DefaultTableModel(columnNames, 0); 
         tblContent = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
@@ -88,7 +90,8 @@ public class StaffMainContentGUI extends JPanel{
                 nhanvien.getMaNV(),
                 nhanvien.getTenNV(),
                 nhanvien.getEmail(),
-                nhanvien.getSdt()             
+                nhanvien.getSdt(),
+                nhanvien.getVaiTro()
             });
         }
     }
@@ -110,8 +113,9 @@ public class StaffMainContentGUI extends JPanel{
         String tenNV = tableModel.getValueAt(selectedRow, 1).toString();
         String sdt = tableModel.getValueAt(selectedRow, 2).toString();
         String email = tableModel.getValueAt(selectedRow, 3).toString();
+        String vaiTro = tableModel.getValueAt(selectedRow, 4).toString();
     
-        NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, sdt, email);
+        NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, sdt, email, vaiTro);
     
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditStaffGUI((JFrame) window, nhanVienBUS, "Chỉnh sửa nhân viên", "save", nv);

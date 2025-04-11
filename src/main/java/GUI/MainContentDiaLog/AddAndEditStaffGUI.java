@@ -10,7 +10,7 @@ import Utils.UIConstants;
 import Utils.UILabel;
 
 public class AddAndEditStaffGUI extends JDialog{
-    private JTextField txtMaNV, txtTenNV, txtEmail, txtSDT;
+    private JTextField txtMaNV, txtTenNV, txtEmail, txtSDT, txtVaiTro;
     private UIButton btnAdd, btnSave, btnCancel;
     private NhanVienBUS nhanVienBus;
     private NhanVienDTO nhanVien;
@@ -44,7 +44,7 @@ public class AddAndEditStaffGUI extends JDialog{
         this.setLayout(new BorderLayout());
         
         //===============================( PANEL INPUT )================================//
-        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         inputPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
@@ -52,10 +52,12 @@ public class AddAndEditStaffGUI extends JDialog{
         inputPanel.add(txtMaNV = new JTextField());
         inputPanel.add(new UILabel("Tên Nhân Viên:"));
         inputPanel.add(txtTenNV = new JTextField());
-        inputPanel.add(new UILabel("Số điện thoại:"));
+        inputPanel.add(new UILabel("Số Điện Thoại:"));
         inputPanel.add(txtSDT = new JTextField());
         inputPanel.add(new UILabel("Email:"));
         inputPanel.add(txtEmail = new JTextField());
+        inputPanel.add(new UILabel("Vai Trò:"));
+        inputPanel.add(txtVaiTro = new JTextField());
         //=============================( End Panel Input )==============================//
         
         
@@ -91,8 +93,9 @@ public class AddAndEditStaffGUI extends JDialog{
             String tenNV = txtTenNV.getText().trim();
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();
+            String vaiTro = txtVaiTro.getText().trim();
 
-            NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email);
+            NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email, vaiTro);
             if(nhanVienBus.addNhanVien(nv)){
                 JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
                 dispose();
@@ -111,8 +114,9 @@ public class AddAndEditStaffGUI extends JDialog{
             String tenNV = txtTenNV.getText().trim();
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();
+            String vaiTro = txtVaiTro.getText().trim();
 
-            NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email);
+            NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, soDT, email, vaiTro);
             if(nhanVienBus.updateNhanVien(nv)){
                 JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công!");
                 dispose();
@@ -153,6 +157,11 @@ public class AddAndEditStaffGUI extends JDialog{
             String email = txtEmail.getText().trim();
             if (!email.isEmpty() && !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
                 JOptionPane.showMessageDialog(this, "Email không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            String vaiTro = txtVaiTro.getText().trim();
+            if(vaiTro.isEmpty()){
+                JOptionPane.showMessageDialog(this, "Vai trò không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } catch (NumberFormatException e) {

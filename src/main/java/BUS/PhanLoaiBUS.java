@@ -34,4 +34,8 @@ public class PhanLoaiBUS {
     public int getMaLoaiByTenLoai(String tenLoai){
         return phanLoaiDAO.getMaLoaiByTenLoai(tenLoai);
     }
+    
+    public String getTenLoaiByMaLoai(int maLoai) {
+        return phanLoaiDAO.getTenLoaiByMaLoai(maLoai);
+    }
 }

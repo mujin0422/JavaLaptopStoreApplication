@@ -34,4 +34,8 @@ public class DoPhanGiaiBUS {
     public int getMaDpgByTenDpg(String tenDpg){
         return doPhanGiaiDAO.getMaDpgByTenDpg(tenDpg);
     }
+    
+    public String getTenDpgByMaDpg(int maDpg) {
+        return doPhanGiaiDAO.getTenDpgByMaDpg(maDpg);
+    }
 }

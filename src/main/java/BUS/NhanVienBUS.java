@@ -54,4 +54,8 @@ public class NhanVienBUS {
         }
         return ketQua;
     }
+    
+    public ArrayList<NhanVienDTO> getAllNvNotExistsTk(){
+        return NhanVienDAO.getAllNvNotExistsTk();
+    }
 }

@@ -30,4 +30,8 @@ public class RamBUS {
     public int getMaRamByDungLuongRam(String dungLuongRam){
         return ramDAO.getMaRamByDungLuongRam(dungLuongRam);
     }
+    
+    public String getDungLuongRamByMaRam(int maRam){
+        return ramDAO.getDungLuongRamByMaRam(maRam);
+    }
 }

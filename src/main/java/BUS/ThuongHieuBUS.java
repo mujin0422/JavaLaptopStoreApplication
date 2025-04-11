@@ -30,4 +30,8 @@ public class ThuongHieuBUS {
     public int getMaThByTenTh(String tenTh){
         return thuongHieuDAO.getMaThByTenTh(tenTh);
     }
+    
+    public String getTenThByMaTh(int maTH) {
+        return thuongHieuDAO.getTenThByMaTh(maTH);
+    }
 }

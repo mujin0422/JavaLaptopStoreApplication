@@ -42,4 +42,12 @@ public class QuyenBUS {
         }
         return ketQua;
     }
+    
+    public String getTenQuyenByMaQuyen(int maQuyen){
+        return quyenDAO.getTenQuyenByMaQuyen(maQuyen);
+    }
+    
+    public int getMaQuyenByTenQuyen(String tenQuyen) {
+        return quyenDAO.getMaQuyenByTenQuyen(tenQuyen);
+    }
 }

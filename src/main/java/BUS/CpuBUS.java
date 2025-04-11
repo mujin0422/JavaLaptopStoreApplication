@@ -34,4 +34,8 @@ public class CpuBUS {
     public int getMaCpuByTenCpu(String tenCpu){
         return cpuDAO.getMaCpuByTenCpu(tenCpu);
     }
+    
+    public String getTenCpuByMaCpu(int maCpu){
+        return cpuDAO.getTenCpuByMaCpu(maCpu);
+    }
 }

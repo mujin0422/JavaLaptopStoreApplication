@@ -71,6 +71,7 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
         pnlButton.add(btnEdit);
 
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
+        pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
         cbFilter = new JComboBox<>();
         cbFilter.setPreferredSize(new Dimension(150,30));
         cbFilter.addItem("Tất cả");

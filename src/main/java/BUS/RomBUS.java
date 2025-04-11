@@ -30,4 +30,8 @@ public class RomBUS {
     public int getMaRomByDungLuongRom(String dungLuongRom){
         return romDAO.getMaRomByDungLuongRom(dungLuongRom);
     }
+    
+    public String getDungLuongRomByMaRom(int maRom) {
+        return romDAO.getDungLuongRomByMaRom(maRom);
+    }
 }

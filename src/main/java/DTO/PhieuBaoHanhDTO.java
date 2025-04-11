@@ -6,6 +6,7 @@ public class PhieuBaoHanhDTO {
     private int maPBH;
     private int maSP;
     private int maPX;
+    private String serialSP;
     private Date ngayTiepNhan;
     private String moTaLoi;
     private int trangThaiBH;
@@ -15,15 +16,24 @@ public class PhieuBaoHanhDTO {
     public PhieuBaoHanhDTO() {
     }
 
-    public PhieuBaoHanhDTO(int maPBH, int maSP, int maPX, Date ngayTiepNhan, String moTaLoi, int trangThaiBH, int maNVBH) {
+    public PhieuBaoHanhDTO(int maPBH, int maSP, int maPX,String serialSP, Date ngayTiepNhan, String moTaLoi, int trangThaiBH, int maNVBH) {
         this.maPBH = maPBH;
         this.maSP = maSP;
         this.maPX = maPX;
+        this.serialSP = serialSP;
         this.ngayTiepNhan = ngayTiepNhan;
         this.moTaLoi = moTaLoi;
         this.trangThaiBH = trangThaiBH;
         this.maNVBH = maNVBH;
         this.trangThaiXoa = 0;
+    }
+
+    public String getSerialSP() {
+        return serialSP;
+    }
+
+    public void setSerialSP(String serialSP) {
+        this.serialSP = serialSP;
     }
 
     public int getTrangThaiXoa() {

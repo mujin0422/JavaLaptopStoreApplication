@@ -1,5 +1,10 @@
 package GUI.MainContentDiaLog;
 
+import BUS.CpuBUS;
+import BUS.DoPhanGiaiBUS;
+import BUS.PhanLoaiBUS;
+import BUS.RamBUS;
+import BUS.RomBUS;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -12,15 +17,33 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import BUS.SanPhamBUS;
+import BUS.ThuongHieuBUS;
+import DTO.CpuDTO;
+import DTO.DoPhanGiaiDTO;
+import DTO.PhanLoaiDTO;
+import DTO.RamDTO;
+import DTO.RomDTO;
 import DTO.SanPhamDTO;
+import DTO.ThuongHieuDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
+import Utils.UITextField;
+import java.awt.Dimension;
+import javax.swing.JComboBox;
 public class AddAndEditProductGUI extends JDialog {
-    private JTextField txtMaSP, txtTenSP, txtGiaSP, txtSoLuongTon, txtMaRam, txtMaCPU, txtMaRom, txtMaDPG, txtMaLoai, txtMaTH, txtThoiGianBH;
+    private UITextField txtMaSP, txtTenSP, txtGiaSP, txtSoLuongTon, txtThoiGianBH;
+    private JComboBox<String> cbRam, cbRom, cbCpu, cbDpg, cbLoai, cbTh;
     private UIButton btnAdd, btnSave, btnCancel;
     private SanPhamBUS sanPhamBus;
+    private RamBUS ramBus;
+    private RomBUS romBus;
+    private CpuBUS cpuBus;
+    private DoPhanGiaiBUS doPhanGiaiBus;
+    private PhanLoaiBUS phanLoaiBus;
+    private ThuongHieuBUS thuongHieuBus;  
     private SanPhamDTO sanPham;
+    
     public AddAndEditProductGUI(JFrame parent, SanPhamBUS sanPhamBus, String title, String type, SanPhamDTO sanPham) {
         super(parent, title, true);
         this.sanPhamBus = sanPhamBus;
@@ -32,15 +55,38 @@ public class AddAndEditProductGUI extends JDialog {
             txtTenSP.setText(sanPham.getTenSP());
             txtGiaSP.setText(String.valueOf(sanPham.getGiaSP()));
             txtSoLuongTon.setText(String.valueOf(sanPham.getSoLuongTon()));
-            txtMaRam.setText(String.valueOf(sanPham.getMaRAM()));
-            txtMaCPU.setText(String.valueOf(sanPham.getMaCPU()));
-            txtMaRom.setText(String.valueOf(sanPham.getMaROM()));
-            txtMaDPG.setText(String.valueOf(sanPham.getMaDPG()));
-            txtMaLoai.setText(String.valueOf(sanPham.getMaLoai()));
-            txtMaTH.setText(String.valueOf(sanPham.getMaTH()));
+            String tenCpu = cpuBus.getTenCpuByMaCpu(sanPham.getMaCPU());
+            if (tenCpu != null) {
+                cbCpu.setSelectedItem(tenCpu);
+            }
+            String tenRam = ramBus.getDungLuongRamByMaRam(sanPham.getMaRAM());
+            if (tenRam != null) {
+                cbRam.setSelectedItem(tenRam);
+            }
+
+            String tenRom = romBus.getDungLuongRomByMaRom(sanPham.getMaROM());
+            if (tenRom != null) {
+                cbRom.setSelectedItem(tenRom);
+            }
+
+            String tenDpg = doPhanGiaiBus.getTenDpgByMaDpg(sanPham.getMaDPG());
+            if (tenDpg != null) {
+                cbDpg.setSelectedItem(tenDpg);
+            }
+
+            String tenLoai = phanLoaiBus.getTenLoaiByMaLoai(sanPham.getMaLoai());
+            if (tenLoai != null) {
+                cbLoai.setSelectedItem(tenLoai);
+            }
+
+            String tenTH = thuongHieuBus.getTenThByMaTh(sanPham.getMaTH());
+            if (tenTH != null) {
+                cbTh.setSelectedItem(tenTH);
+            }
             txtThoiGianBH.setText(String.valueOf(sanPham.getThoiGianBH()));
             txtMaSP.setEnabled(false);
-            txtGiaSP.setEnabled(false);
+            txtSoLuongTon.setEnabled(false);
+            
         }
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -55,36 +101,88 @@ public class AddAndEditProductGUI extends JDialog {
     }
 
     private void initComponent(String type) {
-        this.setSize(550, 400);
+        this.ramBus = new RamBUS();
+        this.romBus = new RomBUS();
+        this.cpuBus = new CpuBUS();
+        this.doPhanGiaiBus = new DoPhanGiaiBUS();
+        this.thuongHieuBus = new ThuongHieuBUS();
+        this.phanLoaiBus = new PhanLoaiBUS();
+        this.setSize(550, 600);
         this.setLayout(new BorderLayout());
 
-        // Panel nhập liệu
         JPanel inputPanel = new JPanel(new GridLayout(12, 2, 10, 10));
         inputPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         inputPanel.add(new UILabel("Mã Sản Phẩm:"));
-        inputPanel.add(txtMaSP = new JTextField());
+        inputPanel.add(txtMaSP = new UITextField(250,30));
         inputPanel.add(new UILabel("Tên Sản Phẩm:"));
-        inputPanel.add(txtTenSP = new JTextField());
+        inputPanel.add(txtTenSP = new UITextField(250,30));
         inputPanel.add(new UILabel("Giá Sản Phẩm:"));
-        inputPanel.add(txtGiaSP = new JTextField());
+        inputPanel.add(txtGiaSP = new UITextField(250,30));
         inputPanel.add(new UILabel("Số Lượng Tồn:"));
-        inputPanel.add(txtSoLuongTon = new JTextField());
-        inputPanel.add(new UILabel("Mã RAM:"));
-        inputPanel.add(txtMaRam = new JTextField());
-        inputPanel.add(new UILabel("Mã CPU:"));
-        inputPanel.add(txtMaCPU = new JTextField());
-        inputPanel.add(new UILabel("Mã ROM:"));
-        inputPanel.add(txtMaRom = new JTextField());
-        inputPanel.add(new UILabel("Mã Độ Phân Giải:"));
-        inputPanel.add(txtMaDPG = new JTextField());
-        inputPanel.add(new UILabel("Mã Loại:"));
-        inputPanel.add(txtMaLoai = new JTextField());
-        inputPanel.add(new UILabel("Mã Thương Hiệu:"));
-        inputPanel.add(txtMaTH = new JTextField());
+        inputPanel.add(txtSoLuongTon = new UITextField(250,30));
+        txtSoLuongTon.setText("0");
+        txtSoLuongTon.setEditable(false);
+        
+        inputPanel.add(new UILabel("RAM:"));
+        cbRam = new JComboBox<>();
+        cbRam.setBackground(UIConstants.WHITE_FONT);
+        cbRam.setPreferredSize(new Dimension(250,30));
+        for (RamDTO ram : ramBus.getAllRAM()) {
+            cbRam.addItem(ram.getDungLuongRAM());   
+        }
+        inputPanel.add(cbRam);
+        
+        
+        inputPanel.add(new UILabel("ROM:"));
+        cbRom = new JComboBox<>();
+        cbRom.setBackground(UIConstants.WHITE_FONT);
+        cbRom.setPreferredSize(new Dimension(250, 30));
+        for (RomDTO rom : romBus.getAllROM()) {
+            cbRom.addItem(rom.getDungLuongROM());
+        }
+        inputPanel.add(cbRom);
+
+        inputPanel.add(new UILabel("CPU:"));
+        cbCpu = new JComboBox<>();
+        cbCpu.setBackground(UIConstants.WHITE_FONT);
+        cbCpu.setPreferredSize(new Dimension(250, 30));
+        for (CpuDTO cpu : cpuBus.getAllCPU()) {
+            cbCpu.addItem(cpu.getTenCPU());
+        }
+        inputPanel.add(cbCpu);
+
+        inputPanel.add(new UILabel("Độ Phân Giải:"));
+        cbDpg = new JComboBox<>();
+        cbDpg.setBackground(UIConstants.WHITE_FONT);
+        cbDpg.setPreferredSize(new Dimension(250, 30));
+        for (DoPhanGiaiDTO dpg : doPhanGiaiBus.getAllDoPhanGiai()) {
+            cbDpg.addItem(dpg.getTenDPG());
+        }
+        inputPanel.add(cbDpg);
+
+        inputPanel.add(new UILabel("Phân Loại:"));
+        cbLoai = new JComboBox<>();
+        cbLoai.setBackground(UIConstants.WHITE_FONT);
+        cbLoai.setPreferredSize(new Dimension(250, 30));
+        for (PhanLoaiDTO loai : phanLoaiBus.getAllPhanLoai()) {
+            cbLoai.addItem(loai.getTenLoai());
+        }
+        inputPanel.add(cbLoai);
+
+        inputPanel.add(new UILabel("Thương Hiệu:"));
+        cbTh = new JComboBox<>();
+        cbTh.setBackground(UIConstants.WHITE_FONT);
+        cbTh.setPreferredSize(new Dimension(250, 30));
+        for (ThuongHieuDTO th : thuongHieuBus.getAllThuongHieu()) {
+            cbTh.addItem(th.getTenTH());
+        }
+        inputPanel.add(cbTh);
+
+        
         inputPanel.add(new UILabel("Thời Gian Bảo Hành:"));
-        inputPanel.add(txtThoiGianBH = new JTextField());
+        inputPanel.add(txtThoiGianBH = new UITextField(250, 30));
 
         //==============================( PANEL BUTTON )================================//
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
@@ -112,22 +210,21 @@ public class AddAndEditProductGUI extends JDialog {
     }
 
     private void saveProduct() {
-        if (!CheckFormInput()) return;
+        if (!checkFormInput()) return;
         try {
             int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String tenSP = txtTenSP.getText().trim();
             int giaSP = Integer.parseInt(txtGiaSP.getText().trim());
             int soLuongTon = Integer.parseInt(txtSoLuongTon.getText().trim());
-            int maRam = Integer.parseInt(txtMaRam.getText().trim());
-            int maCPU = Integer.parseInt(txtMaCPU.getText().trim());
-            int maRom = Integer.parseInt(txtMaRom.getText().trim());
-            int maDPG = Integer.parseInt(txtMaDPG.getText().trim());
-            int maLoai = Integer.parseInt(txtMaLoai.getText().trim());
-            int maTH = Integer.parseInt(txtMaTH.getText().trim());
+            int maRam = ramBus.getMaRamByDungLuongRam(cbRam.getSelectedItem().toString());
+            int maCPU = cpuBus.getMaCpuByTenCpu(cbCpu.getSelectedItem().toString());
+            int maRom = romBus.getMaRomByDungLuongRom(cbRom.getSelectedItem().toString());
+            int maDPG = doPhanGiaiBus.getMaDpgByTenDpg(cbDpg.getSelectedItem().toString());
+            int maLoai = phanLoaiBus.getMaLoaiByTenLoai(cbLoai.getSelectedItem().toString());
+            int maTH = thuongHieuBus.getMaThByTenTh(cbTh.getSelectedItem().toString());
             int thoiGianBH = Integer.parseInt(txtThoiGianBH.getText().trim());
             
             SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
-
             if (sanPhamBus.updateSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công!");
                 dispose();
@@ -141,17 +238,17 @@ public class AddAndEditProductGUI extends JDialog {
 
     private void addProduct() {
         if (!checkFormInput()) return;
-        try {
+        try {   
             int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String tenSP = txtTenSP.getText().trim();
             int giaSP = Integer.parseInt(txtGiaSP.getText().trim());
             int soLuongTon = Integer.parseInt(txtSoLuongTon.getText().trim());
-            int maRam = Integer.parseInt(txtMaRam.getText().trim());
-            int maCPU = Integer.parseInt(txtMaCPU.getText().trim());
-            int maRom = Integer.parseInt(txtMaRom.getText().trim());
-            int maDPG = Integer.parseInt(txtMaDPG.getText().trim());
-            int maLoai = Integer.parseInt(txtMaLoai.getText().trim());
-            int maTH = Integer.parseInt(txtMaTH.getText().trim());
+            int maRam = ramBus.getMaRamByDungLuongRam(cbRam.getSelectedItem().toString());
+            int maCPU = cpuBus.getMaCpuByTenCpu(cbCpu.getSelectedItem().toString());
+            int maRom = romBus.getMaRomByDungLuongRom(cbRom.getSelectedItem().toString());
+            int maDPG = doPhanGiaiBus.getMaDpgByTenDpg(cbDpg.getSelectedItem().toString());
+            int maLoai = phanLoaiBus.getMaLoaiByTenLoai(cbLoai.getSelectedItem().toString());
+            int maTH = thuongHieuBus.getMaThByTenTh(cbTh.getSelectedItem().toString());
             int thoiGianBH = Integer.parseInt(txtThoiGianBH.getText().trim());
 
             SanPhamDTO sp = new SanPhamDTO( maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
@@ -162,15 +259,10 @@ public class AddAndEditProductGUI extends JDialog {
                 JOptionPane.showMessageDialog(this, "Mã sản phẩm đã tồn tại hoặc dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            
+            JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);  
         }
     }
 
-    /**
-     * ...
-     * @return false: error, true: ok
-     */
     private boolean checkFormInput() {
         try {
             String maSPStr = txtMaSP.getText().trim();
@@ -188,7 +280,6 @@ public class AddAndEditProductGUI extends JDialog {
                 JOptionPane.showMessageDialog(this, "Tên sản phẩm không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            // Kiểm tra giá sản phẩm và số lượng tồn
             String giaSPStr = txtGiaSP.getText().trim();
             if (giaSPStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Giá sản phẩm không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -199,59 +290,14 @@ public class AddAndEditProductGUI extends JDialog {
                 JOptionPane.showMessageDialog(this, "Giá sản phẩm phải là số dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            String soLuongTonStr = txtSoLuongTon.getText().trim();
-            if (soLuongTonStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Số lượng tồn không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            String tgBhStr = txtThoiGianBH.getText().trim();
+            if (tgBhStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Thời gian bảo hành không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
-            int soLuongTon = Integer.parseInt(soLuongTonStr);
-            if (soLuongTon < 0) {
-                JOptionPane.showMessageDialog(this, "Số lượng tồn phải là số nguyên không âm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Dữ liệu nhập vào không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
-    }
-    
-
-    private boolean CheckFormInput() {
-        try {
-            String maSPStr = txtMaSP.getText().trim();
-            if (maSPStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã sản phẩm không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int maSP = Integer.parseInt(maSPStr);
-            if (maSP <= 0) {
-                JOptionPane.showMessageDialog(this, "Mã sản phẩm phải là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            String tenSP = txtTenSP.getText().trim();
-            if (tenSP.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tên sản phẩm không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            String giaStr = txtGiaSP.getText().trim();
-            if (giaStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Giá không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            double gia = Double.parseDouble(giaStr);
-            if (gia <= 0) {
-                JOptionPane.showMessageDialog(this, "Giá phải là số dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            String soLuongStr = txtSoLuongTon.getText().trim();
-            if (soLuongStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Số lượng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int soLuong = Integer.parseInt(soLuongStr);
-            if (soLuong < 0) {
-                JOptionPane.showMessageDialog(this, "Số lượng không thể âm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            int tgBh = Integer.parseInt(tgBhStr);
+            if (tgBh <= 0) {
+                JOptionPane.showMessageDialog(this, "Thời gian bảo hành phải là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } catch (NumberFormatException e) {

@@ -6,9 +6,8 @@
 INSERT INTO QUYEN (maQuyen, tenQuyen) VALUES
 (1, N'Quản trị viên (admin)'),
 (2, N'Quản lý'),
-(3, N'Nhân viên bán hàng'),
-(4, N'Nhân viên kế toán'),
-(5, N'Nhân viên bảo hành');
+(3, N'Bán hàng'),
+(4, N'Kế toán');
 
 CREATE TABLE CHUCNANG (
     maCN INT NOT NULL PRIMARY KEY,
@@ -67,15 +66,24 @@ CREATE TABLE NHANVIEN (
     tenNV NVARCHAR(50) NOT NULL,
     sdt VARCHAR(11),
     email VARCHAR(100),
+	vaiTro NVARCHAR(50),
 	trangThaiXoa INT NOT NULL DEFAULT 0
 );
-INSERT INTO NHANVIEN (maNV, tenNV, sdt, email) VALUES
-(1, N'Phạm Đình Duy Thái', '0912345678', 'dthai@gmail.com'),
-(2, N'Lê Văn Nhất', '0923456789', 'nhat@gmail.com'),
-(3, N'Mai Thành Trung', '0934567890', 'trung@gmail.com'),
-(4, N'Hồ Minh TIến', '0945678901', 'tien@gmail.com'),
-(5, N'Đặng Thái Tú', '0956789012', 'tututu@gmail.com');
-
+INSERT INTO NHANVIEN (maNV, tenNV, sdt, email, vaiTro) VALUES
+(1, N'Phạm Đình Duy Thái', '0912345678', 'dthai@gmail.com', N'Admin'),
+(2, N'Lê Văn Nhất', '0923456789', 'nhat@gmail.com', N'Quản lý'),
+(3, N'Mai Thành Trung', '0934567890', 'trung@gmail.com', N'Nhân viên bán hàng' ),
+(4, N'Hồ Minh TIến', '0945678901', 'tien@gmail.com', N'Nhân viên bán hàng'),
+(5, N'Đặng Thái Tú', '0956789012', 'tututu@gmail.com', N'Kế toán'),
+(6, N'Nguyễn Thị Lan', '0967890123', 'lannguyen@gmail.com', N'Nhân viên bán hàng'),
+(7, N'Bùi Văn Hùng', '0978901234', 'hungbui@gmail.com', N'Nhân viên kỹ thuật'),
+(8, N'Trần Minh Hòa', '0989012345', 'minhhoa@gmail.com', N'Nhân viên kỹ thuật'),
+(9, N'Lý Hoàng Long', '0990123456', 'longly@gmail.com', N'Nhân viên bán hàng'),
+(10, N'Đỗ Quỳnh Chi', '0901234567', 'chidq@gmail.com', N'Nhân viên hỗ trợ khách hàng'),
+(11, N'Phan Thị Mai', '0913456789', 'maiphan@gmail.com', N'Kế toán'),
+(12, N'Võ Thanh Tùng', '0924567890', 'tunvo@gmail.com', N'Nhân viên kỹ thuật'),
+(13, N'Lê Quốc Toàn', '0935678901', 'toanle@gmail.com', N'Nhân viên hỗ trợ khách hàng'),
+(14, N'Tạ Minh Thư', '0946789012', 'thutaminh@gmail.com', N'Nhân viên hỗ trợ khách hàng');
 
 CREATE TABLE TAIKHOAN (
     tenDangNhap NVARCHAR(50) NOT NULL PRIMARY KEY,
@@ -88,10 +96,13 @@ CREATE TABLE TAIKHOAN (
 );
 INSERT INTO TAIKHOAN (tenDangNhap, matKhau, maQuyen, maNV) VALUES
 ('admin1', '123456', 1, 1),
-('banhang1', '123456', 3, 2),
-('banhang2', '123456', 3, 3),
-('banhang3', '123456', 3, 4),
-('ketoan1', '123456', 4, 5);
+('quanly1', '123456', 2, 2),
+('banhang1', '123456', 3, 3),
+('banhang2', '123456', 3, 4),
+('ketoan1', '123456', 4, 5),
+('banhang3', '123456', 3, 6),
+('banhang4', '123456', 3, 9),
+('ketoan2', '123456', 4, 11);
 
 
 CREATE TABLE KHACHHANG (
@@ -320,7 +331,8 @@ CREATE TABLE CHITIETPHIEUXUAT (
 CREATE TABLE PHIEUBAOHANH (
     maPBH INT NOT NULL PRIMARY KEY,
     maSP INT NOT NULL,
-    maPX INT NULL,
+    maPX INT NOT NULL,
+    serialSP VARCHAR(50) NOT NULL,
     ngayTiepNhan DATE NOT NULL,
     moTaLoi NVARCHAR(100) NOT NULL,
     trangThaiBH INT NOT NULL,
@@ -328,5 +340,6 @@ CREATE TABLE PHIEUBAOHANH (
 	trangThaiXoa INT NOT NULL DEFAULT 0,
     FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
     FOREIGN KEY (maPX) REFERENCES PHIEUXUAT(maPX),
-    FOREIGN KEY (maNVBH) REFERENCES NHANVIEN(maNV)
+    FOREIGN KEY (maNVBH) REFERENCES NHANVIEN(maNV),
+    FOREIGN KEY (maSP, maPX, serialSP) REFERENCES CHITIETPHIEUXUAT(maSP, maPX, serialSP)
 );

@@ -121,7 +121,7 @@ public final class MainLayoutGUI extends JFrame {
         importProductPanel = new ImportProductMainContentGUI(taiKhoan);
         exportProductPanel = new ExportProductMainContentGUI(taiKhoan);
         accountPanel = new AccountMainContentGUI(taiKhoan);
-        guaranteePanel = new GuaranteeMainContentGUI();
+        guaranteePanel = new GuaranteeMainContentGUI(taiKhoan);
         
         for (int i = 1; i <= 11; i++) {
             String label = buttonInfo[i - 1][0];
