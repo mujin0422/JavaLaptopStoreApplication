@@ -58,5 +58,9 @@ public class PhieuXuatBUS {
     public int countPhieuXuatByMaKh(int maKh){
         return phieuXuatDAO.countPhieuXuatByMaKh(maKh);
     }
+    
+    public int getMaKhByMaPx(int maPx) {
+        return phieuXuatDAO.getMaKhByMaPx(maPx);
+    }
 
 }

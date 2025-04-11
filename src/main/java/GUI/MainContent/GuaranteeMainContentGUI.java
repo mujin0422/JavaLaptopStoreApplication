@@ -1,8 +1,13 @@
 package GUI.MainContent;
 
 import BUS.ChiTietPhieuXuatBUS;
+import BUS.KhachHangBUS;
 import BUS.PhieuBaoHanhBUS;
+import BUS.PhieuXuatBUS;
+import BUS.SanPhamBUS;
+import DTO.PhieuBaoHanhDTO;
 import DTO.TaiKhoanDTO;
+import GUI.MainContentDiaLog.AddAndEditGuaranteeGUI;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
@@ -11,9 +16,13 @@ import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Window;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class GuaranteeMainContentGUI extends JPanel{
@@ -25,8 +34,14 @@ public class GuaranteeMainContentGUI extends JPanel{
     private DefaultTableModel tableModel;
     private PhieuBaoHanhBUS phieuBaoHanhBUS;
     private ChiTietPhieuXuatBUS chiTietPhieuXuatBUS;
+    private SanPhamBUS sanPhamBUS;
+    private PhieuXuatBUS phieuXuatBUS;
+    private KhachHangBUS khachHangBUS;
     
     public GuaranteeMainContentGUI(TaiKhoanDTO taiKhoan){
+        this.sanPhamBUS = new SanPhamBUS();
+        this.phieuXuatBUS = new PhieuXuatBUS();
+        this.khachHangBUS = new KhachHangBUS();
         this.phieuBaoHanhBUS = new PhieuBaoHanhBUS();
         this.chiTietPhieuXuatBUS = new ChiTietPhieuXuatBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
@@ -86,22 +101,57 @@ public class GuaranteeMainContentGUI extends JPanel{
     }
     
     public void loadTableData(){
-        
+        tableModel.setRowCount(0);
+        for(PhieuBaoHanhDTO pbh: phieuBaoHanhBUS.getAllPhieuBaoHanh()){
+            tableModel.addRow(new Object[]{
+                pbh.getMaPBH(),
+                khachHangBUS.getTenKhByMaKh(phieuXuatBUS.getMaKhByMaPx(pbh.getMaPX())),
+                sanPhamBUS.getTenSanPhamByMaSanPham(pbh.getMaSP()),
+                pbh.getSerialSP(),
+                pbh.getTrangThaiBH()
+            });
+        }
     }
 
     private void addGuarantee() {
-    }
-
-    private void deleteGuarantee() {
-        
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditGuaranteeGUI((JFrame) window, phieuBaoHanhBUS, "Thêm Phiếu Bảo Hành", "add");
+        loadTableData();
     }
 
     private void editGuarantee() {
-        
+        int selectedRow = tblContent.getSelectedRow();
+        if(selectedRow == -1){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu bảo hành chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int maPBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+        PhieuBaoHanhDTO pbh = phieuBaoHanhBUS.getPhieuBaoHanhById(maPBH);
+        Window window = SwingUtilities.getWindowAncestor(this);
+        new AddAndEditGuaranteeGUI((JFrame) window, phieuBaoHanhBUS, "Thêm Phiếu Bảo Hành", "add", pbh);
+        loadTableData();
+    }
+
+    private void deleteGuarantee() {
+        int selectedRow = tblContent.getSelectedRow();
+        if(selectedRow == -1){
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một tài khoản chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            int maPBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+            if(phieuBaoHanhBUS.deletePhieuBaoHanh(maPBH)){
+                JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                loadTableData();
+            } else {
+                JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private void viewGuarantee() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       
     }
 
 }

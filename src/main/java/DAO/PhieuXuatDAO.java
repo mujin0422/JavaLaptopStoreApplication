@@ -127,4 +127,22 @@ public class PhieuXuatDAO {
         }
         return 0;
     }
+    
+    public int getMaKhByMaPx(int maPx) {
+        String sql = "SELECT maKH FROM phieuxuat WHERE maPX=?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, maPx);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("maKH");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; 
+    }
+
 }
