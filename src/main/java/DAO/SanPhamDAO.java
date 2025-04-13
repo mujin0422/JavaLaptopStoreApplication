@@ -387,4 +387,36 @@ public class SanPhamDAO {
         }
         return dsSanPham;
     }
+    
+    public ArrayList<SanPhamDTO> searchSanPham(String keyword) {
+        ArrayList<SanPhamDTO> ketQua = new ArrayList<>();
+        String sql = "SELECT * FROM sanpham WHERE trangThaiXoa=0 AND LOWER(tenSP) LIKE ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            String kw = "%" + keyword.toLowerCase() + "%";
+            ps.setString(1, kw);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ketQua.add(new SanPhamDTO(
+                        rs.getInt("maSP"),
+                        rs.getString("tenSP"),
+                        rs.getInt("giaSP"),
+                        rs.getInt("soLuongTon"),
+                        rs.getInt("maCPU"),
+                        rs.getInt("maROM"),
+                        rs.getInt("maRAM"),
+                        rs.getInt("maTH"),
+                        rs.getInt("maDPG"),
+                        rs.getInt("maLoai"),
+                        rs.getInt("thoigianBH")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ketQua;
+    }
 }

@@ -76,16 +76,7 @@ public class SanPhamBUS {
         if (keyword == null || keyword.trim().isEmpty()) {
             return sanPhamDAO.getAll();
         }
-        ArrayList<SanPhamDTO> ketQua = new ArrayList<>();
-        keyword = keyword.toLowerCase(); 
-        ArrayList<SanPhamDTO> danhSach = sanPhamDAO.getAll();
-        if (danhSach != null) {
-            for (SanPhamDTO sp : danhSach) {
-                if (sp.getTenSP().toLowerCase().contains(keyword))
-                    ketQua.add(sp);
-            }
-        }
-        return ketQua;
+        return sanPhamDAO.searchSanPham(keyword);
     }
     
     public String getTenSanPhamByMaSanPham(int maSp){
