@@ -320,22 +320,19 @@ public class SanPhamDAO {
     }
     
     public ArrayList<SanPhamDTO> getSanPhamByDateRange(String startDate, String endDate) {
-        System.out.println("Executing query with dates: " + startDate + " to " + endDate);
-
         ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
-        String sql = "SELECT DISTINCT sp.* FROM sanpham sp " +
+        String sql = "SELECT sp.* FROM sanpham sp " +
                      "JOIN chitietphieunhap ctpn ON sp.maSP = ctpn.maSP " +
-                     "JOIN phieunhap pn ON ctpn.maPN = pn.maPN " +
+                     "JOIN phieunhap pn ON ctpn.maPhieuNhap = pn.maPhieuNhap " +
                      "WHERE pn.ngayNhap BETWEEN ? AND ? AND sp.trangThaiXoa = 0";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, startDate);
             ps.setString(2, endDate);
-
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    SanPhamDTO sp = new SanPhamDTO(
+                    dsSanPham.add(new SanPhamDTO(
                         rs.getInt("maSP"),
                         rs.getString("tenSP"),
                         rs.getInt("giaSP"),
@@ -347,8 +344,7 @@ public class SanPhamDAO {
                         rs.getInt("maDPG"),
                         rs.getInt("maLoai"),
                         rs.getInt("thoigianBH")
-                    );
-                    dsSanPham.add(sp);
+                    ));
                 }
             }
         } catch (SQLException e) {

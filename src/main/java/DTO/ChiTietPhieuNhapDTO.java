@@ -46,6 +46,4 @@ public class ChiTietPhieuNhapDTO {
     public void setGiaNhap(int giaNhap) {
         this.giaNhap = giaNhap;
     }
-
-    
 }

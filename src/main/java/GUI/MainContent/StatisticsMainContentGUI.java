@@ -31,7 +31,7 @@ public class StatisticsMainContentGUI extends JPanel{
         pnlButton.setBackground(UIConstants.MAIN_BACKGROUND);
         btnDoanhthu = new UIButton("menuButton", "DOANH THU", 150, 40);
         btnKhachHang = new UIButton("menuButton", "KHÁCH HÀNG", 150, 40);
-        btnSach = new UIButton("menuButton", "SÁCH", 150, 40);
+        btnSach = new UIButton("menuButton", "SẢN PHẨM", 150, 40);
         btnDoanhthu.addActionListener(e -> switchPanel(panelTkDoanhThu));
         btnKhachHang.addActionListener(e -> switchPanel(panelTkKhachHang));
         btnSach.addActionListener(e -> switchPanel(panelTkSach));
