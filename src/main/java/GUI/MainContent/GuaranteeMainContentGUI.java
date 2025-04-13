@@ -1,6 +1,6 @@
 package GUI.MainContent;
 
-import BUS.ChiTietPhieuXuatBUS;
+import BUS.ChiTietSanPhamBUS;
 import BUS.KhachHangBUS;
 import BUS.PhieuBaoHanhBUS;
 import BUS.PhieuXuatBUS;
@@ -33,7 +33,7 @@ public class GuaranteeMainContentGUI extends JPanel{
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
     private PhieuBaoHanhBUS phieuBaoHanhBUS;
-    private ChiTietPhieuXuatBUS chiTietPhieuXuatBUS;
+    private ChiTietSanPhamBUS chiTietSanPhamBUS;
     private SanPhamBUS sanPhamBUS;
     private PhieuXuatBUS phieuXuatBUS;
     private KhachHangBUS khachHangBUS;
@@ -43,7 +43,7 @@ public class GuaranteeMainContentGUI extends JPanel{
         this.phieuXuatBUS = new PhieuXuatBUS();
         this.khachHangBUS = new KhachHangBUS();
         this.phieuBaoHanhBUS = new PhieuBaoHanhBUS();
-        this.chiTietPhieuXuatBUS = new ChiTietPhieuXuatBUS();
+        this.chiTietSanPhamBUS  = new ChiTietSanPhamBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
         this.setLayout(new BorderLayout(5, 5));
@@ -84,7 +84,7 @@ public class GuaranteeMainContentGUI extends JPanel{
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            
+
         String[] columnNames = {"MÃ PHIẾU", "TÊN KHÁCH HÀNG", "TÊN SẢN PHẨM", "SERIAL", "TRẠNG THÁI"};
         tableModel = new DefaultTableModel(columnNames, 0);
         tblContent = new UITable(tableModel);
@@ -105,8 +105,8 @@ public class GuaranteeMainContentGUI extends JPanel{
         for(PhieuBaoHanhDTO pbh: phieuBaoHanhBUS.getAllPhieuBaoHanh()){
             tableModel.addRow(new Object[]{
                 pbh.getMaPBH(),
-                khachHangBUS.getTenKhByMaKh(phieuXuatBUS.getMaKhByMaPx(pbh.getMaPX())),
-                sanPhamBUS.getTenSanPhamByMaSanPham(pbh.getMaSP()),
+                phieuBaoHanhBUS.getTenKhByMaPbh(pbh.getMaPBH()),
+                phieuBaoHanhBUS.getTenSpByMaPbh(pbh.getMaPBH()),
                 pbh.getSerialSP(),
                 pbh.getTrangThaiBH()
             });
@@ -128,7 +128,7 @@ public class GuaranteeMainContentGUI extends JPanel{
         int maPBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
         PhieuBaoHanhDTO pbh = phieuBaoHanhBUS.getPhieuBaoHanhById(maPBH);
         Window window = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditGuaranteeGUI((JFrame) window, phieuBaoHanhBUS, "Thêm Phiếu Bảo Hành", "add", pbh);
+        new AddAndEditGuaranteeGUI((JFrame) window, phieuBaoHanhBUS, "Thêm Phiếu Bảo Hành", "save", pbh);
         loadTableData();
     }
 

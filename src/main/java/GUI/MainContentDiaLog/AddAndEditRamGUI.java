@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package GUI.MainContentDiaLog;
 
 import BUS.RamBUS;
@@ -20,10 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- *
- * @author Dell Vostro
- */
 public class AddAndEditRamGUI extends JDialog {
     private JTextField txtMaRam, txtDungLuongRam;
     private UIButton btnAdd, btnSave, btnCancel;

@@ -110,13 +110,7 @@ public class StaffMainContentGUI extends JPanel{
         }
     
         int maNV = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-        String tenNV = tableModel.getValueAt(selectedRow, 1).toString();
-        String sdt = tableModel.getValueAt(selectedRow, 2).toString();
-        String email = tableModel.getValueAt(selectedRow, 3).toString();
-        String vaiTro = tableModel.getValueAt(selectedRow, 4).toString();
-    
-        NhanVienDTO nv = new NhanVienDTO(maNV, tenNV, sdt, email, vaiTro);
-    
+        NhanVienDTO nv = nhanVienBUS.getById(maNV);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditStaffGUI((JFrame) window, nhanVienBUS, "Chỉnh sửa nhân viên", "save", nv);
         loadTableData();

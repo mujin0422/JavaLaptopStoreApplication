@@ -25,15 +25,10 @@ import Utils.UIScrollPane;
 import Utils.UITable;
 import Utils.UITextField;
 import java.awt.FlowLayout;
+import javax.swing.BorderFactory;
 
 public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
     private SanPhamBUS sanPhamBUS;
-    private RamBUS ramBUS;
-    private RomBUS romBUS;
-    private CpuBUS cpuBUS;
-    private DoPhanGiaiBUS doPhanGiaiBUS;
-    private PhanLoaiBUS phanLoaiBUS;
-    private ThuongHieuBUS thuongHieuBUS;
     private UIButton btnAdd, btnDelete, btnEdit;
     private UITextField txtSearch;
     private JComboBox<String> cbFilter;
@@ -43,12 +38,6 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
 
     public ProductMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.sanPhamBUS = new SanPhamBUS();
-        this.romBUS = new RomBUS();
-        this.ramBUS = new RamBUS();
-        this.cpuBUS = new CpuBUS();
-        this.doPhanGiaiBUS = new DoPhanGiaiBUS();
-        this.phanLoaiBUS = new PhanLoaiBUS();
-        this.thuongHieuBUS = new ThuongHieuBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH - 200 - 10, UIConstants.HEIGHT - 200 - 10));
         this.setLayout(new BorderLayout(5, 5));
@@ -85,7 +74,7 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
         pnlContent = new JPanel();
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
-        
+        pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         String[] columnNames = {"MÃ", "TÊN SẢN PHÂM", "GIÁ", "TỒN KHO", "CPU", "RAM", "ROM", "ĐỘ PHÂN GIẢI", "THƯƠNG HIỆU", "THỜI GIAN BH"};
         tableModel = new DefaultTableModel(columnNames, 0); 
         tblContent = new UITable(tableModel);
@@ -127,18 +116,7 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
             return;
         }
         int maSP = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-        String tenSP = tableModel.getValueAt(selectedRow, 1).toString();
-        int giaSP = Integer.parseInt((tableModel.getValueAt(selectedRow, 2).toString()));
-        int soLuongTon = Integer.parseInt(tableModel.getValueAt(selectedRow, 3).toString());
-        int maCPU = cpuBUS.getMaCpuByTenCpu(tableModel.getValueAt(selectedRow, 4).toString());
-        int maRam = ramBUS.getMaRamByDungLuongRam(tableModel.getValueAt(selectedRow, 5).toString());
-        int maRom = romBUS.getMaRomByDungLuongRom(tableModel.getValueAt(selectedRow, 6).toString());
-        int maDPG = doPhanGiaiBUS.getMaDpgByTenDpg(tableModel.getValueAt(selectedRow, 7).toString());
-        int maLoai = phanLoaiBUS.getMaLoaiByTenLoai(sanPhamBUS.getTenLoaiByMaSp(maSP));
-        int maTH = thuongHieuBUS.getMaThByTenTh(tableModel.getValueAt(selectedRow, 8).toString());
-        int thoiGianBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 9).toString());
-
-        SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
+        SanPhamDTO sp = sanPhamBUS.getSanPhamById(maSP);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Chỉnh sửa sản phẩm", "save", sp);
         loadTableData();

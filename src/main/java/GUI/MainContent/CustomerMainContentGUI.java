@@ -108,17 +108,13 @@ public class CustomerMainContentGUI extends JPanel{
     private void editCustomer(){
         int selectedRow = tblContent.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khach hang để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khách hàng để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int maKH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-        String tenKh = tableModel.getValueAt(selectedRow, 1).toString();
-        String sdt = tableModel.getValueAt(selectedRow, 2).toString();
-        String email = tableModel.getValueAt(selectedRow, 3).toString();
-        KhachHangDTO kh = new KhachHangDTO(maKH, tenKh, sdt, email);
-        
+        KhachHangDTO kh = khachHangBUS.getById(maKH);
         Window window = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditCostumerGUI((JFrame) window, khachHangBUS, "Chinh sua khách hàng", "save", kh);
+        new AddAndEditCostumerGUI((JFrame) window, khachHangBUS, "Chỉnh sửa khách hàng", "save", kh);
         loadTableData();
     }
     

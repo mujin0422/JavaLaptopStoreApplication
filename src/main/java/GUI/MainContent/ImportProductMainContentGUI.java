@@ -1,11 +1,13 @@
 package GUI.MainContent;
 
 import BUS.ChiTietPhieuNhapBUS;
+import BUS.ChiTietSanPhamBUS;
 import BUS.NhaCungCapBUS;
 import BUS.NhanVienBUS;
 import BUS.PhieuNhapBUS;
 import BUS.SanPhamBUS;
 import DTO.ChiTietPhieuNhapDTO;
+import DTO.ChiTietSanPhamDTO;
 import DTO.NhaCungCapDTO;
 import DTO.NhanVienDTO;
 import DTO.PhieuNhapDTO;
@@ -54,12 +56,14 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
     private SanPhamBUS sanPhamBUS;
     private NhanVienBUS nhanVienBUS;
     private ChiTietPhieuNhapBUS chiTietPhieuNhapBUS;
+    private ChiTietSanPhamBUS chiTietSanPhamBUS;
 
     public ImportProductMainContentGUI(TaiKhoanDTO taiKhoan) {
         phieuNhapBUS = new PhieuNhapBUS();
         nhanVienBUS = new NhanVienBUS();
         nhaCungCapBUS = new NhaCungCapBUS();
         chiTietPhieuNhapBUS = new ChiTietPhieuNhapBUS();
+        chiTietSanPhamBUS = new ChiTietSanPhamBUS();
         sanPhamBUS = new SanPhamBUS();
         
         this.setBackground(UIConstants.SUB_BACKGROUND);
@@ -99,12 +103,12 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         pnlFormNorth.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlFormNorth.setPreferredSize(new Dimension(0, 100));
 
-        pnlFormNorth.add(new UILabel("Mã phiếu nhập:", 150, 25));
-        txtMaPN = new UITextField(340,25);
+        pnlFormNorth.add(new UILabel("Mã phiếu nhập:", 120, 25));
+        txtMaPN = new UITextField(370,25);
         pnlFormNorth.add(txtMaPN);
         
-        pnlFormNorth.add(new UILabel("Nhân viên :", 150, 25));
-        txtMaNV = new UITextField(340, 25);
+        pnlFormNorth.add(new UILabel("Nhân viên :", 120, 25));
+        txtMaNV = new UITextField(370, 25);
         NhanVienDTO nhanVien = nhanVienBUS.getCurrentStaffByUserName(taiKhoan.getTenDangNhap());
         if (nhanVien != null) {
             txtMaNV.setText(nhanVien.getTenNV()); 
@@ -112,9 +116,9 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         }
         pnlFormNorth.add(txtMaNV);
         
-        pnlFormNorth.add(new UILabel("Nhà cung cấp :", 150, 25));
+        pnlFormNorth.add(new UILabel("Nhà cung cấp :", 120, 25));
         cbMaNCC = new JComboBox<>();
-        cbMaNCC.setPreferredSize(new Dimension(340, 25));
+        cbMaNCC.setPreferredSize(new Dimension(370, 25));
         cbMaNCC.setBackground(UIConstants.WHITE_FONT);
         for(NhaCungCapDTO ncc : nhaCungCapBUS.getAllNhaCungCap()){
             cbMaNCC.addItem(ncc.getTenNCC());
@@ -144,9 +148,9 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         pnl2.setBorder(BorderFactory.createEmptyBorder(0,10,5,10));
         pnl2.setBackground(UIConstants.MAIN_BACKGROUND);
         JPanel pnlGroupTongTien = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        pnlGroupTongTien.add(new UILabel("Tổng tiền:",80,30));
+        pnlGroupTongTien.add(new UILabel("Tổng thành tiền:",120,30));
         pnlGroupTongTien.setBackground(UIConstants.MAIN_BACKGROUND);
-        txtTongTien = new UITextField(100, 30);
+        txtTongTien = new UITextField(200, 30);
         txtTongTien.setEditable(false); 
         pnlGroupTongTien.add(txtTongTien);
         btnAddToPN = new UIButton("add", "THÊM", 100, 25);
@@ -413,8 +417,8 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         return true;
     }
     
-    private void addPhieuNhap(){
-        if(!checkFormInput()) return;
+    private void addPhieuNhap() {
+        if (!checkFormInput()) return;
         try {
             int maPN = Integer.parseInt(txtMaPN.getText().trim());
             int maNV = nhanVienBUS.getMaNvByTenNv(txtMaNV.getText().trim());
@@ -433,18 +437,29 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
 
             tableModelForForm = (DefaultTableModel) tblForForm.getModel();
             for (int i = 0; i < tableModelForForm.getRowCount(); i++) {
-                int maSach = Integer.parseInt(tableModelForForm.getValueAt(i, 0).toString());
+                int maSP = Integer.parseInt(tableModelForForm.getValueAt(i, 0).toString());
                 int soLuong = Integer.parseInt(tableModelForForm.getValueAt(i, 2).toString());
                 int giaNhap = Integer.parseInt(tableModelForForm.getValueAt(i, 3).toString());
 
-                ChiTietPhieuNhapDTO chiTiet = new ChiTietPhieuNhapDTO(maPN, maSach, soLuong, giaNhap);
-                if (!chiTietPhieuNhapBUS.addChiTietPhieuNhap(chiTiet)) {
+                // Thêm chi tiết phiếu nhập
+                ChiTietPhieuNhapDTO chiTietPhieuNhap = new ChiTietPhieuNhapDTO(maPN, maSP, soLuong, giaNhap);
+                if (!chiTietPhieuNhapBUS.addChiTietPhieuNhap(chiTietPhieuNhap)) {
                     JOptionPane.showMessageDialog(this, "Thêm chi tiết phiếu nhập thất bại ở dòng " + (i + 1), "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                
-                int soLuongHienTai = sanPhamBUS.getSoLuongTonSanPham(maSach);
-                sanPhamBUS.updateSoLuongTonSanPham(maSach, soLuongHienTai + soLuong);
+
+                // Thêm chi tiết sản phẩm theo số lượng
+                for (int j = 0; j < soLuong; j++) {
+                    String serialSP = chiTietSanPhamBUS.generateUniqueSerial(); 
+                    ChiTietSanPhamDTO chiTietSanPham = new ChiTietSanPhamDTO(serialSP, maSP, maPN);
+                    if (!chiTietSanPhamBUS.addChiTietSanPham(chiTietSanPham)) {
+                        JOptionPane.showMessageDialog(this, "Thêm chi tiết sản phẩm thất bại ở dòng " + (i + 1), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+
+                int soLuongHienTai = sanPhamBUS.getSoLuongTonSanPham(maSP);
+                sanPhamBUS.updateSoLuongTonSanPham(maSP, soLuongHienTai + soLuong);
             }
             JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             resetFormInput();
@@ -452,9 +467,8 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Dữ liệu nhập không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-        
     }
-    
+
     private void addSearchFunctionality() {
         txtSearchSach.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { searchProduct(); }

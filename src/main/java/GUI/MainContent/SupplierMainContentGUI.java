@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Window;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -66,6 +67,7 @@ public class SupplierMainContentGUI extends JPanel{
         pnlContent = new JPanel();
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
+        pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         String[] columnNames = {"MÃ NHÀ CUNG CÁP", "TÊN NHÀ CUNG CẤP", "ĐỊA CHỈ", "SỐ ĐIỆN THOẠI"};
         tableModel = new DefaultTableModel(columnNames, 0);
         tblContent = new UITable(tableModel);
@@ -104,10 +106,7 @@ public class SupplierMainContentGUI extends JPanel{
             return;
         }
         int maNCC = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-        String tenNCC = tableModel.getValueAt(selectedRow, 1).toString();
-        String diaCHi = tableModel.getValueAt(selectedRow, 2).toString();
-        String sdt = tableModel.getValueAt(selectedRow, 3).toString();
-        NhaCungCapDTO ncc = new NhaCungCapDTO(maNCC, tenNCC, diaCHi, sdt);
+        NhaCungCapDTO ncc = nhaCungCapBus.getNhaCungCapById(maNCC);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditSupplierGUI((JFrame) window, nhaCungCapBus, "Sửa Nhà Cung Cấp", "save", ncc);
         loadTableData();

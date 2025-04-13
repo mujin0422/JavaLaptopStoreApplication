@@ -14,6 +14,10 @@ public class KhachHangBUS {
     public ArrayList<KhachHangDTO> getAllKhachHang() {
         return khachHangDAO.getAll();
     }
+    
+    public KhachHangDTO getById(int maKH) {
+        return khachHangDAO.getById(maKH);
+    } 
 
     public boolean addKhachHang(KhachHangDTO khachHang) {
         return khachHangDAO.add(khachHang) > 0;

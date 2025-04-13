@@ -156,9 +156,7 @@ CREATE TABLE PHANLOAI (
 	trangThaiXoa INT NOT NULL DEFAULT 0
 );
 INSERT INTO PHANLOAI (maLoai, tenLoai) VALUES
-(1, N'Laptop Văn Phòng - Học Tập'),
-(2, N'Laptop Gaming'),
-(3, N'Laptop Đồ Họa - Kỹ Thuật');
+(1, N'Laptop Văn Phòng - Học Tập'), (2, N'Laptop Gaming'),(3, N'Laptop Đồ Họa - Kỹ Thuật');
 
 
 CREATE TABLE THUONGHIEU (
@@ -167,12 +165,7 @@ CREATE TABLE THUONGHIEU (
 	trangThaiXoa INT NOT NULL DEFAULT 0
 );
 INSERT INTO THUONGHIEU (maTH, tenTH) VALUES
-(1, N'Dell'),
-(2, N'HP'),
-(3, N'Asus'),
-(4, N'Acer'),
-(5, N'Lenovo'),
-(6, N'MSI');
+(1, N'Dell'), (2, N'HP'), (3, N'Asus'), (4, N'Acer'), (5, N'Lenovo'), (6, N'MSI');
 
 
 CREATE TABLE DOPHANGIAI (
@@ -181,14 +174,7 @@ CREATE TABLE DOPHANGIAI (
 	trangThaiXoa INT NOT NULL DEFAULT 0
 );
 INSERT INTO DOPHANGIAI (maDPG, tenDPG) VALUES
-(1, 'HD'),
-(2, 'Full HD'),
-(3, '2K (Quad HD)'),
-(4, '3K'),
-(5, 'WUXGA'),
-(6, 'WQXGA'),
-(7, 'WQUXGA'),
-(8, '4K (Ultra HD)');
+(1, 'HD'), (2, 'Full HD'), (3, '2K (Quad HD)'), (4, '3K'), (5, 'WUXGA'), (6, 'WQXGA'), (7, 'WQUXGA'), (8, '4K (Ultra HD)');
 
 
 CREATE TABLE CPU (
@@ -322,24 +308,29 @@ CREATE TABLE CHITIETPHIEUXUAT (
     maPX INT NOT NULL,
     giaBan INT NOT NULL,
     soLuongSP INT NOT NULL,
-    serialSP VARCHAR(50) NOT NULL,
-    PRIMARY KEY (maSP, maPX, serialSP),
+    PRIMARY KEY (maSP, maPX),
     FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
     FOREIGN KEY (maPX) REFERENCES PHIEUXUAT(maPX)
 );
 
+CREATE TABLE CHITIETSANPHAM (
+	serialSP VARCHAR(30) NOT NULL PRIMARY KEY,
+	maSP INT NOT NULL,
+	maPN INT NOT NULL,
+	maPX INT,
+	FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
+	FOREIGN KEY (maPN) REFERENCES PHIEUNHAP(maPN),
+	FOREIGN KEY (maPX) REFERENCES PHIEUXUAT(maPX)
+);
+
 CREATE TABLE PHIEUBAOHANH (
     maPBH INT NOT NULL PRIMARY KEY,
-    maSP INT NOT NULL,
-    maPX INT NOT NULL,
-    serialSP VARCHAR(50) NOT NULL,
+    serialSP VARCHAR(30) NOT NULL,
+	maNVBH INT NOT NULL,
     ngayTiepNhan DATE NOT NULL,
     moTaLoi NVARCHAR(100) NOT NULL,
     trangThaiBH INT NOT NULL,
-    maNVBH INT NOT NULL,
-	trangThaiXoa INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (maSP) REFERENCES SANPHAM(maSP),
-    FOREIGN KEY (maPX) REFERENCES PHIEUXUAT(maPX),
+    trangThaiXoa INT NOT NULL DEFAULT 0,
     FOREIGN KEY (maNVBH) REFERENCES NHANVIEN(maNV),
-    FOREIGN KEY (maSP, maPX, serialSP) REFERENCES CHITIETPHIEUXUAT(maSP, maPX, serialSP)
+    FOREIGN KEY (serialSP) REFERENCES CHITIETSANPHAM(serialSP)
 );

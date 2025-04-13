@@ -1,9 +1,9 @@
 package GUI.MainContentDiaLog;
 
-import BUS.ChiTietPhieuXuatBUS;
+import BUS.ChiTietSanPhamBUS;
 import BUS.NhanVienBUS;
 import BUS.PhieuBaoHanhBUS;
-import DTO.ChiTietPhieuXuatDTO;
+import DTO.ChiTietSanPhamDTO;
 import DTO.NhanVienDTO;
 import DTO.PhieuBaoHanhDTO;
 import Utils.UIButton;
@@ -13,8 +13,6 @@ import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,12 +27,12 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 public class AddAndEditGuaranteeGUI extends JDialog{
-    private UITextField txtMaPBH, txtMaPX, txtMaSP;
+    private UITextField txtMaPBH, txtMaPX;
     private JComboBox cbNhanVien, cbSerialSP, cbTrangThaiBH;
     private JTextArea txtMoTaLoi;
     private UIButton btnAdd, btnSave, btnCancel;
     private NhanVienBUS nvBus;
-    private ChiTietPhieuXuatBUS chiTietPhieuXuatBus;
+    private ChiTietSanPhamBUS chiTietSanPhamBUS;
     private PhieuBaoHanhBUS phieuBaoHanhBus;
     private PhieuBaoHanhDTO phieuBaoHanh;
     
@@ -46,9 +44,7 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         if (phieuBaoHanh != null) {
             txtMaPBH.setText(String.valueOf(phieuBaoHanh.getMaPBH()));
             txtMaPBH.setEnabled(false);
-            txtMaSP.setText(String.valueOf(phieuBaoHanh.getMaSP()));
-            txtMaSP.setEnabled(false);
-            txtMaPX.setText(String.valueOf(phieuBaoHanh.getMaPX()));
+            txtMaPX.setText(String.valueOf(phieuBaoHanhBus.getMaPxByMaPbh(phieuBaoHanh.getMaPBH())));
             txtMaPX.setEnabled(false);
             cbSerialSP.setSelectedItem(phieuBaoHanh.getSerialSP());
             cbSerialSP.setEnabled(false);
@@ -76,12 +72,12 @@ public class AddAndEditGuaranteeGUI extends JDialog{
     }
     
     private void initComponent(String type) {
-        this.chiTietPhieuXuatBus = new ChiTietPhieuXuatBUS();
+        this.chiTietSanPhamBUS = new ChiTietSanPhamBUS();
         this.nvBus = new NhanVienBUS();
         this.setSize(550, 400);
         this.setLayout(new BorderLayout());
 
-        JPanel inputPanel = new JPanel(new GridLayout(8, 2, 10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(7, 2, 10, 10));
         inputPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -105,54 +101,28 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         cbSerialSP.setBackground(UIConstants.WHITE_FONT);
         inputPanel.add(cbSerialSP);
 
-        inputPanel.add(new UILabel("Mã Sản Phẩm:"));
-        inputPanel.add(txtMaSP = new UITextField(250,30));
-
-        // ===== ActionListener cho cbSerialSP (chỉ gắn 1 lần) =====
-        cbSerialSP.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedSerial = (String) cbSerialSP.getSelectedItem();
-                if (selectedSerial != null) {
-                    try {
-                        int maPx = Integer.parseInt(txtMaPX.getText().trim());
-                        for (ChiTietPhieuXuatDTO ctpx : chiTietPhieuXuatBus.getAllChiTietPhieuXuatByMaPx(maPx)) {
-                            if (selectedSerial.equals(ctpx.getSerialSP())) {
-                                txtMaSP.setText(String.valueOf(ctpx.getMaSP()));
-                                return;
-                            }
-                        }
-                    } catch (NumberFormatException ex) {
-                    }
-                }
-            }
-        });
-
         // ===== DocumentListener cho txtMaPX =====
         txtMaPX.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 updateSerialComboBox();
             }
-
             public void removeUpdate(DocumentEvent e) {
                 updateSerialComboBox();
             }
-
             public void changedUpdate(DocumentEvent e) {
                 updateSerialComboBox();
             }
-
             private void updateSerialComboBox() {
                 cbSerialSP.removeAllItems();
                 try {
                     int maPx = Integer.parseInt(txtMaPX.getText().trim());
-                    ArrayList<ChiTietPhieuXuatDTO> dsCTPX = chiTietPhieuXuatBus.getAllChiTietPhieuXuatByMaPx(maPx);
+                    ArrayList<ChiTietSanPhamDTO> dsCTSP = chiTietSanPhamBUS.getAllByMaPX(maPx);
 
-                    if (dsCTPX.isEmpty()) {
+                    if (dsCTSP.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Không tìm thấy Serial nào cho mã phiếu xuất " + maPx, "Thông báo", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        for (ChiTietPhieuXuatDTO ctpx : dsCTPX) {
-                            cbSerialSP.addItem(ctpx.getSerialSP());
+                        for (ChiTietSanPhamDTO ctsp : dsCTSP) {
+                            cbSerialSP.addItem(ctsp.getSerialSP());
                         }
                     }
                 } catch (NumberFormatException ex) {
@@ -212,15 +182,13 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         if (!checkFormInput()) return;
         try {
             int maPBH = Integer.parseInt(txtMaPBH.getText().trim());
-            int maPX = Integer.parseInt(txtMaPX.getText().trim());
             String serialSP = (String) cbSerialSP.getSelectedItem();
-            int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String moTaLoi = txtMoTaLoi.getText().trim();
             Date ngayTiepNhan = getCurrentDate();
             int trangThaiBH = cbTrangThaiBH.getSelectedIndex(); 
             String tenNhanVien = (String) cbNhanVien.getSelectedItem();
             int maNVBH = nvBus.getMaNvByTenNv(tenNhanVien);
-            PhieuBaoHanhDTO pbh = new PhieuBaoHanhDTO(maPBH, maSP, maPX, serialSP, ngayTiepNhan, moTaLoi, trangThaiBH, maNVBH);
+            PhieuBaoHanhDTO pbh = new PhieuBaoHanhDTO(maPBH,  serialSP, maNVBH, ngayTiepNhan, moTaLoi, trangThaiBH);
 
             if (phieuBaoHanhBus.addPhieuBaoHanh(pbh)) {
                 JOptionPane.showMessageDialog(this, "Thêm phiếu bảo hành thành công!");
@@ -238,15 +206,13 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         if(!checkFormInput()) return;
         try {
             int maPBH = Integer.parseInt(txtMaPBH.getText().trim());
-            int maPX = Integer.parseInt(txtMaPX.getText().trim());
             String serialSP = (String) cbSerialSP.getSelectedItem();
-            int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String moTaLoi = txtMoTaLoi.getText().trim();
             Date ngayTiepNhan = getCurrentDate();
             int trangThaiBH = cbTrangThaiBH.getSelectedIndex(); 
             String tenNhanVien = (String) cbNhanVien.getSelectedItem();
             int maNVBH = nvBus.getMaNvByTenNv(tenNhanVien);
-            PhieuBaoHanhDTO pbh = new PhieuBaoHanhDTO(maPBH, maSP, maPX, serialSP, ngayTiepNhan, moTaLoi, trangThaiBH, maNVBH);
+            PhieuBaoHanhDTO pbh = new PhieuBaoHanhDTO(maPBH,  serialSP, maNVBH, ngayTiepNhan, moTaLoi, trangThaiBH);
 
             if (phieuBaoHanhBus.updatePhieuBaoHanh(pbh)) {
                 JOptionPane.showMessageDialog(this, "Cập nhật phiếu bảo hành thành công!");

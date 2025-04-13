@@ -11,14 +11,13 @@ import java.util.ArrayList;
 public class ChiTietPhieuXuatDAO {
 
     public int add(ChiTietPhieuXuatDTO obj) {
-        String sql = "INSERT INTO chitietphieuxuat (maSP, maPX, giaBan, soLuongSP, serialSP) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO chitietphieuxuat (maSP, maPX, giaBan, soLuongSP) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, obj.getMaSP());
             ps.setInt(2, obj.getMaPX());
             ps.setInt(3, obj.getGiaBan());
             ps.setInt(4, obj.getSoLuongSP());
-            ps.setString(5, obj.getSerialSP());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -27,14 +26,13 @@ public class ChiTietPhieuXuatDAO {
     }
 
     public int update(ChiTietPhieuXuatDTO obj) {
-        String sql = "UPDATE chitietphieuxuat SET giaBan=?, soLuongSP=?, serialSP=? WHERE maSP=? AND maPX=?";
+        String sql = "UPDATE chitietphieuxuat SET giaBan=?, soLuongSP=?, WHERE maSP=? AND maPX=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, obj.getGiaBan());
             ps.setInt(2, obj.getSoLuongSP());
-            ps.setString(3, obj.getSerialSP());
-            ps.setInt(4, obj.getMaSP());
-            ps.setInt(5, obj.getMaPX());
+            ps.setInt(3, obj.getMaSP());
+            ps.setInt(4, obj.getMaPX());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,8 +64,7 @@ public class ChiTietPhieuXuatDAO {
                     rs.getInt("maSP"),
                     rs.getInt("maPX"),
                     rs.getInt("giaBan"),
-                    rs.getInt("soLuongSP"),
-                    rs.getString("serialSP")
+                    rs.getInt("soLuongSP")
                 ));
             }
         } catch (SQLException e) {
@@ -88,8 +85,7 @@ public class ChiTietPhieuXuatDAO {
                         rs.getInt("maSP"),
                         rs.getInt("maPX"),
                         rs.getInt("giaBan"),
-                        rs.getInt("soLuongSP"),
-                        rs.getString("serialSP")
+                        rs.getInt("soLuongSP")
                     );
                 }
             }
@@ -111,8 +107,7 @@ public class ChiTietPhieuXuatDAO {
                         rs.getInt("maPX"),
                         rs.getInt("maSP"),
                         rs.getInt("giaBan"),
-                        rs.getInt("soLuongSP"),
-                        rs.getString("serialSP")
+                        rs.getInt("soLuongSP")
                     );
                     list.add(ct);
                 }
@@ -154,8 +149,7 @@ public class ChiTietPhieuXuatDAO {
                         rs.getInt("maSP"),
                         rs.getInt("maPX"),
                         rs.getInt("giaBan"),
-                        rs.getInt("soLuongSP"),
-                        rs.getString("serialSP")
+                        rs.getInt("soLuongSP")
                     ));
                 }
             }

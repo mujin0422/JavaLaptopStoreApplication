@@ -287,6 +287,37 @@ public class SanPhamDAO {
         return null;
     }
 
+    public int getMaSpByTenSp(String tenSp) {
+        String sql = "SELECT maSP FROM sanpham WHERE tenSP = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tenSp.trim());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("maSP");
+                }
+            }
+        } catch (SQLException e) {
+            
+        }
+        return 0; 
+    }
+    
+    public int getGiaSpByMaSp(int maSp){
+        String sql = "SELECT giaSP FROM sanpham WHERE maSP = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSp);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("giaSP");
+                }
+            }
+        } catch (SQLException e) {
+        }
+        return -1; 
+    }
+    
     public ArrayList<SanPhamDTO> searchByMaOrTen(String keyword) {
         ArrayList<SanPhamDTO> ketQua = new ArrayList<>();
         String sql = "SELECT * FROM sanpham WHERE trangThaiXoa=0 AND (LOWER(tenSP) LIKE ? OR CAST(maSP AS CHAR) LIKE ?)";

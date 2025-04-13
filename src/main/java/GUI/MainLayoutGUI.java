@@ -142,7 +142,7 @@ public final class MainLayoutGUI extends JFrame {
                 case 9 -> targetPanel = decentralizationPanel; 
                 case 10 -> targetPanel = guaranteePanel;
                 case 11 -> targetPanel = statisticsPanel;       
-                default -> targetPanel = null;
+                default -> targetPanel = WelcomePanel();
             }
             button.addActionListener(e -> {
                 switchPanel(targetPanel);
@@ -153,8 +153,7 @@ public final class MainLayoutGUI extends JFrame {
         }
         addChucNang();
         //==============================( End Panel Content )===========================//
-
-        
+        switchPanel(WelcomePanel());
         
         this.getContentPane().add(pnlMenu, BorderLayout.WEST);
         this.getContentPane().add(pnlContent, BorderLayout.CENTER);
@@ -184,5 +183,19 @@ public final class MainLayoutGUI extends JFrame {
     private void logout(){
         this.dispose(); 
         new LoginGUI(); 
+    }
+    
+    private JPanel WelcomePanel() {
+        JPanel panel = new JPanel();
+        panel.setBackground(UIConstants.MAIN_BACKGROUND);
+        panel.setLayout(new GridBagLayout());
+
+        JLabel lblWelcome = new JLabel();
+        lblWelcome.setFont(new Font("Segoe UI", Font.BOLD, 40));
+        lblWelcome.setForeground(UIConstants.BLACK_FONT);
+        lblWelcome.setText("Xin chào, " + taiKhoan.getTenDangNhap() + "!");
+        
+        panel.add(lblWelcome);
+        return panel;
     }
 }

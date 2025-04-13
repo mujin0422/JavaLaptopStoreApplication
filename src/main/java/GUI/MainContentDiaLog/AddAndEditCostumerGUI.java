@@ -5,13 +5,16 @@ import DTO.KhachHangDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
-import javax.swing.*;
-import java.awt.*;
-/**
- *
- * @author Dell Vostro
- */
 public class AddAndEditCostumerGUI extends JDialog{
     private JTextField txtMaKH, txtTenKH, txtSDT, txtEmail;
     private UIButton btnAdd, btnSave, btnCancel;
@@ -100,7 +103,7 @@ public class AddAndEditCostumerGUI extends JDialog{
             } else {
                 JOptionPane.showMessageDialog(this, "Cập nhật khach hang that bai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (HeadlessException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -119,7 +122,7 @@ public class AddAndEditCostumerGUI extends JDialog{
             } else {
                 JOptionPane.showMessageDialog(this, "Mã khach hang đã tồn tại hoặc dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (HeadlessException | NumberFormatException e) {
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }

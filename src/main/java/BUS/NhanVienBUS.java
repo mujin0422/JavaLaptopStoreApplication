@@ -15,6 +15,10 @@ public class NhanVienBUS {
         return NhanVienDAO.getAll();
     }
 
+    public NhanVienDTO getById(int maNV){
+        return NhanVienDAO.getById(maNV);
+    }
+    
     public boolean addNhanVien(NhanVienDTO nhanVien) {       
         return NhanVienDAO.add(nhanVien) > 0;
     }

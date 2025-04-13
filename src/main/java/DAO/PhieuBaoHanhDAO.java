@@ -11,17 +11,15 @@ import java.util.ArrayList;
 public class PhieuBaoHanhDAO {
     
     public int add(PhieuBaoHanhDTO obj) {
-        String sql = "INSERT INTO phieubaohanh (maPBH, maSP, maPX, serialSP ,ngayTiepNhan, moTaLoi, trangThaiBH, maNVBH) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO phieubaohanh (maPBH, serialSP ,ngayTiepNhan, moTaLoi, trangThaiBH, maNVBH) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, obj.getMaPBH());
-            ps.setInt(2, obj.getMaSP());
-            ps.setInt(3, obj.getMaPX());
-            ps.setString(4, obj.getSerialSP());
-            ps.setDate(5, new java.sql.Date(obj.getNgayTiepNhan().getTime()));
-            ps.setString(6, obj.getMoTaLoi());
-            ps.setInt(7, obj.getTrangThaiBH());
-            ps.setInt(8, obj.getMaNVBH());
+            ps.setString(2, obj.getSerialSP());
+            ps.setDate(3, new java.sql.Date(obj.getNgayTiepNhan().getTime()));
+            ps.setString(4, obj.getMoTaLoi());
+            ps.setInt(5, obj.getTrangThaiBH());
+            ps.setInt(6, obj.getMaNVBH());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,17 +28,15 @@ public class PhieuBaoHanhDAO {
     }
 
     public int update(PhieuBaoHanhDTO obj) {
-        String sql = "UPDATE phieubaohanh SET maSP=?, maPX=?, serialSP=?, ngayTiepNhan=?, moTaLoi=?, trangThaiBH=?, maNVBH=? WHERE maPBH=?";
+        String sql = "UPDATE phieubaohanh SET serialSP=?, ngayTiepNhan=?, moTaLoi=?, trangThaiBH=?, maNVBH=? WHERE maPBH=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, obj.getMaSP());
-            ps.setInt(2, obj.getMaPX());
-            ps.setString(3, obj.getSerialSP());
-            ps.setDate(4, new java.sql.Date(obj.getNgayTiepNhan().getTime()));
-            ps.setString(5, obj.getMoTaLoi());
-            ps.setInt(6, obj.getTrangThaiBH());
-            ps.setInt(7, obj.getMaNVBH());
-            ps.setInt(8, obj.getMaPBH());
+            ps.setString(1, obj.getSerialSP());
+            ps.setDate(2, new java.sql.Date(obj.getNgayTiepNhan().getTime()));
+            ps.setString(3, obj.getMoTaLoi());
+            ps.setInt(4, obj.getTrangThaiBH());
+            ps.setInt(5, obj.getMaNVBH());
+            ps.setInt(6, obj.getMaPBH());
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,13 +65,12 @@ public class PhieuBaoHanhDAO {
             while (rs.next()) {
                 list.add(new PhieuBaoHanhDTO(
                     rs.getInt("maPBH"),
-                    rs.getInt("maSP"),
-                    rs.getInt("maPX"),
                     rs.getString("serialSP"),
+                    rs.getInt("maNVBH"),
                     rs.getDate("ngayTiepNhan"),
                     rs.getString("moTaLoi"),
-                    rs.getInt("trangThaiBH"),
-                    rs.getInt("maNVBH")
+                    rs.getInt("trangThaiBH")
+                    
                 ));
             }
         } catch (SQLException e) {
@@ -93,13 +88,11 @@ public class PhieuBaoHanhDAO {
                 if (rs.next()) {
                     return new PhieuBaoHanhDTO(
                         rs.getInt("maPBH"),
-                        rs.getInt("maSP"),
-                        rs.getInt("maPX"),
                         rs.getString("serialSP"),
+                        rs.getInt("maNVBH"),
                         rs.getDate("ngayTiepNhan"),
                         rs.getString("moTaLoi"),
-                        rs.getInt("trangThaiBH"),
-                        rs.getInt("maNVBH")
+                        rs.getInt("trangThaiBH")
                     );
                 }
             }
@@ -108,4 +101,63 @@ public class PhieuBaoHanhDAO {
         }
         return null;
     }
+    
+    public int getMaPxByMaPbh(int maPBH) {
+        String sql = "SELECT ctsp.maPX FROM phieubaohanh pbh "
+                   + "JOIN chitietsanpham ctsp ON pbh.serialSP = ctsp.serialSP "
+                   + "WHERE pbh.maPBH = ? AND pbh.trangThaiXoa = 0";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maPBH);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("maPX");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; 
+    }
+    
+    public String getTenKhByMaPbh(int maPBH) {
+        String sql = "SELECT kh.tenKH FROM phieubaohanh pbh "
+                   + "JOIN chitietsanpham ctsp ON pbh.serialSP = ctsp.serialSP "
+                   + "JOIN phieuxuat px ON px.maPX = ctsp.maPX "
+                   + "JOIN khachhang kh ON px.maKH = kh.maKH "
+                   + "WHERE pbh.maPBH = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maPBH);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenKH");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    
+    public String getTenSpByMaPbh(int maPBH) {
+        String sql = "SELECT sp.tenSP FROM phieubaohanh pbh "
+                   + "JOIN chitietsanpham ctsp ON pbh.serialSP = ctsp.serialSP "
+                   + "JOIN sanpham sp ON sp.maSP = ctsp.maSP "
+                   + "WHERE pbh.maPBH = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maPBH);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("tenSP");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

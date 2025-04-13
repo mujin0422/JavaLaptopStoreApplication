@@ -15,6 +15,14 @@ public class SanPhamBUS {
     public  ArrayList<SanPhamDTO> getAllSanPham() {
         return sanPhamDAO.getAll();
     }
+    
+    public int getMaSpByTenSp(String tenSp) {
+        return sanPhamDAO.getMaSpByTenSp(tenSp);
+    }
+    
+    public int getGiaSpByMaSp(int maSp){
+        return sanPhamDAO.getGiaSpByMaSp(maSp);
+    }
 
     public boolean addSanPham(SanPhamDTO sanPham) {
         return sanPhamDAO.add(sanPham) > 0;

@@ -6,10 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-/**
- *
- * @author Dell Vostro
- */
+
 public class KhachHangDAO {
     public int add(KhachHangDTO obj) {
         String sql = "INSERT INTO khachhang(maKH, tenKH, sdt, email) VALUES (?, ?, ?, ?)";

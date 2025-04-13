@@ -30,4 +30,16 @@ public class PhieuBaoHanhBUS {
     public PhieuBaoHanhDTO getPhieuBaoHanhById(int maPBH) {
         return phieuBaoHanhDAO.getById(maPBH);
     }
+    
+    public int getMaPxByMaPbh(int maPBH) {
+        return phieuBaoHanhDAO.getMaPxByMaPbh(maPBH);
+    }
+    
+    public String getTenKhByMaPbh(int maPBH) {
+        return phieuBaoHanhDAO.getTenKhByMaPbh(maPBH);
+    }
+    
+    public String getTenSpByMaPbh(int maPBH) {
+        return phieuBaoHanhDAO.getTenSpByMaPbh(maPBH);
+    }
 }
