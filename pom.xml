@@ -17,5 +17,15 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version> <!-- Cập nhật phiên bản mới nhất -->
         </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.4</version> <!-- Latest stable version as of now -->
+        </dependency>
+        <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jcommon</artifactId>
+        <version>1.0.23</version>
+</dependency>
     </dependencies>
 </project>
