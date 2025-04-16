@@ -4,31 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-
 import BUS.ChiTietPhieuNhapBUS;
 import BUS.ChiTietPhieuXuatBUS;
 import BUS.SanPhamBUS;
@@ -40,52 +28,38 @@ import Utils.UIScrollPane;
 import Utils.UITable;
 import Utils.UITextField;
 
-public class ThongKeSach extends JPanel {
-    private JTable table;
+public class ThongKeSanPham extends JPanel {
+    private UITable table;
     private DefaultTableModel model;
-    private JTextField txtSearch, txtDateFrom, txtDateTo;
-    private JButton btnLamMoi, btnLoc, btnToggleView;
+    private UITextField txtSearch, txtDateFrom, txtDateTo;
+    private UIButton btnLamMoi, btnLoc, btnToggleView;
     private SanPhamBUS sanPhamBUS = new SanPhamBUS();
     private ChiTietPhieuNhapBUS ctpnBUS = new ChiTietPhieuNhapBUS();
     private ChiTietPhieuXuatBUS ctpxBUS = new ChiTietPhieuXuatBUS();
-    private JPanel contentPanel;
-    private JScrollPane tableScrollPane;
+    private JPanel pnlFilter, pnlContent;
+    private UIScrollPane tableScrollPane;
     private ChartPanel chartPanel;
     private boolean isTableView = true;
 
-    public ThongKeSach() {
-        setLayout(new BorderLayout(10, 10));
-        setBackground(Color.WHITE);
-        setBorder(new EmptyBorder(15, 15, 15, 15));
+    public ThongKeSanPham() {
+        this.setLayout(new BorderLayout(5, 5));
+        this.setBackground(UIConstants.MAIN_BACKGROUND);
+        this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        // Title
-        UILabel lblTitle = new UILabel("Thống kê sản phẩm");
-        lblTitle.setFont(UIConstants.TITLE_FONT);
-        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        add(lblTitle, BorderLayout.NORTH);
-
-        // Filter Panel
-        JPanel pnlFilter = new JPanel();
-        pnlFilter.setLayout(new GridBagLayout());
+        //==============================================================================//
+        pnlFilter = new JPanel(new FlowLayout());
         pnlFilter.setBackground(Color.WHITE);
-        pnlFilter.setBorder(new EmptyBorder(10, 0, 10, 0));
-        pnlFilter.setPreferredSize(new Dimension(0, 100)); // Tăng chiều cao
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
-
+        pnlFilter.setBorder(new EmptyBorder(5, 5, 5, 5));
+        pnlFilter.setPreferredSize(new Dimension(0, 80)); 
+        
+ 
         // Search
-        JPanel pnlSearchWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel pnlSearchWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlSearchWrapper.setBackground(Color.WHITE);
         pnlSearchWrapper.setBorder(BorderFactory.createTitledBorder("Tìm kiếm"));
-        txtSearch = new UITextField(30, 14);
-        txtSearch.setPreferredSize(new Dimension(250, 30));
+        txtSearch = new UITextField(200, 25);
         pnlSearchWrapper.add(txtSearch);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        pnlFilter.add(pnlSearchWrapper, gbc);
-
+        pnlFilter.add(pnlSearchWrapper);
         txtSearch.addActionListener(e -> {
             String keyword = txtSearch.getText().trim();
             ArrayList<SanPhamDTO> ketQua = sanPhamBUS.searchSanPhamByMaOrTen(keyword);
@@ -93,74 +67,52 @@ public class ThongKeSach extends JPanel {
         });
 
         // Date Range
-        JPanel pnlDateWrapper = new JPanel(new GridBagLayout());
+        JPanel pnlDateWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlDateWrapper.setBackground(Color.WHITE);
         pnlDateWrapper.setBorder(BorderFactory.createTitledBorder("Lọc theo ngày"));
-        GridBagConstraints gbcDate = new GridBagConstraints();
-        gbcDate.fill = GridBagConstraints.HORIZONTAL;
-        gbcDate.insets = new Insets(5, 5, 5, 5);
 
-        pnlDateWrapper.add(new UILabel("Từ:"), gbcDate);
-        gbcDate.gridx = 1;
-        txtDateFrom = new UITextField(15, 14);
-        txtDateFrom.setPreferredSize(new Dimension(120, 30));
-        pnlDateWrapper.add(txtDateFrom, gbcDate);
-
-        gbcDate.gridx = 2;
-        pnlDateWrapper.add(new JLabel("Đến:"), gbcDate);
-        gbcDate.gridx = 3;
-        txtDateTo = new UITextField(15, 14);
-        txtDateTo.setPreferredSize(new Dimension(120, 30));
-        pnlDateWrapper.add(txtDateTo, gbcDate);
-
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        pnlFilter.add(pnlDateWrapper, gbc);
+        pnlDateWrapper.add(new UILabel("Từ:",30,25));
+        txtDateFrom = new UITextField(120, 25);
+        pnlDateWrapper.add(txtDateFrom);
+        pnlDateWrapper.add(new UILabel("Đến:",35,25));
+        txtDateTo = new UITextField(120, 25);
+        pnlDateWrapper.add(txtDateTo);
+        pnlFilter.add(pnlDateWrapper);
 
         // Buttons
-        JPanel pnlRefreshWrapper = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel pnlRefreshWrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlRefreshWrapper.setBackground(Color.WHITE);
-        pnlRefreshWrapper.setBorder(BorderFactory.createTitledBorder(""));
+        pnlRefreshWrapper.setBorder(BorderFactory.createTitledBorder("Chức năng"));
 
-        btnLamMoi = new UIButton("primary", "Làm mới");
+        btnLamMoi = new UIButton("menuButton", "LÀM MỚI");
         btnLamMoi.setPreferredSize(new Dimension(100, 30));
         pnlRefreshWrapper.add(btnLamMoi);
 
-        btnLoc = new UIButton("success", "Lọc");
+        btnLoc = new UIButton("menuButton", "LỌC");
         btnLoc.setPreferredSize(new Dimension(100, 30));
         pnlRefreshWrapper.add(btnLoc);
 
-        btnToggleView = new UIButton("info", "Xem Biểu đồ");
-        btnToggleView.setPreferredSize(new Dimension(100, 30));
+        btnToggleView = new UIButton("menuButton", "XEM BIỂU ĐỒ");
+        btnToggleView.setPreferredSize(new Dimension(140, 30));
         pnlRefreshWrapper.add(btnToggleView);
 
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        pnlFilter.add(pnlRefreshWrapper, gbc);
+        pnlFilter.add(pnlRefreshWrapper);
 
-        add(pnlFilter, BorderLayout.NORTH);
-
-        // Content Panel (Table or Chart)
-        contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(Color.WHITE);
+        //==============================================================================//
+        pnlContent = new JPanel(new BorderLayout());
+        pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
 
         // Table Setup
-        String[] columns = {"STT", "Mã máy", "Tên máy", "Số lượng nhập", "Số lượng bán"};
+        String[] columns = {"STT", "MÃ SẢN PHẨM", "TÊN SẢN PHẨM", "SỐ LƯỢNG NHẬP", "SỐ LƯỢNG BÁN"};
         model = new DefaultTableModel(columns, 0);
         table = new UITable(model);
         tableScrollPane = new UIScrollPane(table);
-        tableScrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
         // Chart Setup (initially null)
         chartPanel = null;
-
         // Add table to content panel initially
-        contentPanel.add(tableScrollPane, BorderLayout.CENTER);
-        add(contentPanel, BorderLayout.CENTER);
-
+        pnlContent.add(tableScrollPane, BorderLayout.CENTER);
+        add(pnlContent, BorderLayout.CENTER);
         // Action Listeners
         btnLamMoi.addActionListener(e -> {
             txtSearch.setText("");
@@ -189,7 +141,9 @@ public class ThongKeSach extends JPanel {
             btnToggleView.setText(isTableView ? "Xem Biểu đồ" : "Xem Bảng");
             updateContentPanel();
         });
-
+        
+        
+        this.add(pnlFilter, BorderLayout.NORTH);
         hienThiDuLieu();
     }
 
@@ -239,16 +193,16 @@ public class ThongKeSach extends JPanel {
     }
 
     private void updateContentPanel() {
-        contentPanel.removeAll();
+        pnlContent.removeAll();
         if (isTableView) {
-            contentPanel.add(tableScrollPane, BorderLayout.CENTER);
+            pnlContent.add(tableScrollPane, BorderLayout.CENTER);
         } else {
             if (chartPanel != null) {
-                contentPanel.add(chartPanel, BorderLayout.CENTER);
+                pnlContent.add(chartPanel, BorderLayout.CENTER);
             }
         }
-        contentPanel.revalidate();
-        contentPanel.repaint();
+        pnlContent.revalidate();
+        pnlContent.repaint();
     }
 
     private String chuyenDoiNgay(String ngayDauVao) {

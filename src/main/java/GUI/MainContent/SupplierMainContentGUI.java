@@ -19,6 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 public class SupplierMainContentGUI extends JPanel{
@@ -78,6 +80,7 @@ public class SupplierMainContentGUI extends JPanel{
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
         loadTableData();
+        addSearchFunctionality();
     }
     
     private void loadTableData(){
@@ -127,6 +130,28 @@ public class SupplierMainContentGUI extends JPanel{
             } else {
                 JOptionPane.showMessageDialog(this, "Xóa NCC thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+    
+    private void addSearchFunctionality() {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { searchCustomer(); }
+            public void removeUpdate(DocumentEvent e) { searchCustomer(); }
+            public void changedUpdate(DocumentEvent e) { searchCustomer(); }
+        });
+    }
+    
+    private void searchCustomer() {
+        String keyword = txtSearch.getText().trim().toLowerCase();
+        tableModel.setRowCount(0); 
+        ArrayList<NhaCungCapDTO> listNCC = nhaCungCapBus.searchNhaCungCap(keyword);
+        for (NhaCungCapDTO ncc : listNCC) {
+            tableModel.addRow(new Object[]{
+                ncc.getMaNCC(),
+                ncc.getTenNCC(),
+                ncc.getDiaChi(),
+                ncc.getSdt()
+            });
         }
     }
 }

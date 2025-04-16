@@ -90,7 +90,23 @@ public class SanPhamBUS {
         return sanPhamDAO.searchByMaOrTen(keyword);
     }
     
-     public ArrayList<SanPhamDTO> searchSanPhamByDateRange(String startDate, String endDate) {
+    public ArrayList<SanPhamDTO> searchSanPhamByDateRange(String startDate, String endDate) {
         return sanPhamDAO.getSanPhamByDateRange(startDate, endDate);
+    }
+     
+    public ArrayList<SanPhamDTO> searchSanPham1(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return sanPhamDAO.getAll();
+        }
+        ArrayList<SanPhamDTO> ketQua = new ArrayList<>();
+        keyword = keyword.toLowerCase();
+        ArrayList<SanPhamDTO> ds = sanPhamDAO.getAll();
+        if(ds != null){
+            for(SanPhamDTO kh : ds){
+                if(kh.getTenSP().toLowerCase().contains(keyword)) 
+                    ketQua.add(kh);      
+            }
+        }
+        return ketQua;
     }
 }

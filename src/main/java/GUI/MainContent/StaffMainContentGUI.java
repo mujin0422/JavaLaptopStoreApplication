@@ -19,6 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 public class StaffMainContentGUI extends JPanel{
@@ -80,6 +82,7 @@ public class StaffMainContentGUI extends JPanel{
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
         loadTableData();
+        addSearchFunctionality();
     }
     
     private void loadTableData(){
@@ -135,6 +138,30 @@ public class StaffMainContentGUI extends JPanel{
             }
         }
     }
+    
+    private void addSearchFunctionality() {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { searchCustomer(); }
+            public void removeUpdate(DocumentEvent e) { searchCustomer(); }
+            public void changedUpdate(DocumentEvent e) { searchCustomer(); }
+        });
+    }
+    
+    private void searchCustomer() {
+        String keyword = txtSearch.getText().trim().toLowerCase();
+        tableModel.setRowCount(0); 
+        ArrayList<NhanVienDTO> listNV = nhanVienBUS.searchNhanVien(keyword);
+        for (NhanVienDTO nhanvien : listNV) {
+            tableModel.addRow(new Object[]{
+                nhanvien.getMaNV(),
+                nhanvien.getTenNV(),
+                nhanvien.getEmail(),
+                nhanvien.getSdt(),
+                nhanvien.getVaiTro()
+            });
+        }
+    }
+    
 
 
 }

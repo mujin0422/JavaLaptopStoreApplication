@@ -12,7 +12,6 @@ import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
 import Utils.UITable;
-import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -27,7 +26,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class GuaranteeMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit, btnView;
-    private UITextField txtSearch;
     private JComboBox<String> cbFilter;
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
@@ -70,8 +68,10 @@ public class GuaranteeMainContentGUI extends JPanel{
             
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
-        txtSearch = new UITextField(190, 30);
-        pnlSearchFilter.add(txtSearch);
+        cbFilter = new JComboBox<>(new String[] {"Tất cả", "Đã bảo hành", "Đang bảo hành"});
+        cbFilter.setPreferredSize(new Dimension(100,30));
+        cbFilter.addActionListener(e -> filterGuarantee()); 
+        pnlSearchFilter.add(cbFilter);
         
         pnlHeader.add(pnlButton, BorderLayout.WEST);
         pnlHeader.add(pnlSearchFilter, BorderLayout.CENTER);
@@ -100,15 +100,16 @@ public class GuaranteeMainContentGUI extends JPanel{
         loadTableData();
     }
     
-    public void loadTableData(){
+    public void loadTableData() {
         tableModel.setRowCount(0);
-        for(PhieuBaoHanhDTO pbh: phieuBaoHanhBUS.getAllPhieuBaoHanh()){
+        for (PhieuBaoHanhDTO pbh : phieuBaoHanhBUS.getAllPhieuBaoHanh()) {
+            String trangThai = (pbh.getTrangThaiBH() == 0) ? "Đang bảo hành" : "Đã bảo hành";
             tableModel.addRow(new Object[]{
                 pbh.getMaPBH(),
                 phieuBaoHanhBUS.getTenKhByMaPbh(pbh.getMaPBH()),
                 phieuBaoHanhBUS.getTenSpByMaPbh(pbh.getMaPBH()),
                 pbh.getSerialSP(),
-                pbh.getTrangThaiBH()
+                trangThai
             });
         }
     }
@@ -153,5 +154,34 @@ public class GuaranteeMainContentGUI extends JPanel{
     private void viewGuarantee() {
        
     }
+
+    private void filterGuarantee() {
+        String selected = cbFilter.getSelectedItem().toString();
+        tableModel.setRowCount(0);
+
+        for (PhieuBaoHanhDTO pbh : phieuBaoHanhBUS.getAllPhieuBaoHanh()) {
+            boolean match = false;
+
+            if ("Tất cả".equals(selected)) {
+                match = true;
+            } else if ("Đã bảo hành".equals(selected) && pbh.getTrangThaiBH() == 1) {
+                match = true;
+            } else if ("Đang bảo hành".equals(selected) && pbh.getTrangThaiBH() == 0) {
+                match = true;
+            }
+
+            if (match) {
+                String trangThai = (pbh.getTrangThaiBH() == 0) ? "Đang bảo hành" : "Đã bảo hành";
+                tableModel.addRow(new Object[]{
+                    pbh.getMaPBH(),
+                    phieuBaoHanhBUS.getTenKhByMaPbh(pbh.getMaPBH()),
+                    phieuBaoHanhBUS.getTenSpByMaPbh(pbh.getMaPBH()),
+                    pbh.getSerialSP(),
+                    trangThai
+                });
+            }
+        }
+    }
+
 
 }

@@ -1,10 +1,5 @@
 package GUI.MainContent;
 
-import BUS.CpuBUS;
-import BUS.DoPhanGiaiBUS;
-import BUS.PhanLoaiBUS;
-import BUS.RamBUS;
-import BUS.RomBUS;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Window;
@@ -15,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import BUS.SanPhamBUS;
-import BUS.ThuongHieuBUS;
 import DTO.SanPhamDTO;
 import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditProductGUI;
@@ -25,13 +19,15 @@ import Utils.UIScrollPane;
 import Utils.UITable;
 import Utils.UITextField;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
     private SanPhamBUS sanPhamBUS;
     private UIButton btnAdd, btnDelete, btnEdit;
     private UITextField txtSearch;
-    private JComboBox<String> cbFilter;
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
@@ -61,11 +57,7 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
 
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
-        cbFilter = new JComboBox<>();
-        cbFilter.setPreferredSize(new Dimension(150,30));
-        cbFilter.addItem("Tất cả");
         txtSearch = new UITextField(190,30);
-        pnlSearchFilter.add(cbFilter);
         pnlSearchFilter.add(txtSearch);
 
         pnlHeader.add(pnlButton, BorderLayout.WEST);
@@ -84,6 +76,7 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
         loadTableData();
+        addSearchFunctionality();
     }
     
     public void loadTableData() { 
@@ -136,6 +129,34 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
             } else {
                 JOptionPane.showMessageDialog(this, "Xóa san phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+    
+    private void addSearchFunctionality() {
+        txtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { searchCustomer(); }
+            public void removeUpdate(DocumentEvent e) { searchCustomer(); }
+            public void changedUpdate(DocumentEvent e) { searchCustomer(); }
+        });
+    }
+    
+    private void searchCustomer() {
+        String keyword = txtSearch.getText().trim().toLowerCase();
+        tableModel.setRowCount(0); 
+        ArrayList<SanPhamDTO> listSP = sanPhamBUS.searchSanPham1(keyword);
+        for (SanPhamDTO sp : listSP) {
+            tableModel.addRow(new Object[]{
+                sp.getMaSP(),
+                sp.getTenSP(),
+                sp.getGiaSP(),
+                sp.getSoLuongTon(),
+                sanPhamBUS.getTenCpuByMaSp(sp.getMaSP()),
+                sanPhamBUS.getDungLuongRamByMaSp(sp.getMaSP()) ,
+                sanPhamBUS.getDungLuongRomByMaSp(sp.getMaSP()),
+                sanPhamBUS.getTenDpgByMaSp(sp.getMaSP()),
+                sanPhamBUS.getTenThByMaSp(sp.getMaSP()),
+                sp.getThoiGianBH()
+            });
         }
     }
 
