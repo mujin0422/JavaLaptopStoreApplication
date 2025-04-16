@@ -11,7 +11,6 @@ import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UIScrollPane;
 import Utils.UITable;
-import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -26,15 +25,16 @@ import javax.swing.table.DefaultTableModel;
 
 public class AccountMainContentGUI extends JPanel{
     private UIButton btnAdd, btnDelete, btnEdit;
-    private UITextField txtSearch;
     private JComboBox<String> cbFilter;
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
     private TaiKhoanBUS taiKhoanBUS;
+    private QuyenBUS quyenBUS;
 
     public AccountMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.taiKhoanBUS = new TaiKhoanBUS();
+        this.quyenBUS = new QuyenBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
         this.setLayout(new BorderLayout(5, 5));
@@ -58,11 +58,22 @@ public class AccountMainContentGUI extends JPanel{
 
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
-        cbFilter = new JComboBox<>(new String[]{"Lọc"});
+        cbFilter = new JComboBox<>();
         cbFilter.setPreferredSize(new Dimension(150,30));
-        txtSearch = new UITextField(190, 30);
+        cbFilter.setBackground(UIConstants.WHITE_FONT);
+        cbFilter.addItem("Tất cả quyền");
+        for (QuyenDTO quyen : quyenBUS.getAllQuyen()) {
+            cbFilter.addItem(quyen.getTenQuyen());
+        }
         pnlSearchFilter.add(cbFilter);
-        pnlSearchFilter.add(txtSearch);
+        cbFilter.addActionListener(e -> {
+            String selected = (String) cbFilter.getSelectedItem();
+            if (selected.equals("Tất cả quyền")) {
+                loadTableData(); 
+            } else {
+                loadAccountsByRole(selected); 
+            }
+        });
 
         pnlHeader.add(pnlButton, BorderLayout.WEST);
         pnlHeader.add(pnlSearchFilter, BorderLayout.CENTER);
@@ -154,6 +165,28 @@ public class AccountMainContentGUI extends JPanel{
                 loadTableData();
             } else {
                 JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    
+    private void loadAccountsByRole(String tenQuyen) {
+        tableModel.setRowCount(0);
+        int maQuyen = 0;
+
+        for (QuyenDTO quyen : quyenBUS.getAllQuyen()) {
+            if (quyen.getTenQuyen().equals(tenQuyen)) {
+                maQuyen = quyen.getMaQuyen();
+                break;
+            }
+        }
+        for (TaiKhoanDTO tk : taiKhoanBUS.getAllTaiKhoan()) {
+            if (tk.getMaQuyen() == maQuyen) {
+                tableModel.addRow(new Object[]{
+                    taiKhoanBUS.getTenNvByUsername(tk.getTenDangNhap()),
+                    tk.getTenDangNhap(),
+                    tk.getMatKhau(),
+                    tenQuyen
+                });
             }
         }
     }

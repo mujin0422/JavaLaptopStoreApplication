@@ -351,8 +351,6 @@ public class SanPhamDAO {
     }
     
     public ArrayList<SanPhamDTO> getSanPhamByDateRange(String startDate, String endDate) {
-        System.out.println("Executing query with dates: " + startDate + " to " + endDate);
-
         ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
         String sql = "SELECT DISTINCT sp.* FROM sanpham sp " +
                      "JOIN chitietphieunhap ctpn ON sp.maSP = ctpn.maSP " +
@@ -387,6 +385,116 @@ public class SanPhamDAO {
         }
         return dsSanPham;
     }
+    public ArrayList<SanPhamDTO> getSanPhamByYearRange(int fromYear, int toYear) {
+        ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
+        String sql = "SELECT DISTINCT sp.* FROM sanpham sp " +
+                     "JOIN chitietphieunhap ctpn ON sp.maSP = ctpn.maSP " +
+                     "JOIN phieunhap pn ON ctpn.maPN = pn.maPN " +
+                     "WHERE YEAR(pn.ngayNhap) BETWEEN ? AND ? AND sp.trangThaiXoa = 0";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, fromYear);
+            ps.setInt(2, toYear);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    SanPhamDTO sp = new SanPhamDTO(
+                        rs.getInt("maSP"),
+                        rs.getString("tenSP"),
+                        rs.getInt("giaSP"),
+                        rs.getInt("soLuongTon"),
+                        rs.getInt("maCPU"),
+                        rs.getInt("maROM"),
+                        rs.getInt("maRAM"),
+                        rs.getInt("maTH"),
+                        rs.getInt("maDPG"),
+                        rs.getInt("maLoai"),
+                        rs.getInt("thoigianBH")
+                    );
+                    dsSanPham.add(sp);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dsSanPham;
+    }
+    public ArrayList<SanPhamDTO> getSanPhamByMonthYear(int month, int year) {
+        ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
+        String sql = "SELECT DISTINCT sp.* FROM sanpham sp " +
+                     "JOIN chitietphieunhap ctpn ON sp.maSP = ctpn.maSP " +
+                     "JOIN phieunhap pn ON ctpn.maPN = pn.maPN " +
+                     "WHERE MONTH(pn.ngayNhap) = ? AND YEAR(pn.ngayNhap) = ? AND sp.trangThaiXoa = 0";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, month);
+            ps.setInt(2, year);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    SanPhamDTO sp = new SanPhamDTO(
+                        rs.getInt("maSP"),
+                        rs.getString("tenSP"),
+                        rs.getInt("giaSP"),
+                        rs.getInt("soLuongTon"),
+                        rs.getInt("maCPU"),
+                        rs.getInt("maROM"),
+                        rs.getInt("maRAM"),
+                        rs.getInt("maTH"),
+                        rs.getInt("maDPG"),
+                        rs.getInt("maLoai"),
+                        rs.getInt("thoigianBH")
+                    );
+                    dsSanPham.add(sp);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dsSanPham;
+    }
+    public ArrayList<SanPhamDTO> getSanPhamByExactDate(String date) {
+        ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
+        String sql = "SELECT DISTINCT sp.* FROM sanpham sp " +
+                     "JOIN chitietphieunhap ctpn ON sp.maSP = ctpn.maSP " +
+                     "JOIN phieunhap pn ON ctpn.maPN = pn.maPN " +
+                     "WHERE DATE(pn.ngayNhap) = ? AND sp.trangThaiXoa = 0";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, date);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    SanPhamDTO sp = new SanPhamDTO(
+                        rs.getInt("maSP"),
+                        rs.getString("tenSP"),
+                        rs.getInt("giaSP"),
+                        rs.getInt("soLuongTon"),
+                        rs.getInt("maCPU"),
+                        rs.getInt("maROM"),
+                        rs.getInt("maRAM"),
+                        rs.getInt("maTH"),
+                        rs.getInt("maDPG"),
+                        rs.getInt("maLoai"),
+                        rs.getInt("thoigianBH")
+                    );
+                    dsSanPham.add(sp);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsSanPham;
+    }
+
+
+
     
     public ArrayList<SanPhamDTO> searchSanPham(String keyword) {
         ArrayList<SanPhamDTO> ketQua = new ArrayList<>();

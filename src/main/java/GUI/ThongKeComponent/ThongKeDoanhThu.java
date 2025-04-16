@@ -205,7 +205,7 @@ public class ThongKeDoanhThu extends JPanel {
             if (thongKeTheo.equals("Sản phẩm")) {
                 ArrayList<SanPhamDTO> ketQua = sanPhamBUS.searchSanPhamByMaOrTen(keyword);
                 if (startDateConverted != null && endDateConverted != null) {
-                    ketQua = sanPhamBUS.searchSanPhamByDateRange(startDateConverted, endDateConverted);
+                    ketQua = sanPhamBUS.getSanPhamByDateRange(startDateConverted, endDateConverted);
                 }
                 hienThiDuLieuTheoSanPham(ketQua);
             } else if (thongKeTheo.equals("Tháng")) {

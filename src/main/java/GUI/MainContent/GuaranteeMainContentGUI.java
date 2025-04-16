@@ -69,7 +69,8 @@ public class GuaranteeMainContentGUI extends JPanel{
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
         cbFilter = new JComboBox<>(new String[] {"Tất cả", "Đã bảo hành", "Đang bảo hành"});
-        cbFilter.setPreferredSize(new Dimension(100,30));
+        cbFilter.setPreferredSize(new Dimension(150,30));
+        cbFilter.setBackground(UIConstants.WHITE_FONT);
         cbFilter.addActionListener(e -> filterGuarantee()); 
         pnlSearchFilter.add(cbFilter);
         
@@ -182,6 +183,4 @@ public class GuaranteeMainContentGUI extends JPanel{
             }
         }
     }
-
-
 }

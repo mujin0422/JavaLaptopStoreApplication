@@ -90,8 +90,18 @@ public class SanPhamBUS {
         return sanPhamDAO.searchByMaOrTen(keyword);
     }
     
-    public ArrayList<SanPhamDTO> searchSanPhamByDateRange(String startDate, String endDate) {
+    public ArrayList<SanPhamDTO> getSanPhamByDateRange(String startDate, String endDate) {
         return sanPhamDAO.getSanPhamByDateRange(startDate, endDate);
+    }
+    
+    public ArrayList<SanPhamDTO> getSanPhamByYearRange(int fromYear, int toYear) {
+        return sanPhamDAO.getSanPhamByYearRange(fromYear, toYear);
+    }
+    public ArrayList<SanPhamDTO> getSanPhamByMonthYear(int month, int year) {
+        return sanPhamDAO.getSanPhamByMonthYear(month, year);
+    }
+    public ArrayList<SanPhamDTO> getSanPhamByExactDate(String date) {
+        return sanPhamDAO.getSanPhamByExactDate(date);
     }
      
     public ArrayList<SanPhamDTO> searchSanPham1(String keyword) {
