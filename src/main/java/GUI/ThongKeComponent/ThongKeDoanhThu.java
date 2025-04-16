@@ -9,10 +9,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,7 +34,10 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import BUS.ChiTietPhieuXuatBUS;
+import BUS.PhieuXuatBUS;
 import BUS.SanPhamBUS;
+import DTO.ChiTietPhieuXuatDTO;
+import DTO.PhieuXuatDTO;
 import DTO.SanPhamDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
@@ -44,13 +51,14 @@ public class ThongKeDoanhThu extends JPanel {
     private DefaultTableModel model;
     private JTextField txtSearch, txtDateFrom, txtDateTo;
     private JButton btnLamMoi, btnLoc, btnToggleView;
+    private JComboBox<String> cbxThongKeTheo;
     private SanPhamBUS sanPhamBUS = new SanPhamBUS();
     private ChiTietPhieuXuatBUS ctpxBUS = new ChiTietPhieuXuatBUS();
+    private PhieuXuatBUS pxBUS = new PhieuXuatBUS();
     private JPanel contentPanel;
     private JScrollPane tableScrollPane;
     private ChartPanel chartPanel;
     private boolean isTableView = true;
-    // private  SanPhamDTO sp;
 
     public ThongKeDoanhThu() {
         setLayout(new BorderLayout(10, 10));
@@ -68,28 +76,30 @@ public class ThongKeDoanhThu extends JPanel {
         pnlFilter.setLayout(new GridBagLayout());
         pnlFilter.setBackground(Color.WHITE);
         pnlFilter.setBorder(new EmptyBorder(10, 0, 10, 0));
-        pnlFilter.setPreferredSize(new Dimension(0, 100));
+        pnlFilter.setPreferredSize(new Dimension(0, 150));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Search
+        // Search and Filter Type
         JPanel pnlSearchWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT));
         pnlSearchWrapper.setBackground(Color.WHITE);
         pnlSearchWrapper.setBorder(BorderFactory.createTitledBorder("Tìm kiếm"));
         txtSearch = new UITextField(30, 14);
         txtSearch.setPreferredSize(new Dimension(250, 30));
         pnlSearchWrapper.add(txtSearch);
+
+        String[] thongKeTheo = {"Sản phẩm", "Tháng", "Năm"};
+        cbxThongKeTheo = new JComboBox<>(thongKeTheo);
+        cbxThongKeTheo.setPreferredSize(new Dimension(120, 30));
+        pnlSearchWrapper.add(new JLabel("Thống kê theo:"));
+        pnlSearchWrapper.add(cbxThongKeTheo);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         pnlFilter.add(pnlSearchWrapper, gbc);
 
-        txtSearch.addActionListener(e -> {
-            String keyword = txtSearch.getText().trim();
-            ArrayList<SanPhamDTO> ketQua = sanPhamBUS.searchSanPhamByMaOrTen(keyword);
-            hienThiDuLieu(ketQua);
-        });
+        txtSearch.addActionListener(e -> locDuLieu());
 
         // Date Range
         JPanel pnlDateWrapper = new JPanel(new GridBagLayout());
@@ -99,6 +109,7 @@ public class ThongKeDoanhThu extends JPanel {
         gbcDate.fill = GridBagConstraints.HORIZONTAL;
         gbcDate.insets = new Insets(5, 5, 5, 5);
 
+        gbcDate.gridx = 0;
         pnlDateWrapper.add(new UILabel("Từ:"), gbcDate);
         gbcDate.gridx = 1;
         txtDateFrom = new UITextField(15, 14);
@@ -112,9 +123,9 @@ public class ThongKeDoanhThu extends JPanel {
         txtDateTo.setPreferredSize(new Dimension(120, 30));
         pnlDateWrapper.add(txtDateTo, gbcDate);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
         pnlFilter.add(pnlDateWrapper, gbc);
 
         // Buttons
@@ -136,6 +147,7 @@ public class ThongKeDoanhThu extends JPanel {
 
         gbc.gridx = 2;
         gbc.gridy = 0;
+        gbc.gridwidth = 1;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         pnlFilter.add(pnlRefreshWrapper, gbc);
@@ -147,7 +159,7 @@ public class ThongKeDoanhThu extends JPanel {
         contentPanel.setBackground(Color.WHITE);
 
         // Table Setup
-        String[] columns = {"STT", "Mã sản phẩm", "Tên sản phẩm", "Số lượng bán", "Doanh thu"};
+        String[] columns = {"STT", "Mã sản phẩm", "Vốn", "Doanh thu", "Lợi nhuận"};
         model = new DefaultTableModel(columns, 0);
         table = new UITable(model);
         tableScrollPane = new UIScrollPane(table);
@@ -165,23 +177,11 @@ public class ThongKeDoanhThu extends JPanel {
             txtSearch.setText("");
             txtDateFrom.setText("");
             txtDateTo.setText("");
-            hienThiDuLieu();
+            cbxThongKeTheo.setSelectedIndex(0);
+            locDuLieu();
         });
 
-        btnLoc.addActionListener(e -> {
-            String startDate = txtDateFrom.getText().trim();
-            String endDate = txtDateTo.getText().trim();
-            try {
-                String startDateConverted = chuyenDoiNgay(startDate);
-                String endDateConverted = chuyenDoiNgay(endDate);
-                if (startDateConverted != null && endDateConverted != null) {
-                    ArrayList<SanPhamDTO> ketQua = sanPhamBUS.searchSanPhamByDateRange(startDateConverted, endDateConverted);
-                    hienThiDuLieu(ketQua);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        btnLoc.addActionListener(e -> locDuLieu());
 
         btnToggleView.addActionListener(e -> {
             isTableView = !isTableView;
@@ -189,36 +189,78 @@ public class ThongKeDoanhThu extends JPanel {
             updateContentPanel();
         });
 
-        hienThiDuLieu();
+        locDuLieu();
     }
 
-    private void hienThiDuLieu(ArrayList<SanPhamDTO> danhSachSanPham) {
+    private void locDuLieu() {
+        String keyword = txtSearch.getText().trim();
+        String startDate = txtDateFrom.getText().trim();
+        String endDate = txtDateTo.getText().trim();
+        String thongKeTheo = (String) cbxThongKeTheo.getSelectedItem();
+
+        try {
+            String startDateConverted = chuyenDoiNgay(startDate);
+            String endDateConverted = chuyenDoiNgay(endDate);
+
+            if (thongKeTheo.equals("Sản phẩm")) {
+                ArrayList<SanPhamDTO> ketQua = sanPhamBUS.searchSanPhamByMaOrTen(keyword);
+                if (startDateConverted != null && endDateConverted != null) {
+                    ketQua = sanPhamBUS.searchSanPhamByDateRange(startDateConverted, endDateConverted);
+                }
+                hienThiDuLieuTheoSanPham(ketQua);
+            } else if (thongKeTheo.equals("Tháng")) {
+                hienThiDuLieuTheoThang(startDateConverted, endDateConverted);
+            } else if (thongKeTheo.equals("Năm")) {
+                hienThiDuLieuTheoNam(startDateConverted, endDateConverted);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi lọc dữ liệu: " + ex.getMessage());
+        }
+    }
+
+    private void hienThiDuLieuTheoSanPham(ArrayList<SanPhamDTO> danhSachSanPham) {
         // Update Table
         ArrayList<Object[]> rows = new ArrayList<>();
         for (SanPhamDTO sp : danhSachSanPham) {
             int soLuongBan = ctpxBUS.getTongSoLuongXuatTheoMaSP(sp.getMaSP());
+            int soLuongNhap = sp.getSoLuongTon();
+            double vonNhap = calculateVon(sp.getMaSP(), soLuongNhap);
             double doanhThu = calculateDoanhThu(sp.getMaSP(), soLuongBan);
-            rows.add(new Object[]{sp.getMaSP(), sp.getTenSP(), soLuongBan, doanhThu});
+            double loiNhuan = doanhThu - vonNhap;
+
+            rows.add(new Object[]{sp.getMaSP(), vonNhap, doanhThu, loiNhuan});
         }
-        rows.sort((a, b) -> Double.compare((double) b[3], (double) a[3])); // Sắp xếp theo doanh thu giảm dần
+        rows.sort((a, b) -> Double.compare((double) b[3], (double) a[3])); // Sắp xếp theo lợi nhuận giảm dần
+        model.setColumnIdentifiers(new String[]{"STT", "Mã sản phẩm", "Vốn", "Doanh thu", "Lợi nhuận"});
         model.setRowCount(0);
         int stt = 1;
         for (Object[] row : rows) {
-            model.addRow(new Object[]{stt++, row[0], row[1], row[2], String.format("%,.0f VNĐ", (double) row[3])});
+            model.addRow(new Object[]{
+                stt++,
+                row[0],
+                String.format("%,.0f VNĐ", (double) row[1]),
+                String.format("%,.0f VNĐ", (double) row[2]),
+                String.format("%,.0f VNĐ", (double) row[3])
+            });
         }
 
         // Update Chart
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Object[] row : rows) {
-            String tenSP = (String) row[1];
-            double doanhThu = (double) row[3];
-            dataset.addValue(doanhThu, "Doanh thu", tenSP);
+            String maSP = (String) row[0];
+            double vonNhap = (double) row[1];
+            double doanhThu = (double) row[2];
+            double loiNhuan = (double) row[3];
+            dataset.addValue(vonNhap, "Vốn Nhập", maSP);
+            dataset.addValue(doanhThu, "Doanh Thu", maSP);
+            dataset.addValue(loiNhuan, "Lợi Nhuận", maSP);
         }
 
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Thống kê doanh thu",
+                "Thống kê doanh thu theo sản phẩm",
                 "Sản phẩm",
-                "Doanh thu (VNĐ)",
+                "Số tiền (VNĐ)",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true, true, false
@@ -226,13 +268,183 @@ public class ThongKeDoanhThu extends JPanel {
 
         chartPanel = new ChartPanel(barChart);
         chartPanel.setPreferredSize(new Dimension(800, 400));
-
         updateContentPanel();
     }
 
-    private void hienThiDuLieu() {
-        ArrayList<SanPhamDTO> danhSachSanPham = sanPhamBUS.getAllSanPham();
-        hienThiDuLieu(danhSachSanPham);
+    private void hienThiDuLieuTheoThang(String startDate, String endDate) {
+        // Tính toán dữ liệu theo tháng
+        Map<String, Double[]> thongKeTheoThang = new HashMap<>();
+        ArrayList<ChiTietPhieuXuatDTO> danhSachCTPX = ctpxBUS.getAllChiTietPhieuXuat();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Calendar cal = Calendar.getInstance();
+
+        for (ChiTietPhieuXuatDTO ctpx : danhSachCTPX) {
+            try {
+                PhieuXuatDTO px =  pxBUS.getById(ctpx.getMaPX());
+                Date ngayXuat = px.getNgayXuat();
+                String thangNam = sdf.format(ngayXuat);
+
+                // Kiểm tra khoảng thời gian
+                if (startDate != null && endDate != null) {
+                    Date start = sdf.parse(startDate.substring(0, 7));
+                    Date end = sdf.parse(endDate.substring(0, 7));
+                    Date current = sdf.parse(thangNam);
+                    if (current.before(start) || current.after(end)) {
+                        continue;
+                    }
+                }
+
+                int soLuongBan = ctpx.getSoLuongSP();
+                double doanhThu = calculateDoanhThu(ctpx.getMaSP(), soLuongBan);
+                double vonNhap = calculateVon(ctpx.getMaSP(), soLuongBan); // Giả sử nhập = xuất
+                double loiNhuan = doanhThu - vonNhap;
+
+                thongKeTheoThang.compute(thangNam, (k, v) -> {
+                    if (v == null) v = new Double[]{0.0, 0.0, 0.0};
+                    v[0] += vonNhap;
+                    v[1] += doanhThu;
+                    v[2] += loiNhuan;
+                    return v;
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Update Table
+        ArrayList<Object[]> rows = new ArrayList<>();
+        for (Map.Entry<String, Double[]> entry : thongKeTheoThang.entrySet()) {
+            String thangNam = entry.getKey();
+            Double[] values = entry.getValue();
+            rows.add(new Object[]{thangNam, values[0], values[1], values[2]});
+        }
+        rows.sort((a, b) -> ((String) a[0]).compareTo((String) b[0])); // Sắp xếp theo tháng
+        model.setColumnIdentifiers(new String[]{"STT", "Tháng", "Vốn", "Doanh thu", "Lợi nhuận"});
+        model.setRowCount(0);
+        int stt = 1;
+        for (Object[] row : rows) {
+            model.addRow(new Object[]{
+                stt++,
+                row[0],
+                String.format("%,.0f VNĐ", (double) row[1]),
+                String.format("%,.0f VNĐ", (double) row[2]),
+                String.format("%,.0f VNĐ", (double) row[3])
+            });
+        }
+
+        // Update Chart
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Object[] row : rows) {
+            String thangNam = (String) row[0];
+            double vonNhap = (double) row[1];
+            double doanhThu = (double) row[2];
+            double loiNhuan = (double) row[3];
+            dataset.addValue(vonNhap, "Vốn Nhập", thangNam);
+            dataset.addValue(doanhThu, "Doanh Thu", thangNam);
+            dataset.addValue(loiNhuan, "Lợi Nhuận", thangNam);
+        }
+
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Thống kê doanh thu theo tháng",
+                "Tháng",
+                "Số tiền (VNĐ)",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, true, false
+        );
+
+        chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new Dimension(800, 400));
+        updateContentPanel();
+    }
+
+    private void hienThiDuLieuTheoNam(String startDate, String endDate) {
+        // Tính toán dữ liệu theo năm
+        Map<String, Double[]> thongKeTheoNam = new HashMap<>();
+        ArrayList<ChiTietPhieuXuatDTO> danhSachCTPX = ctpxBUS.getAllChiTietPhieuXuat();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Calendar cal = Calendar.getInstance();
+
+        for (ChiTietPhieuXuatDTO ctpx : danhSachCTPX) {
+            try {
+                PhieuXuatDTO px =  pxBUS.getById(ctpx.getMaPX());
+                Date ngayXuat = px.getNgayXuat();
+                String nam = sdf.format(ngayXuat);
+
+                // Kiểm tra khoảng thời gian
+                if (startDate != null && endDate != null) {
+                    Date start = sdf.parse(startDate.substring(0, 4));
+                    Date end = sdf.parse(endDate.substring(0, 4));
+                    Date current = sdf.parse(nam);
+                    if (current.before(start) || current.after(end)) {
+                        continue;
+                    }
+                }
+
+                int soLuongBan = ctpx.getSoLuongSP();
+                double doanhThu = calculateDoanhThu(ctpx.getMaSP(), soLuongBan);
+                double vonNhap = calculateVon(ctpx.getMaSP(), soLuongBan); // Giả sử nhập = xuất
+                double loiNhuan = doanhThu - vonNhap;
+
+                thongKeTheoNam.compute(nam, (k, v) -> {
+                    if (v == null) v = new Double[]{0.0, 0.0, 0.0};
+                    v[0] += vonNhap;
+                    v[1] += doanhThu;
+                    v[2] += loiNhuan;
+                    return v;
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Update Table
+        ArrayList<Object[]> rows = new ArrayList<>();
+        for (Map.Entry<String, Double[]> entry : thongKeTheoNam.entrySet()) {
+            String nam = entry.getKey();
+            Double[] values = entry.getValue();
+            rows.add(new Object[]{nam, values[0], values[1], values[2]});
+        }
+        rows.sort((a, b) -> ((String) a[0]).compareTo((String) b[0])); // Sắp xếp theo năm
+        model.setColumnIdentifiers(new String[]{"STT", "Năm", "Vốn", "Doanh thu", "Lợi nhuận"});
+        model.setRowCount(0);
+        int stt = 1;
+        for (Object[] row : rows) {
+            model.addRow(new Object[]{
+                stt++,
+                row[0],
+                String.format("%,.0f VNĐ", (double) row[1]),
+                String.format("%,.0f VNĐ", (double) row[2]),
+                String.format("%,.0f VNĐ", (double) row[3])
+            });
+        }
+
+        // Update Chart
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Object[] row : rows) {
+            String nam = (String) row[0];
+            double vonNhap = (double) row[1];
+            double doanhThu = (double) row[2];
+            double loiNhuan = (double) row[3];
+            dataset.addValue(vonNhap, "Vốn Nhập", nam);
+            dataset.addValue(doanhThu, "Doanh Thu", nam);
+            dataset.addValue(loiNhuan, "Lợi Nhuận", nam);
+        }
+
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Thống kê doanh thu theo năm",
+                "Năm",
+                "Số tiền (VNĐ)",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, true, false
+        );
+
+        chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new Dimension(800, 400));
+        updateContentPanel();
     }
 
     private void updateContentPanel() {
@@ -263,18 +475,15 @@ public class ThongKeDoanhThu extends JPanel {
         }
     }
 
-    // private double calculateDoanhThu(int maSP, int soLuongBan) {
-    //     // Giả định SanPhamDTO có phương thức getGiaBan()
-    //      sp = sanPhamBUS.getGiaSpByMaSp(maSP);
-    //     // if (sp != null && sp.getGiaSP() != null) {
-    //         return soLuongBan * sp.getGiaSP();
-    //     // }
-    //     return 0.0;
-    // }
     private double calculateDoanhThu(int maSP, int soLuongBan) {
         int giaBan = sanPhamBUS.getGiaSpByMaSp(maSP);
-            return soLuongBan * giaBan;
-
+        return soLuongBan * giaBan;
     }
 
+
+    private double calculateVon(int maSP, int soLuongNhap) {
+        int giaBan = sanPhamBUS.getGiaSpByMaSp(maSP);
+            return soLuongNhap * giaBan;
+
+    }
 }
