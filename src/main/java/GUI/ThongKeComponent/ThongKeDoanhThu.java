@@ -420,6 +420,8 @@ public class ThongKeDoanhThu extends JPanel {
                 String.format("%,.0f VNĐ", (double) row[3])
             });
         }
+        
+        
 
         // Update Chart
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();

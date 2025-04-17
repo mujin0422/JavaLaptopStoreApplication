@@ -51,12 +51,12 @@ public class ThongKeSanPham extends JPanel {
 
         // Thanh chọn thời gian
         pnlOption = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        pnlOption.setPreferredSize(new Dimension(0, 29));
+        pnlOption.setPreferredSize(new Dimension(0, 35));
         pnlOption.setBackground(Color.WHITE);
-        pnlOption.setBorder(new EmptyBorder(2, 2, 2, 2));
-        btnOptionYear = new UIButton("menuButton", "Năm", 100, 25);
-        btnOptionMonth = new UIButton("menuButton", "Tháng", 100, 25);
-        btnOptionDay = new UIButton("menuButton", "Ngày", 100, 25);
+        pnlOption.setBorder(new EmptyBorder(5, 5, 5, 5));
+        btnOptionYear = new UIButton("menuButton", "Năm", 80, 25);
+        btnOptionMonth = new UIButton("menuButton", "Tháng", 80, 25);
+        btnOptionDay = new UIButton("menuButton", "Ngày", 80, 25);
         btnOptionYear.addActionListener(e -> OptionYearPanel());
         btnOptionMonth.addActionListener(e -> OptionMonthPanel());
         btnOptionDay.addActionListener(e -> OptionDayPanel());
