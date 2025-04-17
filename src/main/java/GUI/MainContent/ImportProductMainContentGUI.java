@@ -336,6 +336,7 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
             return;
         }
         tableModelForForm.removeRow(selectedRow);
+        calcTongTien();
     }
     
     private void editSoLuongInFromTableForForm(){
@@ -344,6 +345,7 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trong phiếu để sửa số lượng", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        SanPhamDTO sp = sanPhamBUS.getSanPhamById(Integer.parseInt(tblForForm.getValueAt(selectedRow, 0).toString()));
         Window window = SwingUtilities.getWindowAncestor(this);
         JDialog dialog = new JDialog((Frame) window, "Sửa Số Lượng", true);
         dialog.setSize(300, 150);
@@ -363,12 +365,16 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
                     return;
                 }
                 int soLuong = Integer.parseInt(soLuongText);
+                int thanhTien = soLuong * sp.getGiaSP();
                 tblForForm.setValueAt(soLuong, selectedRow, 2); 
-                dialog.dispose(); 
+                tblForForm.setValueAt(thanhTien, selectedRow, 3); 
+                dialog.dispose();
+                
             }
         });
         dialog.setLocationRelativeTo(this); 
         dialog.setVisible(true);
+        calcTongTien();
     }
     
     private void calcTongTien() {

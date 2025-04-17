@@ -337,6 +337,7 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
             return;
         }
         tableModelForForm.removeRow(selectedRow);
+        calcTongTien();
     }
      
     private void calcTongTien() {

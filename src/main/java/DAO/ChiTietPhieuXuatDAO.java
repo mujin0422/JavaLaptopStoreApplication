@@ -158,4 +158,70 @@ public class ChiTietPhieuXuatDAO {
         }
         return list;
     }
+    
+    public int getTongSoLuongXuat(int maSP, int fromYear, int toYear) {
+        int tongSoLuong = 0;
+        String sql = "SELECT SUM(ct.soLuongSP) AS tongSoLuong " +
+                     "FROM chitietphieuxuat ct " +
+                     "JOIN phieuxuat px ON ct.maPX = px.maPX " +
+                     "WHERE ct.maSP = ? AND YEAR(px.ngayXuat) BETWEEN ? AND ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSP);
+            ps.setInt(2, fromYear);
+            ps.setInt(3, toYear);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    tongSoLuong = rs.getInt("tongSoLuong");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tongSoLuong;
+    }
+    
+    public int getTongSoLuongXuat(int thang, int nam) {
+        int tongSoLuong = 0;
+        String sql = "SELECT SUM(ct.soLuongSP) as tongSoLuong " +
+                     "FROM chitietphieuxuat ct " +
+                     "JOIN phieuxuat px ON ct.maPX = px.maPX " +
+                     "WHERE MONTH(px.ngayXuat) = ? AND YEAR(px.ngayXuat) = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, thang);
+            ps.setInt(2, nam);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    tongSoLuong = rs.getInt("tongSoLuong");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tongSoLuong;
+    }
+    
+    public int getTongSoLuongXuatTheoNgay(int maSP, String ngay) {
+        int tong = 0;
+        String sql = "SELECT SUM(soLuongSP) FROM chitietphieuxuat ctpx " +
+                     "JOIN phieuxuat px ON ctpx.maPX = px.maPX " +
+                     "WHERE ctpx.maSP = ? AND DATE(px.ngayXuat) = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maSP);
+            ps.setString(2, ngay);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) tong = rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tong;
+    }
 }

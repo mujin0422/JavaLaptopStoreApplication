@@ -43,4 +43,15 @@ public class ChiTietPhieuXuatBUS {
         ChiTietPhieuXuatDAO dao = new ChiTietPhieuXuatDAO();
         return dao.getAllByDateRange(startDate, endDate);
     }
+    //thống kê
+    public int getTongSoLuongXuat(int maSP, int fromYear, int toYear) {
+        return chiTietPhieuXuatDAO.getTongSoLuongXuat(maSP, fromYear, toYear);
+    }
+    public int getTongSoLuongXuat(int thang, int nam) {
+        return chiTietPhieuXuatDAO.getTongSoLuongXuat(thang, nam);
+    }
+    public int getTongSoLuongXuat(int maSP, String ngay) {
+        return chiTietPhieuXuatDAO.getTongSoLuongXuatTheoNgay(maSP, ngay);
+    }
+
 }
