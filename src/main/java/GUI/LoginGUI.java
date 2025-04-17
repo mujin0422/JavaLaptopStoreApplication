@@ -5,14 +5,13 @@ import DTO.TaiKhoanDTO;
 import java.awt.*;
 import javax.swing.*;
 import Utils.UIButton;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import Utils.UIConstants;
 
 public final class LoginGUI extends JFrame {
     private JTextField txtAccount;
     private JPasswordField txtPassword;
-    private JLabel lblAccount, lblPassword, lblTitle;
-    private JPanel pnlLeft, pnlCenter;
+    private JLabel lblAccount, lblPassword;
+    private JPanel pnlTitle, pnlLeft, pnlCenter;
     private UIButton btnLogin;
     private TaiKhoanDAO taiKhoanDAO;
 
@@ -24,15 +23,47 @@ public final class LoginGUI extends JFrame {
     }
 
     public void initComponent() {
-        this.setTitle("ĐĂNG NHẬP VÀO HỆ THỐNG");
         this.setSize(new Dimension(800, 400));
-        this.getContentPane().setBackground(Color.LIGHT_GRAY);
+        this.getContentPane().setBackground(UIConstants.SUB_BACKGROUND);
         this.getContentPane().setLayout(new BorderLayout(5, 5));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        //==============================( PANEL TITLE )=================================//
+        pnlTitle = new JPanel(null);
+        pnlTitle.setBackground(UIConstants.MAIN_BUTTON);
+        pnlTitle.setPreferredSize(new Dimension(800, 50));
+
+        JLabel lblTitle = new JLabel("QUẢN LÝ CỬA HÀNG BÁN LAPTOP");
+        lblTitle.setFont(UIConstants.TITLE_FONT);
+        lblTitle.setForeground(UIConstants.WHITE_FONT);
+        lblTitle.setBounds(10, 5, 450, 40);
+
+        ImageIcon minimizeIcon = new ImageIcon(getClass().getResource("/Icon/minimize_icon.png"));
+        ImageIcon closeIcon = new ImageIcon(getClass().getResource("/Icon/close_icon.png"));
+        Image imgMinimize = minimizeIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image imgClose = closeIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
+        JButton btnMinimize = new JButton(new ImageIcon(imgMinimize));
+        btnMinimize.setBackground(UIConstants.MAIN_BACKGROUND);
+        btnMinimize.setBorder(null);
+        btnMinimize.setBounds(800 - 80, 10, 30, 30);
+        btnMinimize.addActionListener(e -> setState(JFrame.ICONIFIED));
+
+        JButton btnClose = new JButton(new ImageIcon(imgClose));
+        btnClose.setBackground(UIConstants.MAIN_BACKGROUND);
+        btnClose.setBorder(null);
+        btnClose.setBounds(800 - 40, 10, 30, 30);
+        btnClose.addActionListener(e -> System.exit(0));
+
+        pnlTitle.add(lblTitle);
+        pnlTitle.add(btnMinimize);
+        pnlTitle.add(btnClose);
+        //==============================( End Panel Title )=============================//
+        
 
         //==============================( PANEL LEFT )==================================//
         pnlLeft = new JPanel(new BorderLayout());
-        pnlLeft.setBackground(Color.GRAY);
+        pnlLeft.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlLeft.setPreferredSize(new Dimension(300, 0));
         this.getContentPane().add(pnlLeft, BorderLayout.WEST);
 
@@ -54,7 +85,7 @@ public final class LoginGUI extends JFrame {
         //=============================( PANEL CENTER )=================================//
         pnlCenter = new JPanel();
         pnlCenter.setLayout(null);
-        pnlCenter.setBackground(Color.LIGHT_GRAY);
+        pnlCenter.setBackground(UIConstants.MAIN_BACKGROUND);
         this.getContentPane().add(pnlCenter, BorderLayout.CENTER);
 
         lblTitle = new JLabel("ĐĂNG NHẬP VÀO HỆ THỐNG");
@@ -74,8 +105,8 @@ public final class LoginGUI extends JFrame {
 
         JPanel accountPanel = new JPanel(new BorderLayout());
         accountPanel.setBounds(180, 120, 250, 35);
-        accountPanel.setBackground(Color.WHITE);
-        accountPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        accountPanel.setBackground(UIConstants.WHITE_FONT);
+        accountPanel.setBorder(BorderFactory.createLineBorder(UIConstants.MAIN_BACKGROUND));
 
         txtAccount = new JTextField();
         txtAccount.setBorder(null); 
@@ -94,26 +125,30 @@ public final class LoginGUI extends JFrame {
 
         JPanel passwordPanel = new JPanel(new BorderLayout());
         passwordPanel.setBounds(180, 180, 250, 35);
-        passwordPanel.setBackground(Color.WHITE);
-        passwordPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        passwordPanel.setBackground(UIConstants.WHITE_FONT);
+        passwordPanel.setBorder(BorderFactory.createLineBorder(UIConstants.MAIN_BACKGROUND));
 
         txtPassword = new JPasswordField();
         txtPassword.setBorder(null); 
         passwordPanel.add(lblLockIcon, BorderLayout.WEST);
         passwordPanel.add(txtPassword, BorderLayout.CENTER);
 
-        btnLogin = new UIButton("confirm", "ĐĂNG NHẬP", 160, 35, "/Icon/login_key_icon.png");
+        btnLogin = new UIButton("menuButton", "ĐĂNG NHẬP", 160, 35, "/Icon/login_icon.png");
         btnLogin.setBounds(160, 240, 140, 40 );
         btnLogin.addActionListener(e -> login());
 
-        //=============================( End panel Center )=============================//
         pnlCenter.add(lblTitle);
         pnlCenter.add(lblAccount);
         pnlCenter.add(accountPanel);
         pnlCenter.add(lblPassword);
         pnlCenter.add(passwordPanel);
         pnlCenter.add(btnLogin);
+        //=============================( End panel Center )=============================//
 
+        
+        this.getContentPane().add(pnlLeft, BorderLayout.WEST);
+        this.getContentPane().add(pnlCenter, BorderLayout.CENTER);
+        this.getContentPane().add(pnlTitle, BorderLayout.NORTH);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }

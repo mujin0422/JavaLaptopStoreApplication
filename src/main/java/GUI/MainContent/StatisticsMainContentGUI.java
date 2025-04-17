@@ -42,7 +42,7 @@ public class StatisticsMainContentGUI extends JPanel{
  
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
-        
+        switchPanel(panelTkDoanhThu);
     }
      private void switchPanel(JPanel newPanel) {
         pnlContent.removeAll();

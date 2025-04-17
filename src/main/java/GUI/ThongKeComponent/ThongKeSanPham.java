@@ -38,9 +38,9 @@ public class ThongKeSanPham extends JPanel {
     private JPanel pnlOption, pnlContent;
 
     public ThongKeSanPham() {
-        setLayout(new BorderLayout(5, 5));
-        setBackground(UIConstants.MAIN_BACKGROUND);
-        setBorder(new EmptyBorder(5, 5, 5, 5));
+        this.setLayout(new BorderLayout(5, 5));
+        this.setBackground(UIConstants.MAIN_BACKGROUND);
+        this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         //=================================(PANEL OPTION)===============================//
         pnlOption = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
@@ -63,8 +63,9 @@ public class ThongKeSanPham extends JPanel {
         //=================================(End Panel Content)==============================//
         
 
-        add(pnlOption, BorderLayout.NORTH);
-        add(pnlContent, BorderLayout.CENTER);
+        this.add(pnlOption, BorderLayout.NORTH);
+        this.add(pnlContent, BorderLayout.CENTER);
+        switchPanel(OptionYearPanel());
     }
     
     private void switchPanel(JPanel newPanel){
@@ -89,7 +90,7 @@ public class ThongKeSanPham extends JPanel {
         panelForFilter.add(new UILabel("Đến năm:", 70, 25));
         txtYearTo = new UITextField(70, 25);
         panelForFilter.add(txtYearTo);
-        btnLoc = new UIButton("filterButton", "LỌC", 50, 25);
+        btnLoc = new UIButton("confirm", "LỌC", 50, 25);
         panelForFilter.add(btnLoc);
 
         // ===================== (CENTER - Biểu đồ cột) ===================== //
@@ -188,7 +189,7 @@ public class ThongKeSanPham extends JPanel {
         panelForFilter.add(new UILabel("Năm:", 40, 25));
         UITextField txtYear = new UITextField(70, 25);
         panelForFilter.add(txtYear);
-        btnLoc = new UIButton("filterButton", "LỌC", 50, 25);
+        btnLoc = new UIButton("confirm", "LỌC", 50, 25);
         panelForFilter.add(btnLoc);
 
         // ===================== (CENTER - Biểu đồ cột đôi) ===================== //
@@ -268,7 +269,7 @@ public class ThongKeSanPham extends JPanel {
         panelForFilter.add(new UILabel("Ngày (dd/MM/yyyy):", 150, 25));
         UITextField txtDate = new UITextField(100, 25);
         panelForFilter.add(txtDate);
-        btnLoc = new UIButton("filterButton", "LỌC", 50, 25);
+        btnLoc = new UIButton("confirm", "LỌC", 50, 25);
         panelForFilter.add(btnLoc);
 
         // ===================== (CENTER - Biểu đồ cột đôi) ===================== //
