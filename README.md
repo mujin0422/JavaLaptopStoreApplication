@@ -24,9 +24,9 @@ Import cơ sở dữ liệu trong folder database -> quanlibanlaptop.sql.
 - Quản lí xuất hàng
 - Quản lí phân quyền
 - Quản lí bảo hành
-- Quản lí thống kêkê
+- Quản lí thống kê
 
-### Giao diện
+## Giao diện
 ![Giao diện đăng nhập](./img/login.png)
  
  <h4 align="center">Đăng nhập</h4>
