@@ -20,14 +20,22 @@ import Utils.UILabel;
 import Utils.UIScrollPane;
 import Utils.UITable;
 import Utils.UITextField;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfPTable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Window;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -47,7 +55,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 public final class ExportProductMainContentGUI extends JPanel implements ReloadablePanel{
-    private UIButton btnAdd, btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnAddToPX, btnSavePX;
+    private UIButton btnAdd, btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnAddToPX, btnExportPDF;
     private UITextField txtSearch, txtSoLuong, txtMaPX, txtMaNV, txtTongTien;
     private JComboBox<String> cbMaKH, cbFilterChiTietSanPham;
     private UITable tblContent, tblForProduct , tblForForm;
@@ -285,12 +293,11 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         panelChiTiet.setLayout(new BoxLayout(panelChiTiet, BoxLayout.Y_AXIS));
         panelChiTiet.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-        Font monoFont = new Font("Monospaced", Font.PLAIN, 14);
         UILabel lblTitle = new UILabel("CHI TIẾT PHIẾU XUẤT:", 550, 25);
         panelChiTiet.add(lblTitle);
 
         UILabel lblHeader = new UILabel(String.format("%-35s %-20s %-10s %-15s", "SẢN PHẨM", "SERIAL" ,"SỐ LƯỢNG", "THÀNH TIỀN"), 600, 25);
-        lblHeader.setFont(monoFont);
+        lblHeader.setFont(UIConstants.monoFont);
         panelChiTiet.add(lblHeader);
 
         ArrayList<ChiTietSanPhamDTO> dsSerial = chiTietSanPhamBUS.getAllByMaPX(maPX);
@@ -300,15 +307,18 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
             for (ChiTietSanPhamDTO sp : dsSerial) {
                 if (sp.getMaSP() == ct.getMaSP()) {
                     UILabel lblRow = new UILabel(String.format("%-35s %-20s %-10s %-15s", sanPhamBUS.getTenSanPhamByMaSanPham(ct.getMaSP()), sp.getSerialSP(),"1",  ct.getGiaBan()), 600, 25);
-                    lblRow.setFont(monoFont);
+                    lblRow.setFont(UIConstants.monoFont);
                     panelChiTiet.add(lblRow);
                 }
             }
         }
         JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        UIButton btnClose = new UIButton("add", "Đóng", 100, 30);
+        UIButton btnClose = new UIButton("add", "ĐÓNG", 100, 30);
         btnClose.addActionListener(e -> dialog.dispose());
         panelButton.add(btnClose);
+        btnExportPDF = new UIButton("add", "XUẤT PDF", 100, 30);
+        btnExportPDF.addActionListener(e -> exportToPDF(maPX));
+        panelButton.add(btnExportPDF);
 
         dialog.add(panelThongTin, BorderLayout.NORTH);
         dialog.add(panelChiTiet, BorderLayout.CENTER);
@@ -458,4 +468,63 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         loadTableData();
         resetFormInput();
     }
+    
+    private void exportToPDF(int maPX) {
+    try {
+        PhieuXuatDTO px = phieuXuatBUS.getById(maPX);
+        ArrayList<ChiTietPhieuXuatDTO> dsChiTiet = chiTietPhieuXuatBUS.getAllChiTietPhieuXuatByMaPx(maPX);
+        ArrayList<ChiTietSanPhamDTO> dsSerial = chiTietSanPhamBUS.getAllByMaPX(maPX);
+        // Đường dẫn file
+        String filePath = "./phieu/phieuxuat/PhieuXuat" + maPX + ".pdf";
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        document.open();
+        // Font tiếng Việt
+        BaseFont baseFont = BaseFont.createFont("C:/Windows/Fonts/times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font titleFont = new Font(baseFont, 16);
+        Font infoFont = new Font(baseFont, 12);
+        Font tableHeaderFont = new Font(baseFont, 12, Font.BOLD);
+        Font tableDataFont = new Font(baseFont, 12);
+        // Tiêu đề
+        Paragraph title = new Paragraph("CHI TIẾT PHIẾU XUẤT", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+        document.add(new Paragraph("\n"));
+        // Thông tin phiếu xuất
+        document.add(new Paragraph("Mã phiếu xuất: " + px.getMaPX(), infoFont));
+        document.add(new Paragraph("Nhân viên xuất hàng: " + nhanVienBUS.getTenNvByMaNv(px.getMaNV()), infoFont));
+        document.add(new Paragraph("Khách hàng: " + khachHangBUS.getTenKhByMaKh(px.getMaKH()), infoFont));
+        document.add(new Paragraph("Ngày ghi phiếu: " + px.getNgayXuat().toString(), infoFont));
+        document.add(new Paragraph("Tổng tiền: " + px.getTongTien(), infoFont));
+        document.add(new Paragraph("\n"));
+
+        // Bảng chi tiết sản phẩm
+        PdfPTable table = new PdfPTable(4); // 4 cột: Sản phẩm - Serial - Số lượng - Thành tiền
+        table.setWidthPercentage(100);
+        table.setWidths(new float[] {3, 2, 1, 2});
+
+        table.addCell(new Phrase("SẢN PHẨM", tableHeaderFont));
+        table.addCell(new Phrase("SERIAL", tableHeaderFont));
+        table.addCell(new Phrase("SỐ LƯỢNG", tableHeaderFont));
+        table.addCell(new Phrase("THÀNH TIỀN", tableHeaderFont));
+
+        for (ChiTietPhieuXuatDTO ct : dsChiTiet) {
+            for (ChiTietSanPhamDTO sp : dsSerial) {
+                if (sp.getMaSP() == ct.getMaSP()) {
+                    table.addCell(new Phrase(sanPhamBUS.getTenSanPhamByMaSanPham(ct.getMaSP()), tableDataFont));
+                    table.addCell(new Phrase(sp.getSerialSP(), tableDataFont));
+                    table.addCell(new Phrase("1", tableDataFont));
+                    table.addCell(new Phrase(String.valueOf(ct.getGiaBan()), tableDataFont));
+                }
+            }
+        }
+        document.add(table);
+        document.close();
+        JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Lỗi xuất PDF: " + e.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
 }

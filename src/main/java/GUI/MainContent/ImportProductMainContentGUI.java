@@ -20,16 +20,24 @@ import Utils.UILabel;
 import Utils.UIScrollPane;
 import Utils.UITable;
 import Utils.UITextField;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfPTable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +54,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 public class ImportProductMainContentGUI extends JPanel implements ReloadablePanel{
-    private UIButton btnAdd ,btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnAddToPN, btnSavePN;
+    private UIButton btnAdd ,btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnAddToPN, btnExportPDF;
     private UITextField txtSearch, txtSoLuong, txtMaPN, txtMaNV, txtTongTien, txtSearchSach;
     private JComboBox<String> cbMaNCC;
     private UITable tblContent, tblForProduct , tblForForm;
@@ -280,25 +288,28 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         panelChiTiet.setLayout(new BoxLayout(panelChiTiet, BoxLayout.Y_AXIS));
         panelChiTiet.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-        Font monoFont = new Font("Monospaced", Font.PLAIN, 14);
         UILabel lblTitle = new UILabel("CHI TIẾT PHIẾU NHẬP:", 550, 25);
         panelChiTiet.add(lblTitle);
 
         UILabel lblHeader = new UILabel(String.format("%-40s %-10s %-15s", "SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN"), 600, 25);
-        lblHeader.setFont(monoFont);
+        lblHeader.setFont(UIConstants.monoFont);
         panelChiTiet.add(lblHeader);
 
         for (ChiTietPhieuNhapDTO ct : chiTietPhieuNhapBUS.getAllChiTietPhieuNhapByMaPn(maPN)) {
             UILabel lblRow = new UILabel(String.format("%-40s %-10s %-15s", sanPhamBUS.getTenSanPhamByMaSanPham(ct.getMaSP()), ct.getSoLuongSP(),ct.getGiaNhap()), 600, 25);
-            lblRow.setFont(monoFont);
+            lblRow.setFont(UIConstants.monoFont);
             panelChiTiet.add(lblRow);
         }
 
         JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        UIButton btnClose = new UIButton("add", "Đóng", 100, 30);
+        UIButton btnClose = new UIButton("add", "ĐÓNG", 100, 30);
         btnClose.addActionListener(e -> dialog.dispose());
         panelButton.add(btnClose);
 
+        btnExportPDF = new UIButton("add", "XUẤT PDF", 100, 30);
+        btnExportPDF.addActionListener(e -> exportToPDF(maPN));
+        panelButton.add(btnExportPDF);
+        
         dialog.add(panelThongTin, BorderLayout.NORTH);
         dialog.add(panelChiTiet, BorderLayout.CENTER);
         dialog.add(panelButton, BorderLayout.SOUTH);
@@ -464,7 +475,6 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
                     JOptionPane.showMessageDialog(this, "Thêm chi tiết phiếu nhập thất bại ở dòng " + (i + 1), "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
                 // Thêm chi tiết sản phẩm theo số lượng
                 for (int j = 0; j < soLuong; j++) {
                     String serialSP = chiTietSanPhamBUS.generateUniqueSerial(); 
@@ -474,7 +484,6 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
                         return;
                     }
                 }
-
                 int soLuongHienTai = sanPhamBUS.getSoLuongTonSanPham(maSP);
                 sanPhamBUS.updateSoLuongTonSanPham(maSP, soLuongHienTai + soLuong);
             }
@@ -505,6 +514,56 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
                 sp.getGiaSP(),
                 sp.getSoLuongTon()
             });
+        }
+    }
+    
+    private void exportToPDF(int maPN) {
+        try {
+            PhieuNhapDTO pn = phieuNhapBUS.getById(maPN);
+            Document document = new Document();
+            // Lưu file PDF
+            String filePath = "./phieu/phieunhap/PhieuNhap" + maPN + ".pdf";
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+            // Tiêu đề
+            BaseFont baseFont = BaseFont.createFont("C:/Windows/Fonts/times.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font titleFont = new Font(baseFont, 16);
+            Paragraph title = new Paragraph("CHI TIẾT PHIẾU NHẬP", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            Font infoFont = new Font(baseFont, 12);
+            document.add(new Paragraph("Mã phiếu nhập: " + pn.getMaPN(), infoFont));
+            document.add(new Paragraph("Nhân viên nhập hàng: " + nhanVienBUS.getTenNvByMaNv(pn.getMaNV()), infoFont));
+            document.add(new Paragraph("Nhà cung cấp: " + nhaCungCapBUS.getTenNccByMaNcc(pn.getMaNCC()), infoFont));
+            document.add(new Paragraph("Ngày ghi phiếu: " + pn.getNgayNhap().toString(), infoFont));
+            document.add(new Paragraph("Tổng tiền: " + pn.getTongTien(), infoFont));
+            // Thêm một khoảng cách
+            document.add(new Paragraph("\n"));
+
+            Font tableHeaderFont = new Font(baseFont, 12);
+            Font tableDataFont = new Font(baseFont, 12);
+            // Tạo bảng chi tiết phiếu nhập
+            PdfPTable table = new PdfPTable(3);
+            table.setWidthPercentage(100);
+            // Đặt tiêu đề bảng
+            table.addCell(new Phrase("SẢN PHẨM", tableHeaderFont));
+            table.addCell(new Phrase("SỐ LƯỢNG", tableHeaderFont));
+            table.addCell(new Phrase("THÀNH TIỀN", tableHeaderFont));
+            // Dữ liệu chi tiết phiếu nhập
+            for (ChiTietPhieuNhapDTO ct : chiTietPhieuNhapBUS.getAllChiTietPhieuNhapByMaPn(maPN)) {
+                table.addCell(new Phrase(sanPhamBUS.getTenSanPhamByMaSanPham(ct.getMaSP()), tableDataFont));
+                table.addCell(new Phrase(String.valueOf(ct.getSoLuongSP()), tableDataFont));
+                table.addCell(new Phrase(String.valueOf(ct.getGiaNhap()), tableDataFont));
+            }
+            // Thêm bảng vào tài liệu
+            document.add(table);
+            // Đóng tài liệu
+            document.close();
+            JOptionPane.showMessageDialog(this, "Xuất PDF thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi xuất PDF: " + e.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
