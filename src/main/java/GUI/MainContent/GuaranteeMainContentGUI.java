@@ -26,7 +26,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class GuaranteeMainContentGUI extends JPanel{
-    private UIButton btnAdd, btnDelete, btnEdit, btnView;
+    private UIButton btnAdd, btnDelete, btnEdit;
     private JComboBox<String> cbFilter;
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
@@ -62,12 +62,9 @@ public class GuaranteeMainContentGUI extends JPanel{
         btnDelete.addActionListener(e -> deleteGuarantee());
         btnEdit = new UIButton("menuButton", "SỬA", 90, 40, "/Icon/sua_icon.png");
         btnEdit.addActionListener(e -> editGuarantee());
-        btnView = new UIButton("menuButton","XEM" ,90, 40, "/Icon/chitiet_icon.png");
-        btnView.addActionListener(e -> viewGuarantee());
         pnlButton.add(btnAdd);
         pnlButton.add(btnDelete);
         pnlButton.add(btnEdit);
-        pnlButton.add(btnView);
         applyPermissions(taiKhoan.getTenDangNhap(), 10); 
             
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));

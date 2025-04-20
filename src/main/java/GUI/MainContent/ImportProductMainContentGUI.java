@@ -55,7 +55,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 public class ImportProductMainContentGUI extends JPanel implements ReloadablePanel{
-    private UIButton btnAdd ,btnView, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnAddToPN, btnExportPDF;
+    private UIButton btnAdd ,btnView, btnPdf, btnThemVaoPhieu, btnXoaKhoiPhieu, btnSuaSoLuong, btnAddToPN, btnExportPDF;
     private UITextField txtSearch, txtSoLuong, txtMaPN, txtMaNV, txtTongTien, txtSearchSach;
     private JComboBox<String> cbMaNCC;
     private UITable tblContent, tblForProduct , tblForForm;
@@ -93,8 +93,11 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         btnAdd.addActionListener(e -> resetFormInput());
         btnView = new UIButton("menuButton", "XEM", 90, 40, "/Icon/chitiet_icon.png");
         btnView.addActionListener(e -> viewChiTietPhieuNhap());
+        btnPdf = new UIButton("menuButton", "PDF", 90, 40, "/Icon/pdf_icon.png");
+        btnPdf.addActionListener(e -> exportPdf());
         pnlButton.add(btnAdd);
         pnlButton.add(btnView);
+        pnlButton.add(btnPdf);
         
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
@@ -527,7 +530,6 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            
             // Lưu file PDF
             String filePath = "./phieu/phieunhap/PhieuNhap" + maPN + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
@@ -572,5 +574,15 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi xuất PDF: " + e.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void exportPdf(){
+        int selectedRow = tblContent.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int maPN = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
+        exportToPDF(maPN);
     }
 }

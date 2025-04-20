@@ -21,7 +21,7 @@ public class UIConstants {
     public static final Color BLACK_FONT = new Color(0,0,0);
     
     // Màu sắc chính
-    public static final Color MAIN_BACKGROUND = new Color(204, 204, 204); // Xám nhạt
+    public static final Color MAIN_BACKGROUND = new Color(233, 233, 233); // Xám nhạt
     public static final Color SUB_BACKGROUND = new Color(128,128,128); // Xám thường 
     public static final Color MAIN_BUTTON = new Color(15, 41, 47); //Lục đen
     public static final Color HOVER_BUTTON = new Color(203, 45, 111);//Hồng

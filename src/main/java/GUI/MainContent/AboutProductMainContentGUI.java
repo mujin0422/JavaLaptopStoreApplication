@@ -485,9 +485,5 @@ public class AboutProductMainContentGUI extends JPanel{
             }
         }
     }
-
-    
-    
-        
     
 }

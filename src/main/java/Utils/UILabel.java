@@ -2,7 +2,6 @@ package Utils;
 
 import javax.swing.JLabel;
 import java.awt.Dimension;
-import java.awt.Font;
 
 public class UILabel extends JLabel {
     
