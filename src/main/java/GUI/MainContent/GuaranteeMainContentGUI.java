@@ -5,6 +5,7 @@ import BUS.KhachHangBUS;
 import BUS.PhieuBaoHanhBUS;
 import BUS.PhieuXuatBUS;
 import BUS.SanPhamBUS;
+import BUS.TaiKhoanBUS;
 import DTO.PhieuBaoHanhDTO;
 import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditGuaranteeGUI;
@@ -35,6 +36,7 @@ public class GuaranteeMainContentGUI extends JPanel{
     private SanPhamBUS sanPhamBUS;
     private PhieuXuatBUS phieuXuatBUS;
     private KhachHangBUS khachHangBUS;
+    private TaiKhoanBUS taiKhoanBUS;
     
     public GuaranteeMainContentGUI(TaiKhoanDTO taiKhoan){
         this.sanPhamBUS = new SanPhamBUS();
@@ -42,6 +44,7 @@ public class GuaranteeMainContentGUI extends JPanel{
         this.khachHangBUS = new KhachHangBUS();
         this.phieuBaoHanhBUS = new PhieuBaoHanhBUS();
         this.chiTietSanPhamBUS  = new ChiTietSanPhamBUS();
+        this.taiKhoanBUS = new TaiKhoanBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
         this.setLayout(new BorderLayout(5, 5));
@@ -65,6 +68,7 @@ public class GuaranteeMainContentGUI extends JPanel{
         pnlButton.add(btnDelete);
         pnlButton.add(btnEdit);
         pnlButton.add(btnView);
+        applyPermissions(taiKhoan.getTenDangNhap(), 10); 
             
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
@@ -99,6 +103,12 @@ public class GuaranteeMainContentGUI extends JPanel{
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
         loadTableData();
+    }
+    
+    private void applyPermissions(String username, int maCN) {
+        btnAdd.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        btnEdit.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        btnDelete.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
     public void loadTableData() {

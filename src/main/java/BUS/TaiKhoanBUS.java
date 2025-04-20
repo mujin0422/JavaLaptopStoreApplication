@@ -38,4 +38,8 @@ public class TaiKhoanBUS {
     public ArrayList<Integer> getDanhSachMaCnByUsername(String username){
         return TaiKhoanDAO.getDanhSachMaCnByUsername(username);
     }
+    
+    public boolean hasPermission(String username, int maCN, String maHD){
+        return TaiKhoanDAO.hasPermission(username, maCN, maHD);
+    }
 }

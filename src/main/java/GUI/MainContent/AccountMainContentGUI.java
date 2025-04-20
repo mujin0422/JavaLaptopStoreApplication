@@ -55,6 +55,7 @@ public class AccountMainContentGUI extends JPanel{
         pnlButton.add(btnAdd);
         pnlButton.add(btnDelete);
         pnlButton.add(btnEdit);
+        applyPermissions(taiKhoan.getTenDangNhap(), 5);
 
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
@@ -99,6 +100,12 @@ public class AccountMainContentGUI extends JPanel{
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlContent, BorderLayout.CENTER);
         loadTableData();
+    }
+    
+    private void applyPermissions(String username, int maCN) {
+        btnAdd.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        btnEdit.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        btnDelete.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
     private void loadTableData(){

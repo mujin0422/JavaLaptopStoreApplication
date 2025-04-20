@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import BUS.SanPhamBUS;
+import BUS.TaiKhoanBUS;
 import DTO.SanPhamDTO;
 import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditProductGUI;
@@ -31,9 +32,11 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
+    private TaiKhoanBUS taiKhoanBUS;
 
     public ProductMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.sanPhamBUS = new SanPhamBUS();
+        this.taiKhoanBUS = new TaiKhoanBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH - 200 - 10, UIConstants.HEIGHT - 200 - 10));
         this.setLayout(new BorderLayout(5, 5));
@@ -54,6 +57,7 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
         pnlButton.add(btnAdd);
         pnlButton.add(btnDelete);
         pnlButton.add(btnEdit);
+        applyPermissions(taiKhoan.getTenDangNhap(), 1);
 
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
         pnlSearchFilter.setBackground(UIConstants.MAIN_BACKGROUND);
@@ -77,6 +81,12 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
         this.add(pnlContent, BorderLayout.CENTER);
         loadTableData();
         addSearchFunctionality();
+    }
+    
+    private void applyPermissions(String username, int maCN) {
+        btnAdd.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        btnEdit.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        btnDelete.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
     public void loadTableData() { 

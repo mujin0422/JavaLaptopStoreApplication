@@ -30,16 +30,16 @@ public final class MainLayoutGUI extends JFrame {
     private UIButton btnLogout;
     
     String[][] buttonInfo = {
-        {"SẢN PHẨM", "/Icon/Laptop_icon.png"},
-        {"CẤU HÌNH", "/Icon/ThongTinSach_icon.png"},
-        {"KHÁCH HÀNG", "/Icon/KhachHang_icon.png"},
-        {"NHÂN VIÊN", "/Icon/NhanVien_icon.png"},
-        {"TÀI KHOẢN", "/Icon/TaiKhoan_icon.png"},
-        {"NHÀ CUNG CẤP", "/Icon/NhaCungCap_icon.png"},
-        {"NHẬP HÀNG", "/Icon/NhapHang_icon.png"},
-        {"XUẤT HÀNG", "/Icon/XuatHang_icon.png"},
-        {"PHÂN QUYỀN", "/Icon/PhanQuyen_icon.png"},
-        {"BẢO HÀNH", "/Icon/TaiKhoan_icon.png"},
+        {"SẢN PHẨM", "/Icon/Laptop_icon.png"},              //1
+        {"CẤU HÌNH", "/Icon/ThongTinSach_icon.png"},        //2
+        {"KHÁCH HÀNG", "/Icon/KhachHang_icon.png"},         //3
+        {"NHÂN VIÊN", "/Icon/NhanVien_icon.png"},           //4
+        {"TÀI KHOẢN", "/Icon/TaiKhoan_icon.png"},           //5
+        {"NHÀ CUNG CẤP", "/Icon/NhaCungCap_icon.png"},      //6
+        {"NHẬP HÀNG", "/Icon/NhapHang_icon.png"},           //7
+        {"XUẤT HÀNG", "/Icon/XuatHang_icon.png"},           //8
+        {"PHÂN QUYỀN", "/Icon/PhanQuyen_icon.png"},         //9
+        {"BẢO HÀNH", "/Icon/TaiKhoan_icon.png"},            //10
         {"THỐNG KÊ", "/Icon/ThongKe_icon.png"},
     };
     
@@ -126,8 +126,7 @@ public final class MainLayoutGUI extends JFrame {
         for (int i = 1; i <= 11; i++) {
             String label = buttonInfo[i - 1][0];
             String iconPath = buttonInfo[i - 1][1];
-            UIButton button = new UIButton("menuButton", label, 180, 40);
-            button.setButtonIcon(iconPath);
+            UIButton button = new UIButton("menuButton", label, 180, 40, iconPath);
             buttons.add(button);
             JPanel targetPanel;
             switch (i) {

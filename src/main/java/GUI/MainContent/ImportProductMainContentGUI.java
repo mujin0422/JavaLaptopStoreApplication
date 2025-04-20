@@ -6,6 +6,7 @@ import BUS.NhaCungCapBUS;
 import BUS.NhanVienBUS;
 import BUS.PhieuNhapBUS;
 import BUS.SanPhamBUS;
+import BUS.TaiKhoanBUS;
 import DTO.ChiTietPhieuNhapDTO;
 import DTO.ChiTietSanPhamDTO;
 import DTO.NhaCungCapDTO;
@@ -57,6 +58,7 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
     private NhanVienBUS nhanVienBUS;
     private ChiTietPhieuNhapBUS chiTietPhieuNhapBUS;
     private ChiTietSanPhamBUS chiTietSanPhamBUS;
+    private TaiKhoanBUS taiKhoanBUS;
 
     public ImportProductMainContentGUI(TaiKhoanDTO taiKhoan) {
         phieuNhapBUS = new PhieuNhapBUS();
@@ -65,6 +67,7 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         chiTietPhieuNhapBUS = new ChiTietPhieuNhapBUS();
         chiTietSanPhamBUS = new ChiTietSanPhamBUS();
         sanPhamBUS = new SanPhamBUS();
+        taiKhoanBUS = new TaiKhoanBUS();
         
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
@@ -210,6 +213,7 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
         pnlContent.add(scrollPane, BorderLayout.CENTER);
         //===============================( End Panel Content )===========================//
+        applyPermissions(taiKhoan.getTenDangNhap(), 7);
         
         
         this.add(pnlHeader, BorderLayout.NORTH);
@@ -218,6 +222,13 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         this.add(pnlContent, BorderLayout.SOUTH);
         loadTableData();
         addSearchFunctionality();
+    }
+    
+    private void applyPermissions(String username, int maCN) {
+        btnAdd.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        btnAddToPN.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        //btnEdit.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        //btnDelete.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
     public void loadTableData(){

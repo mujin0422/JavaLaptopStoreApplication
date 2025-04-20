@@ -6,6 +6,7 @@ import BUS.KhachHangBUS;
 import BUS.NhanVienBUS;
 import BUS.PhieuXuatBUS;
 import BUS.SanPhamBUS;
+import BUS.TaiKhoanBUS;
 import DTO.ChiTietPhieuXuatDTO;
 import DTO.ChiTietSanPhamDTO;
 import DTO.KhachHangDTO;
@@ -58,6 +59,7 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
     private NhanVienBUS nhanVienBUS;
     private ChiTietPhieuXuatBUS chiTietPhieuXuatBUS;
     private ChiTietSanPhamBUS chiTietSanPhamBUS;
+    private TaiKhoanBUS taiKhoanBUS;
 
     public ExportProductMainContentGUI(TaiKhoanDTO taiKhoan) {
         phieuXuatBUS = new PhieuXuatBUS();
@@ -66,6 +68,7 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         chiTietPhieuXuatBUS = new ChiTietPhieuXuatBUS();
         chiTietSanPhamBUS = new ChiTietSanPhamBUS();
         sanPhamBUS = new SanPhamBUS();
+        taiKhoanBUS = new TaiKhoanBUS();
         
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
@@ -217,13 +220,20 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
         pnlContent.add(scrollPane, BorderLayout.CENTER);
         //===============================( End Panel Content )===========================//
-        
+        applyPermissions(taiKhoan.getTenDangNhap(), 8);
         
         this.add(pnlHeader, BorderLayout.NORTH);
         this.add(pnlForm, BorderLayout.CENTER);
         this.add(pnlProduct, BorderLayout.EAST);
         this.add(pnlContent, BorderLayout.SOUTH);
         loadTableData();
+    }
+    
+    private void applyPermissions(String username, int maCN) {
+        btnAdd.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        btnAddToPX.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        //btnEdit.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        //btnDelete.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
     public void loadTableData(){

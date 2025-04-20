@@ -5,6 +5,7 @@ import BUS.DoPhanGiaiBUS;
 import BUS.PhanLoaiBUS;
 import BUS.RamBUS;
 import BUS.RomBUS;
+import BUS.TaiKhoanBUS;
 import BUS.ThuongHieuBUS;
 import DTO.CpuDTO;
 import DTO.DoPhanGiaiDTO;
@@ -36,6 +37,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class AboutProductMainContentGUI extends JPanel{
+    private UIButton addRAM, addROM, addCPU, addBrand, addResolution, addCategory;
+    private UIButton editRAM, editROM, editCPU, editBrand, editResolution, editCategory;
+    private UIButton deleteRAM, deleteROM, deleteCPU, deleteBrand, deleteResolution, deleteCategory;
     private UIAboutPanel pnlRAM, pnlROM, pnlCPU, pnlThuongHieu, pnlDoPhanGiai, pnlPhanLoai;
     private UITable tblRAM, tblROM, tblCPU, tblThuongHieu, tblDoPhanGiai, tblPhanLoai;
     private DefaultTableModel tblModelRAM, tblModelROM, tblModelCPU, tblModelThuongHieu, tblModelDoPhanGiai, tblModelPhanLoai;
@@ -45,8 +49,10 @@ public class AboutProductMainContentGUI extends JPanel{
     private ThuongHieuBUS thuongHieuBus;
     private DoPhanGiaiBUS doPhanGiaiBus;
     private PhanLoaiBUS phanLoaiBus;
+    private TaiKhoanBUS taiKhoanBUS;
     
     public AboutProductMainContentGUI(TaiKhoanDTO taiKhoan){
+        this.taiKhoanBUS = new TaiKhoanBUS();
         this.setBackground(UIConstants.MAIN_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
         this.setLayout(new FlowLayout(10));
@@ -57,11 +63,11 @@ public class AboutProductMainContentGUI extends JPanel{
         //=================================( PANEL RAM )================================//
         ramBus = new RamBUS();
         pnlRAM = new UIAboutPanel("/Icon/RAM_icon.png","RAM", pnlWidth , pnlHeight);
-        UIButton addRAM = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
+        addRAM = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
         addRAM.addActionListener(e -> addRam());
-        UIButton deleteRAM = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        deleteRAM = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
         deleteRAM.addActionListener(e -> deleteRam());
-        UIButton editRAM = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        editRAM = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
         editRAM.addActionListener(e -> editRam());
         pnlRAM.addButton(addRAM);
         pnlRAM.addButton(deleteRAM);
@@ -79,11 +85,11 @@ public class AboutProductMainContentGUI extends JPanel{
         //=================================( PANEL ROM )================================//
         romBus = new RomBUS();
         pnlROM = new UIAboutPanel("/Icon/ROM_icon.png","ROM", pnlWidth , pnlHeight);
-        UIButton addROM = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
+        addROM = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
         addROM.addActionListener(e -> addRom());
-        UIButton deleteROM = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        deleteROM = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
         deleteROM.addActionListener(e -> deleteRom());
-        UIButton editROM = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        editROM = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
         editROM.addActionListener(e -> editRom());
         pnlROM.addButton(addROM);
         pnlROM.addButton(deleteROM);
@@ -101,11 +107,11 @@ public class AboutProductMainContentGUI extends JPanel{
         //=================================( PANEL CPU )================================//
         cpuBus = new CpuBUS();
         pnlCPU = new UIAboutPanel("/Icon/CPU_icon.png","CPU", pnlWidth , pnlHeight);
-        UIButton addCPU = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
+        addCPU = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
         addCPU.addActionListener(e -> addCpu());
-        UIButton deleteCPU = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        deleteCPU = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
         deleteCPU.addActionListener(e -> deleteCpu());
-        UIButton editCPU = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        editCPU = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
         editCPU.addActionListener(e -> editCpu());
         pnlCPU.addButton(addCPU);
         pnlCPU.addButton(deleteCPU);
@@ -123,11 +129,11 @@ public class AboutProductMainContentGUI extends JPanel{
         //=============================( PANEL THUONG HIEU )============================//
         thuongHieuBus = new ThuongHieuBUS();
         pnlThuongHieu = new UIAboutPanel("/Icon/ThuongHieu_icon.png","THƯƠNG HIỆU", pnlWidth , pnlHeight);
-        UIButton addBrand = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
+        addBrand = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
         addBrand.addActionListener(e -> addThuongHieu());
-        UIButton deleteBrand = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        deleteBrand = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
         deleteBrand.addActionListener(e -> deleteThuongHieu());
-        UIButton editBrand = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        editBrand = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
         editBrand.addActionListener(e -> editThuongHieu());
         pnlThuongHieu.addButton(addBrand);
         pnlThuongHieu.addButton(deleteBrand);
@@ -143,13 +149,13 @@ public class AboutProductMainContentGUI extends JPanel{
         
         
         //=============================( PANEL DO PHAN GIAI )===========================//
-         doPhanGiaiBus = new DoPhanGiaiBUS();
+        doPhanGiaiBus = new DoPhanGiaiBUS();
         pnlDoPhanGiai = new UIAboutPanel("/Icon/DoPhanGiai_icon.png","ĐỘ PHÂN GIẢI", pnlWidth , pnlHeight);
-        UIButton addResolution = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
+        addResolution = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
         addResolution.addActionListener(e -> addDoPhanGiai());
-        UIButton deleteResolution = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        deleteResolution = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
         deleteResolution.addActionListener(e -> deleteDoPhanGiai());
-        UIButton editResolution = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        editResolution = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
         editResolution.addActionListener(e -> editDoPhanGiai());
         pnlDoPhanGiai.addButton(addResolution);
         pnlDoPhanGiai.addButton(deleteResolution);
@@ -167,11 +173,11 @@ public class AboutProductMainContentGUI extends JPanel{
         //==============================( PANEL PHAN LOAI )=============================//
         phanLoaiBus = new PhanLoaiBUS();
         pnlPhanLoai = new UIAboutPanel("/Icon/PhanLoai_icon.png","PHÂN LOẠI", pnlWidth , pnlHeight);
-        UIButton addCategory = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
+        addCategory = new UIButton("add", "THÊM", 90, 40, "/Icon/them_icon.png");
         addCategory.addActionListener(e -> addPhanLoai());
-        UIButton deleteCategory = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        deleteCategory = new UIButton("delete", "XÓA", 90, 40, "/Icon/xoa_icon.png");
         deleteCategory.addActionListener(e -> deletePhanLoai());
-        UIButton editCategory = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        editCategory = new UIButton("edit", "SỬA", 90, 40, "/Icon/sua_icon.png");
         editCategory.addActionListener(e -> editPhanLoai());
         pnlPhanLoai.addButton(addCategory);
         pnlPhanLoai.addButton(deleteCategory);
@@ -185,6 +191,7 @@ public class AboutProductMainContentGUI extends JPanel{
         //============================( End Panel Phan Loai )===========================//
         
         
+        applyPermissions(taiKhoan.getTenDangNhap(), 2);
         this.add(pnlRAM);
         this.add(pnlROM);
         this.add(pnlCPU);
@@ -197,6 +204,27 @@ public class AboutProductMainContentGUI extends JPanel{
         loadTableDataThuongHieu();
         loadTableDataDoPhanGiai();
         loadTableDataPhanLoai();
+    }
+    
+    private void applyPermissions(String username, int maCN) {
+        addRAM.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        addROM.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        addCPU.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        addBrand.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        addResolution.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        addCategory.setVisible(taiKhoanBUS.hasPermission(username, maCN, "add"));
+        editRAM.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        editROM.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        editCPU.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        editBrand.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        editResolution.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        editCategory.setVisible(taiKhoanBUS.hasPermission(username, maCN, "edit"));
+        deleteRAM.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
+        deleteROM.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
+        deleteCPU.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
+        deleteBrand.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
+        deleteResolution.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
+        deleteCategory.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
     private void loadTableDataRAM(){
