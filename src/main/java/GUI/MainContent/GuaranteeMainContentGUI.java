@@ -32,18 +32,10 @@ public class GuaranteeMainContentGUI extends JPanel{
     private JPanel pnlHeader, pnlContent;
     private DefaultTableModel tableModel;
     private PhieuBaoHanhBUS phieuBaoHanhBUS;
-    private ChiTietSanPhamBUS chiTietSanPhamBUS;
-    private SanPhamBUS sanPhamBUS;
-    private PhieuXuatBUS phieuXuatBUS;
-    private KhachHangBUS khachHangBUS;
     private TaiKhoanBUS taiKhoanBUS;
     
     public GuaranteeMainContentGUI(TaiKhoanDTO taiKhoan){
-        this.sanPhamBUS = new SanPhamBUS();
-        this.phieuXuatBUS = new PhieuXuatBUS();
-        this.khachHangBUS = new KhachHangBUS();
         this.phieuBaoHanhBUS = new PhieuBaoHanhBUS();
-        this.chiTietSanPhamBUS  = new ChiTietSanPhamBUS();
         this.taiKhoanBUS = new TaiKhoanBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH_CONTENT, UIConstants.HEIGHT_CONTENT));
@@ -157,10 +149,6 @@ public class GuaranteeMainContentGUI extends JPanel{
                 JOptionPane.showMessageDialog(this, "Xóa thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-    private void viewGuarantee() {
-       
     }
 
     private void filterGuarantee() {
