@@ -35,6 +35,7 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Window;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -474,6 +475,11 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         PhieuXuatDTO px = phieuXuatBUS.getById(maPX);
         ArrayList<ChiTietPhieuXuatDTO> dsChiTiet = chiTietPhieuXuatBUS.getAllChiTietPhieuXuatByMaPx(maPX);
         ArrayList<ChiTietSanPhamDTO> dsSerial = chiTietSanPhamBUS.getAllByMaPX(maPX);
+        
+        File dir = new File("./phieu/phieuxuat");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
         // Đường dẫn file
         String filePath = "./phieu/phieuxuat/PhieuXuat" + maPX + ".pdf";
         Document document = new Document();

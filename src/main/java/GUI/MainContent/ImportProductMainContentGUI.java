@@ -37,6 +37,7 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -521,6 +522,12 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         try {
             PhieuNhapDTO pn = phieuNhapBUS.getById(maPN);
             Document document = new Document();
+            
+            File dir = new File("./phieu/phieunhap");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            
             // Lưu file PDF
             String filePath = "./phieu/phieunhap/PhieuNhap" + maPN + ".pdf";
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
