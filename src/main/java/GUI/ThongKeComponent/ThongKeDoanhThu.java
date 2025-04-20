@@ -4,468 +4,334 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-
-import BUS.ChiTietPhieuXuatBUS;
+import BUS.PhieuNhapBUS;
 import BUS.PhieuXuatBUS;
-import BUS.SanPhamBUS;
-import DTO.ChiTietPhieuXuatDTO;
-import DTO.PhieuXuatDTO;
-import DTO.SanPhamDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
 import Utils.UIScrollPane;
 import Utils.UITable;
 import Utils.UITextField;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.plot.CategoryPlot;
 
 public class ThongKeDoanhThu extends JPanel {
-    private JTable table;
-    private DefaultTableModel model;
-    private JTextField txtSearch, txtDateFrom, txtDateTo;
-    private JButton btnLamMoi, btnLoc, btnToggleView;
-    private JComboBox<String> cbxThongKeTheo;
-    private SanPhamBUS sanPhamBUS = new SanPhamBUS();
-    private ChiTietPhieuXuatBUS ctpxBUS = new ChiTietPhieuXuatBUS();
-    private PhieuXuatBUS pxBUS = new PhieuXuatBUS();
-    private JPanel contentPanel;
-    private JScrollPane tableScrollPane;
-    private ChartPanel chartPanel;
-    private boolean isTableView = true;
+    private UIButton btnLamMoi, btnLoc;
+    private UIButton btnOptionMonth, btnOptionYear, btnOptionDay;
+    private PhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
+    private PhieuXuatBUS phieuXuatBUS = new PhieuXuatBUS();
+    private JPanel pnlOption, pnlContent;
 
     public ThongKeDoanhThu() {
-        setLayout(new BorderLayout(10, 10));
-        setBackground(Color.WHITE);
-        setBorder(new EmptyBorder(15, 15, 15, 15));
+        this.setLayout(new BorderLayout(5, 5));
+        this.setBackground(UIConstants.MAIN_BACKGROUND);
+        this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        // Title
-        UILabel lblTitle = new UILabel("Thống kê doanh thu");
-        lblTitle.setFont(UIConstants.TITLE_FONT);
-        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-        add(lblTitle, BorderLayout.NORTH);
+        //=================================(PANEL OPTION)===============================//
+        pnlOption = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        pnlOption.setPreferredSize(new Dimension(0, 25));
+        pnlOption.setBackground(UIConstants.MAIN_BACKGROUND);
+        btnOptionYear = new UIButton("menuButton", "NĂM", 70, 25);
+        btnOptionMonth = new UIButton("menuButton", "THÁNG", 70, 25);
+        btnOptionDay = new UIButton("menuButton", "NGÀY", 70, 25);
+        btnOptionYear.addActionListener(e -> switchPanel(OptionYearPanel()));
+        btnOptionMonth.addActionListener(e -> switchPanel(OptionMonthPanel()));
+        btnOptionDay.addActionListener(e -> switchPanel(OptionDayPanel()));
+        pnlOption.add(btnOptionYear);
+        pnlOption.add(btnOptionMonth);
+        pnlOption.add(btnOptionDay);
+        //===============================(End Panel Option)=============================//
 
-        // Filter Panel
-        JPanel pnlFilter = new JPanel();
-        pnlFilter.setLayout(new GridBagLayout());
-        pnlFilter.setBackground(Color.WHITE);
-        pnlFilter.setBorder(new EmptyBorder(10, 0, 10, 0));
-        pnlFilter.setPreferredSize(new Dimension(0, 150));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        //=================================(PANEL CONTENT)==============================//
+        pnlContent = new JPanel(new BorderLayout());
+        pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
+        //=================================(End Panel Content)==============================//
+        
 
-        // Search and Filter Type
-        JPanel pnlSearchWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        pnlSearchWrapper.setBackground(Color.WHITE);
-        pnlSearchWrapper.setBorder(BorderFactory.createTitledBorder("Tìm kiếm"));
-        txtSearch = new UITextField(30, 14);
-        txtSearch.setPreferredSize(new Dimension(250, 30));
-        pnlSearchWrapper.add(txtSearch);
+        this.add(pnlOption, BorderLayout.NORTH);
+        this.add(pnlContent, BorderLayout.CENTER);
+        switchPanel(OptionYearPanel());
+    }
+    
+    private void switchPanel(JPanel newPanel){
+        pnlContent.removeAll();
+        pnlContent.add(newPanel, BorderLayout.CENTER);
+        pnlContent.revalidate();
+        pnlContent.repaint();
+    }
+        
+    private JPanel OptionYearPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(UIConstants.MAIN_BACKGROUND);
 
-        String[] thongKeTheo = {"Sản phẩm", "Tháng", "Năm"};
-        cbxThongKeTheo = new JComboBox<>(thongKeTheo);
-        cbxThongKeTheo.setPreferredSize(new Dimension(120, 30));
-        pnlSearchWrapper.add(new JLabel("Thống kê theo:"));
-        pnlSearchWrapper.add(cbxThongKeTheo);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        pnlFilter.add(pnlSearchWrapper, gbc);
+        // ===================== (NORTH - Filter Panel) ===================== //
+        JPanel panelForFilter = new JPanel(new FlowLayout(FlowLayout.LEFT, 5,5));
+        panelForFilter.setBackground(Color.WHITE);
+        panelForFilter.setPreferredSize(new Dimension(0, 35));
+        panelForFilter.add(new UILabel("Từ năm:", 60, 25));
+        UITextField txtYearFrom = new UITextField(70, 25);
+        panelForFilter.add(txtYearFrom);
+        panelForFilter.add(new UILabel("Đến năm:", 70, 25));
+        UITextField txtYearTo = new UITextField(70, 25);
+        panelForFilter.add(txtYearTo);
+        btnLoc = new UIButton("confirm", "LỌC", 50, 25);
+        panelForFilter.add(btnLoc);
 
-        txtSearch.addActionListener(e -> locDuLieu());
+        // ===================== (CENTER - Biểu đồ) ===================== //
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        // Date Range
-        JPanel pnlDateWrapper = new JPanel(new GridBagLayout());
-        pnlDateWrapper.setBackground(Color.WHITE);
-        pnlDateWrapper.setBorder(BorderFactory.createTitledBorder("Lọc theo ngày"));
-        GridBagConstraints gbcDate = new GridBagConstraints();
-        gbcDate.fill = GridBagConstraints.HORIZONTAL;
-        gbcDate.insets = new Insets(5, 5, 5, 5);
+        JFreeChart barChart = ChartFactory.createBarChart(
+            "THỐNG KÊ LỢI NHUẬN THEO NĂM", "", "", dataset, PlotOrientation.VERTICAL,
+            true, true, false
+        );
 
-        gbcDate.gridx = 0;
-        pnlDateWrapper.add(new UILabel("Từ:"), gbcDate);
-        gbcDate.gridx = 1;
-        txtDateFrom = new UITextField(15, 14);
-        txtDateFrom.setPreferredSize(new Dimension(120, 30));
-        pnlDateWrapper.add(txtDateFrom, gbcDate);
+        barChart.setBackgroundPaint(UIConstants.WHITE_FONT);
+        CategoryPlot plot = barChart.getCategoryPlot();
+        plot.setBackgroundPaint(UIConstants.WHITE_FONT);
+        plot.setRangeGridlinePaint(Color.GRAY);
+        plot.setDomainGridlinePaint(Color.GRAY);
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setNumberFormatOverride(new DecimalFormat("#,###"));  
 
-        gbcDate.gridx = 2;
-        pnlDateWrapper.add(new JLabel("Đến:"), gbcDate);
-        gbcDate.gridx = 3;
-        txtDateTo = new UITextField(15, 14);
-        txtDateTo.setPreferredSize(new Dimension(120, 30));
-        pnlDateWrapper.add(txtDateTo, gbcDate);
+        ChartPanel chartPanel = new ChartPanel(barChart);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        pnlFilter.add(pnlDateWrapper, gbc);
+        // ===================== (SOUTH - Bảng dữ liệu) ===================== //
+        String[] columnNames = {"NĂM", "VỐN", "DOANH THU", "LỢI NHUẬN"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        UITable table = new UITable(model);
+        UIScrollPane scrollPane = new UIScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(0, 150));
 
-        // Buttons
-        JPanel pnlRefreshWrapper = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        pnlRefreshWrapper.setBackground(Color.WHITE);
-        pnlRefreshWrapper.setBorder(BorderFactory.createTitledBorder(""));
+        // ===================== (Sự kiện LỌC) ===================== //
+        btnLoc.addActionListener(e -> {
+            try {
+                int fromYear = Integer.parseInt(txtYearFrom.getText());
+                int toYear = Integer.parseInt(txtYearTo.getText());
 
-        btnLamMoi = new UIButton("primary", "Làm mới");
-        btnLamMoi.setPreferredSize(new Dimension(100, 30));
-        pnlRefreshWrapper.add(btnLamMoi);
+                if (fromYear < 2024 || toYear < 2024) {
+                    JOptionPane.showMessageDialog(this, "Chỉ được thống kê từ năm 2024 trở đi.");
+                    return;
+                }
+                if (fromYear > toYear) {
+                    JOptionPane.showMessageDialog(this, "Năm bắt đầu phải nhỏ hơn hoặc bằng năm kết thúc.");
+                    return;
+                }
+                if ((toYear - fromYear) > 30) {
+                    JOptionPane.showMessageDialog(this, "Khoảng cách giữa hai năm không được vượt quá 30 năm.");
+                    return;
+                }
 
-        btnLoc = new UIButton("success", "Lọc");
-        btnLoc.setPreferredSize(new Dimension(100, 30));
-        pnlRefreshWrapper.add(btnLoc);
+                model.setRowCount(0);
+                dataset.clear();
 
-        btnToggleView = new UIButton("info", "Xem Biểu đồ");
-        btnToggleView.setPreferredSize(new Dimension(100, 30));
-        pnlRefreshWrapper.add(btnToggleView);
+                for (int year = fromYear; year <= toYear; year++) {
+                    double tongVon = phieuNhapBUS.getTongTienTheoNam(year);
+                    double tongDoanhThu = phieuXuatBUS.getTongTienTheoNam(year);
+                    double loiNhuan = tongDoanhThu - tongVon;
+                    // Đưa vào biểu đồ
+                    dataset.addValue(tongVon, "VỐN", String.valueOf(year));
+                    dataset.addValue(tongDoanhThu, "DOANH THU", String.valueOf(year));
+                    // Đưa vào bảng
+                    model.addRow(new Object[]{
+                            year,
+                            String.format("%,.0f", tongVon),
+                            String.format("%,.0f", tongDoanhThu),
+                            String.format("%,.0f", loiNhuan)
+                    });
+                }
 
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        pnlFilter.add(pnlRefreshWrapper, gbc);
-
-        add(pnlFilter, BorderLayout.NORTH);
-
-        // Content Panel (Table or Chart)
-        contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(Color.WHITE);
-
-        // Table Setup
-        String[] columns = {"STT", "Mã sản phẩm", "Vốn", "Doanh thu", "Lợi nhuận"};
-        model = new DefaultTableModel(columns, 0);
-        table = new UITable(model);
-        tableScrollPane = new UIScrollPane(table);
-        tableScrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-
-        // Chart Setup (initially null)
-        chartPanel = null;
-
-        // Add table to content panel initially
-        contentPanel.add(tableScrollPane, BorderLayout.CENTER);
-        add(contentPanel, BorderLayout.CENTER);
-
-        // Action Listeners
-        btnLamMoi.addActionListener(e -> {
-            txtSearch.setText("");
-            txtDateFrom.setText("");
-            txtDateTo.setText("");
-            cbxThongKeTheo.setSelectedIndex(0);
-            locDuLieu();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập năm hợp lệ (ví dụ: 2024).");
+            }
         });
 
-        btnLoc.addActionListener(e -> locDuLieu());
+        // ===================== (Thêm vào mainPanel) ===================== //
+        mainPanel.add(panelForFilter, BorderLayout.NORTH);
+        mainPanel.add(chartPanel, BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.SOUTH);
 
-        btnToggleView.addActionListener(e -> {
-            isTableView = !isTableView;
-            btnToggleView.setText(isTableView ? "Xem Biểu đồ" : "Xem Bảng");
-            updateContentPanel();
+        return mainPanel;
+    }
+
+
+
+    private JPanel OptionMonthPanel() {
+        // Panel chính
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(UIConstants.MAIN_BACKGROUND);
+
+        // ===================== (NORTH - Filter Panel) ===================== //
+        JPanel panelForFilter = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        panelForFilter.setBackground(Color.WHITE);
+        panelForFilter.setPreferredSize(new Dimension(0, 35));
+        panelForFilter.add(new UILabel("Năm:", 40, 25));
+        UITextField txtYear = new UITextField(70, 25);
+        panelForFilter.add(txtYear);
+        UIButton btnLoc = new UIButton("confirm", "LỌC", 50, 25);
+        panelForFilter.add(btnLoc);
+
+        // ===================== (CENTER - Biểu đồ lợi nhuận theo tháng) ===================== //
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        JFreeChart barChart = ChartFactory.createBarChart( "THỐNG KÊ LỢI NHUẬN THEO THÁNG TRONG NĂM", "", "",dataset, PlotOrientation.VERTICAL, true, true, false );
+
+        barChart.setBackgroundPaint(UIConstants.WHITE_FONT);
+        CategoryPlot plot = barChart.getCategoryPlot();
+        plot.setBackgroundPaint(UIConstants.WHITE_FONT);
+        plot.setRangeGridlinePaint(Color.GRAY);
+        plot.setDomainGridlinePaint(Color.GRAY);
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setNumberFormatOverride(new DecimalFormat("#,###"));  
+        ChartPanel chartPanel = new ChartPanel(barChart);
+
+        // ===================== (SOUTH - Bảng dữ liệu) ===================== //
+        String[] columnNames = {"THÁNG", "VỐN", "DOANH THU", "LỢI NHUẬN"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        UITable table = new UITable(model);
+        UIScrollPane scrollPane = new UIScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(0, 150));
+
+        // ===================== (Sự kiện lọc) ===================== //
+        btnLoc.addActionListener(e -> {
+            try {
+                int nam = Integer.parseInt(txtYear.getText());
+                if (nam < 2024) {
+                    JOptionPane.showMessageDialog(this, "Chỉ được thống kê từ năm 2024 trở đi.");
+                    return;
+                }
+
+                dataset.clear();
+                model.setRowCount(0);
+
+                for (int thang = 1; thang <= 12; thang++) {
+                    double tongVon = phieuNhapBUS.getTongTienTheoThangNam(thang, nam);
+                    double tongDoanhThu = phieuXuatBUS.getTongTienTheoThangNam(thang, nam);
+                    double loiNhuan = tongDoanhThu - tongVon;
+
+                    dataset.addValue(tongVon, "VỐN", String.valueOf(thang));
+                    dataset.addValue(tongDoanhThu, "DOANH THU", String.valueOf(thang));
+
+                    model.addRow(new Object[]{
+                            thang,
+                            String.format("%,.0f", tongVon),
+                            String.format("%,.0f", tongDoanhThu),
+                            String.format("%,.0f", loiNhuan)
+                    });
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập năm hợp lệ (ví dụ: 2024).");
+            }
         });
 
-        locDuLieu();
+        // ===================== (Thêm vào mainPanel) ===================== //
+        mainPanel.add(panelForFilter, BorderLayout.NORTH);
+        mainPanel.add(chartPanel, BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.SOUTH);
+
+        return mainPanel;
     }
 
-    private void locDuLieu() {
-        String keyword = txtSearch.getText().trim();
-        String startDate = txtDateFrom.getText().trim();
-        String endDate = txtDateTo.getText().trim();
-        String thongKeTheo = (String) cbxThongKeTheo.getSelectedItem();
 
-        try {
-            String startDateConverted = chuyenDoiNgay(startDate);
-            String endDateConverted = chuyenDoiNgay(endDate);
+    private JPanel OptionDayPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(UIConstants.MAIN_BACKGROUND);
 
-            if (thongKeTheo.equals("Sản phẩm")) {
-                ArrayList<SanPhamDTO> ketQua = sanPhamBUS.searchSanPhamByMaOrTen(keyword);
-                if (startDateConverted != null && endDateConverted != null) {
-                    ketQua = sanPhamBUS.getSanPhamByDateRange(startDateConverted, endDateConverted);
-                }
-                hienThiDuLieuTheoSanPham(ketQua);
-            } else if (thongKeTheo.equals("Tháng")) {
-                hienThiDuLieuTheoThang(startDateConverted, endDateConverted);
-            } else if (thongKeTheo.equals("Năm")) {
-                hienThiDuLieuTheoNam(startDateConverted, endDateConverted);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi lọc dữ liệu: " + ex.getMessage());
-        }
-    }
+        // ===================== (NORTH - Bộ lọc) ===================== //
+        JPanel panelForFilter = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
+        panelForFilter.setBackground(Color.WHITE);
+        panelForFilter.setPreferredSize(new Dimension(0, 35));
+        panelForFilter.add(new UILabel("Ngày (dd/MM/yyyy):", 150, 25));
+        UITextField txtDate = new UITextField(100, 25);
+        panelForFilter.add(txtDate);
+        btnLoc = new UIButton("confirm", "LỌC", 50, 25);
+        panelForFilter.add(btnLoc);
 
-    private void hienThiDuLieuTheoSanPham(ArrayList<SanPhamDTO> danhSachSanPham) {
-        // Update Table
-        ArrayList<Object[]> rows = new ArrayList<>();
-        for (SanPhamDTO sp : danhSachSanPham) {
-            int soLuongBan = ctpxBUS.getTongSoLuongXuatTheoMaSP(sp.getMaSP());
-            int soLuongNhap = sp.getSoLuongTon();
-            double vonNhap = calculateVon(sp.getMaSP(), soLuongNhap);
-            double doanhThu = calculateDoanhThu(sp.getMaSP(), soLuongBan);
-            double loiNhuan = doanhThu - vonNhap;
-
-            rows.add(new Object[]{sp.getMaSP(), vonNhap, doanhThu, loiNhuan});
-        }
-        rows.sort((a, b) -> Double.compare((double) b[3], (double) a[3])); // Sắp xếp theo lợi nhuận giảm dần
-        model.setColumnIdentifiers(new String[]{"STT", "Mã sản phẩm", "Vốn", "Doanh thu", "Lợi nhuận"});
-        model.setRowCount(0);
-        int stt = 1;
-        for (Object[] row : rows) {
-            model.addRow(new Object[]{
-                stt++,
-                row[0],
-                String.format("%,.0f VNĐ", (double) row[1]),
-                String.format("%,.0f VNĐ", (double) row[2]),
-                String.format("%,.0f VNĐ", (double) row[3])
-            });
-        }
-
-        // Update Chart
+        // ===================== (CENTER - Biểu đồ cột) ===================== //
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Object[] row : rows) {
-            String maSP = (String) row[0];
-            double vonNhap = (double) row[1];
-            double doanhThu = (double) row[2];
-            double loiNhuan = (double) row[3];
-            dataset.addValue(vonNhap, "Vốn Nhập", maSP);
-            dataset.addValue(doanhThu, "Doanh Thu", maSP);
-            dataset.addValue(loiNhuan, "Lợi Nhuận", maSP);
-        }
-
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Thống kê doanh thu theo sản phẩm",
-                "Sản phẩm",
-                "Số tiền (VNĐ)",
+                "THỐNG KÊ LỢI NHUẬN THEO NGÀY", "", "",
                 dataset,
                 PlotOrientation.VERTICAL,
                 true, true, false
         );
+        barChart.setBackgroundPaint(UIConstants.WHITE_FONT);
+        CategoryPlot plot = barChart.getCategoryPlot();
+        plot.setBackgroundPaint(UIConstants.WHITE_FONT);
+        plot.setRangeGridlinePaint(Color.GRAY);
+        plot.setDomainGridlinePaint(Color.GRAY);
+        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setNumberFormatOverride(new DecimalFormat("#,###"));  
+        ChartPanel chartPanel = new ChartPanel(barChart);
 
-        chartPanel = new ChartPanel(barChart);
-        chartPanel.setPreferredSize(new Dimension(800, 400));
-        updateContentPanel();
-    }
+        // ===================== (SOUTH - Bảng dữ liệu) ===================== //
+        String[] columnNames = {"NGÀY", "VỐN", "DOANH THU", "LỢI NHUẬN"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        UITable table = new UITable(model);
+        UIScrollPane scrollPane = new UIScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(0, 150));
 
-    private void hienThiDuLieuTheoThang(String startDate, String endDate) {
-        // Tính toán dữ liệu theo tháng
-        Map<String, Double[]> thongKeTheoThang = new HashMap<>();
-        ArrayList<ChiTietPhieuXuatDTO> danhSachCTPX = ctpxBUS.getAllChiTietPhieuXuat();
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        Calendar cal = Calendar.getInstance();
-
-        for (ChiTietPhieuXuatDTO ctpx : danhSachCTPX) {
+        // ===================== (Sự kiện LỌC) ===================== //
+        btnLoc.addActionListener(e -> {
             try {
-                PhieuXuatDTO px =  pxBUS.getById(ctpx.getMaPX());
-                Date ngayXuat = px.getNgayXuat();
-                String thangNam = sdf.format(ngayXuat);
+                String input = txtDate.getText();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                sdf.setLenient(false);
+                Date inputDate = sdf.parse(input);
+                Date minDate = sdf.parse("01/10/2024");
 
-                // Kiểm tra khoảng thời gian
-                if (startDate != null && endDate != null) {
-                    Date start = sdf.parse(startDate.substring(0, 7));
-                    Date end = sdf.parse(endDate.substring(0, 7));
-                    Date current = sdf.parse(thangNam);
-                    if (current.before(start) || current.after(end)) {
-                        continue;
-                    }
+                if (inputDate.before(minDate)) {
+                    JOptionPane.showMessageDialog(this, "Chỉ thống kê từ ngày 01/10/2024 trở đi.");
+                    return;
                 }
 
-                int soLuongBan = ctpx.getSoLuongSP();
-                double doanhThu = calculateDoanhThu(ctpx.getMaSP(), soLuongBan);
-                double vonNhap = calculateVon(ctpx.getMaSP(), soLuongBan); // Giả sử nhập = xuất
-                double loiNhuan = doanhThu - vonNhap;
+                String date = chuyenDoiNgay(input);
+                if (date == null) return;
 
-                thongKeTheoThang.compute(thangNam, (k, v) -> {
-                    if (v == null) v = new Double[]{0.0, 0.0, 0.0};
-                    v[0] += vonNhap;
-                    v[1] += doanhThu;
-                    v[2] += loiNhuan;
-                    return v;
+                dataset.clear();
+                model.setRowCount(0);
+
+                double von = phieuNhapBUS.getTongTienTheoNgay(date);
+                double doanhThu = phieuXuatBUS.getTongTienTheoNgay(date);
+                double loiNhuan = doanhThu - von;
+
+                dataset.addValue(von, "Vốn", "Ngày");
+                dataset.addValue(doanhThu, "Doanh thu", "Ngày");
+                dataset.addValue(loiNhuan, "Lợi nhuận", "Ngày");
+
+                model.addRow(new Object[]{
+                        input,
+                        String.format("%,.0f VNĐ", von),
+                        String.format("%,.0f VNĐ", doanhThu),
+                        String.format("%,.0f VNĐ", loiNhuan)
                 });
-            } catch (Exception e) {
-                e.printStackTrace();
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày hợp lệ (vd: 15/04/2025).");
             }
-        }
+        });
 
-        // Update Table
-        ArrayList<Object[]> rows = new ArrayList<>();
-        for (Map.Entry<String, Double[]> entry : thongKeTheoThang.entrySet()) {
-            String thangNam = entry.getKey();
-            Double[] values = entry.getValue();
-            rows.add(new Object[]{thangNam, values[0], values[1], values[2]});
-        }
-        rows.sort((a, b) -> ((String) a[0]).compareTo((String) b[0])); // Sắp xếp theo tháng
-        model.setColumnIdentifiers(new String[]{"STT", "Tháng", "Vốn", "Doanh thu", "Lợi nhuận"});
-        model.setRowCount(0);
-        int stt = 1;
-        for (Object[] row : rows) {
-            model.addRow(new Object[]{
-                stt++,
-                row[0],
-                String.format("%,.0f VNĐ", (double) row[1]),
-                String.format("%,.0f VNĐ", (double) row[2]),
-                String.format("%,.0f VNĐ", (double) row[3])
-            });
-        }
+        // ===================== (Thêm vào mainPanel) ===================== //
+        mainPanel.add(panelForFilter, BorderLayout.NORTH);
+        mainPanel.add(chartPanel, BorderLayout.CENTER);
+        mainPanel.add(scrollPane, BorderLayout.SOUTH);
 
-        // Update Chart
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Object[] row : rows) {
-            String thangNam = (String) row[0];
-            double vonNhap = (double) row[1];
-            double doanhThu = (double) row[2];
-            double loiNhuan = (double) row[3];
-            dataset.addValue(vonNhap, "Vốn Nhập", thangNam);
-            dataset.addValue(doanhThu, "Doanh Thu", thangNam);
-            dataset.addValue(loiNhuan, "Lợi Nhuận", thangNam);
-        }
-
-        JFreeChart barChart = ChartFactory.createBarChart(
-                "Thống kê doanh thu theo tháng",
-                "Tháng",
-                "Số tiền (VNĐ)",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true, true, false
-        );
-
-        chartPanel = new ChartPanel(barChart);
-        chartPanel.setPreferredSize(new Dimension(800, 400));
-        updateContentPanel();
+        return mainPanel;
     }
 
-    private void hienThiDuLieuTheoNam(String startDate, String endDate) {
-        // Tính toán dữ liệu theo năm
-        Map<String, Double[]> thongKeTheoNam = new HashMap<>();
-        ArrayList<ChiTietPhieuXuatDTO> danhSachCTPX = ctpxBUS.getAllChiTietPhieuXuat();
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-        Calendar cal = Calendar.getInstance();
-
-        for (ChiTietPhieuXuatDTO ctpx : danhSachCTPX) {
-            try {
-                PhieuXuatDTO px =  pxBUS.getById(ctpx.getMaPX());
-                Date ngayXuat = px.getNgayXuat();
-                String nam = sdf.format(ngayXuat);
-
-                // Kiểm tra khoảng thời gian
-                if (startDate != null && endDate != null) {
-                    Date start = sdf.parse(startDate.substring(0, 4));
-                    Date end = sdf.parse(endDate.substring(0, 4));
-                    Date current = sdf.parse(nam);
-                    if (current.before(start) || current.after(end)) {
-                        continue;
-                    }
-                }
-
-                int soLuongBan = ctpx.getSoLuongSP();
-                double doanhThu = calculateDoanhThu(ctpx.getMaSP(), soLuongBan);
-                double vonNhap = calculateVon(ctpx.getMaSP(), soLuongBan); // Giả sử nhập = xuất
-                double loiNhuan = doanhThu - vonNhap;
-
-                thongKeTheoNam.compute(nam, (k, v) -> {
-                    if (v == null) v = new Double[]{0.0, 0.0, 0.0};
-                    v[0] += vonNhap;
-                    v[1] += doanhThu;
-                    v[2] += loiNhuan;
-                    return v;
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Update Table
-        ArrayList<Object[]> rows = new ArrayList<>();
-        for (Map.Entry<String, Double[]> entry : thongKeTheoNam.entrySet()) {
-            String nam = entry.getKey();
-            Double[] values = entry.getValue();
-            rows.add(new Object[]{nam, values[0], values[1], values[2]});
-        }
-        rows.sort((a, b) -> ((String) a[0]).compareTo((String) b[0])); // Sắp xếp theo năm
-        model.setColumnIdentifiers(new String[]{"STT", "Năm", "Vốn", "Doanh thu", "Lợi nhuận"});
-        model.setRowCount(0);
-        int stt = 1;
-        for (Object[] row : rows) {
-            model.addRow(new Object[]{
-                stt++,
-                row[0],
-                String.format("%,.0f VNĐ", (double) row[1]),
-                String.format("%,.0f VNĐ", (double) row[2]),
-                String.format("%,.0f VNĐ", (double) row[3])
-            });
-        }
-        
-        
-
-        // Update Chart
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        for (Object[] row : rows) {
-            String nam = (String) row[0];
-            double vonNhap = (double) row[1];
-            double doanhThu = (double) row[2];
-            double loiNhuan = (double) row[3];
-            dataset.addValue(vonNhap, "Vốn Nhập", nam);
-            dataset.addValue(doanhThu, "Doanh Thu", nam);
-            dataset.addValue(loiNhuan, "Lợi Nhuận", nam);
-        }
-
-        JFreeChart barChart = ChartFactory.createBarChart(
-                "Thống kê doanh thu theo năm",
-                "Năm",
-                "Số tiền (VNĐ)",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true, true, false
-        );
-
-        chartPanel = new ChartPanel(barChart);
-        chartPanel.setPreferredSize(new Dimension(800, 400));
-        updateContentPanel();
-    }
-
-    private void updateContentPanel() {
-        contentPanel.removeAll();
-        if (isTableView) {
-            contentPanel.add(tableScrollPane, BorderLayout.CENTER);
-        } else {
-            if (chartPanel != null) {
-                contentPanel.add(chartPanel, BorderLayout.CENTER);
-            }
-        }
-        contentPanel.revalidate();
-        contentPanel.repaint();
-    }
 
     private String chuyenDoiNgay(String ngayDauVao) {
-        if (ngayDauVao.isEmpty()) {
-            return null;
-        }
+        if (ngayDauVao.isEmpty()) return null;
         try {
             SimpleDateFormat sdfNguoiDung = new SimpleDateFormat("dd/MM/yyyy");
             SimpleDateFormat sdfDB = new SimpleDateFormat("yyyy-MM-dd");
@@ -475,17 +341,5 @@ public class ThongKeDoanhThu extends JPanel {
             JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ. Vui lòng nhập dd/MM/yyyy");
             return null;
         }
-    }
-
-    private double calculateDoanhThu(int maSP, int soLuongBan) {
-        int giaBan = sanPhamBUS.getGiaSpByMaSp(maSP);
-        return soLuongBan * giaBan;
-    }
-
-
-    private double calculateVon(int maSP, int soLuongNhap) {
-        int giaBan = sanPhamBUS.getGiaSpByMaSp(maSP);
-            return soLuongNhap * giaBan;
-
     }
 }

@@ -29,7 +29,6 @@ import Utils.UITextField;
 import org.jfree.chart.plot.CategoryPlot;
 
 public class ThongKeSanPham extends JPanel {
-    private UITextField txtYearFrom, txtYearTo;
     private UIButton btnLamMoi, btnLoc;
     private UIButton btnOptionMonth, btnOptionYear, btnOptionDay;
     private SanPhamBUS sanPhamBUS = new SanPhamBUS();
@@ -85,10 +84,10 @@ public class ThongKeSanPham extends JPanel {
         panelForFilter.setBackground(Color.WHITE);
         panelForFilter.setPreferredSize(new Dimension(0, 35));
         panelForFilter.add(new UILabel("Từ năm:", 60, 25));
-        txtYearFrom = new UITextField(70, 25);
+        UITextField txtYearFrom = new UITextField(70, 25);
         panelForFilter.add(txtYearFrom);
         panelForFilter.add(new UILabel("Đến năm:", 70, 25));
-        txtYearTo = new UITextField(70, 25);
+        UITextField txtYearTo = new UITextField(70, 25);
         panelForFilter.add(txtYearTo);
         btnLoc = new UIButton("confirm", "LỌC", 50, 25);
         panelForFilter.add(btnLoc);

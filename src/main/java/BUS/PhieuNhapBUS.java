@@ -49,4 +49,14 @@ public class PhieuNhapBUS{
         return ketQua;
     }
     
+    // thống kê
+    public double getTongTienTheoNam(int year) {
+        return phieuNhapDAO.getTongTienTheoNam(year);
+    }
+    public double getTongTienTheoThangNam(int thang, int nam) {
+        return phieuNhapDAO.getTongTienTheoThangNam(thang, nam);
+    }
+    public double getTongTienTheoNgay(String ngay) {
+        return phieuNhapDAO.getTongTienTheoNgay(ngay);
+    }
 }

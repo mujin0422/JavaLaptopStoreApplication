@@ -111,5 +111,59 @@ public class PhieuNhapDAO {
         }
         return null;
     }
-
+    
+    public double getTongTienTheoNam(int year) {
+        double tongTien = 0;
+        String sql = "SELECT SUM(tongTien) as tongTien " +
+                     "FROM phieunhap " +
+                     "WHERE YEAR(ngayNhap) = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, year);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    tongTien = rs.getDouble("tongTien");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tongTien;
+    }
+    
+    public double getTongTienTheoThangNam(int thang, int nam) {
+        double tongTien = 0;
+        String sql = "SELECT SUM(tongTien) as tongTien " +
+                     "FROM phieunhap " +
+                     "WHERE MONTH(ngayNhap) = ? AND YEAR(ngayNhap) = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, thang);
+            ps.setInt(2, nam);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    tongTien = rs.getDouble("tongTien");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tongTien;
+    }
+    
+    public double getTongTienTheoNgay(String ngay) {
+        double tongTien = 0;
+        String sql = "SELECT SUM(tongTien) AS tongTien FROM phieunhap WHERE DATE(ngayNhap) = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, ngay); // Định dạng yyyy-MM-dd
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                tongTien = rs.getDouble("tongTien");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tongTien;
+    }
 }
