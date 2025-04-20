@@ -168,7 +168,7 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         txtTongTien = new UITextField(200, 30);
         txtTongTien.setEditable(false); 
         pnlGroupTongTien.add(txtTongTien);
-        btnAddToPN = new UIButton("add", "THÊM", 100, 25);
+        btnAddToPN = new UIButton("add", "XÁC NHẬN", 100, 25);
         btnAddToPN.addActionListener(e -> addPhieuNhap());
         pnl2.add(pnlGroupTongTien, BorderLayout.WEST);
         pnl2.add(btnAddToPN, BorderLayout.EAST);

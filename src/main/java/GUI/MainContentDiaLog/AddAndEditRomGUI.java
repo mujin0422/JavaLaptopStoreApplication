@@ -45,7 +45,7 @@ public class AddAndEditRomGUI extends JDialog{
     }
     
     public void initComponent(String type){
-        this.setSize(550, 200);
+        this.setSize(400, 180);
         this.setLayout(new BorderLayout());
         
         JPanel inputPanel = new JPanel(new GridLayout(2,2,10,10));

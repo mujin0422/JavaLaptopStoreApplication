@@ -47,7 +47,7 @@ public class AddAndEditSupplierGUI extends JDialog{
     }
 
     public void initComponent(String type){
-        this.setSize(550, 300);
+        this.setSize(450, 250);
         this.setLayout(new BorderLayout());
         
         //===============================( PANEL INPUT )================================//

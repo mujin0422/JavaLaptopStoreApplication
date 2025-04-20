@@ -166,7 +166,7 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         txtTongTien = new UITextField(150, 30);
         txtTongTien.setEditable(false); 
         pnlGroupTongTien.add(txtTongTien);
-        btnAddToPX = new UIButton("add", "THÊM", 100, 25);
+        btnAddToPX = new UIButton("add", "XÁC NHẬN", 100, 25);
         btnAddToPX.addActionListener(e -> addPhieuXuat());
         pnl2.add(pnlGroupTongTien, BorderLayout.WEST);
         pnl2.add(btnAddToPX, BorderLayout.EAST);

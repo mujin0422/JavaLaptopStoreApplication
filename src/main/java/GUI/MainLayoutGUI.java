@@ -189,12 +189,25 @@ public final class MainLayoutGUI extends JFrame {
         panel.setBackground(UIConstants.MAIN_BACKGROUND);
         panel.setLayout(new GridBagLayout());
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10); // khoảng cách giữa các dòng
+
         JLabel lblWelcome = new JLabel();
         lblWelcome.setFont(new Font("Segoe UI", Font.BOLD, 40));
         lblWelcome.setForeground(UIConstants.BLACK_FONT);
         lblWelcome.setText("Xin chào, " + taiKhoan.getTenDangNhap() + "!");
-        
-        panel.add(lblWelcome);
+        panel.add(lblWelcome, gbc);
+
+        gbc.gridy++; // chuyển xuống dòng tiếp theo
+        JLabel lblMessage = new JLabel();
+        lblMessage.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+        lblMessage.setForeground(UIConstants.BLACK_FONT);
+        lblMessage.setText("Chúc bạn có một ngày làm việc vui vẻ!");
+        panel.add(lblMessage, gbc);
+
         return panel;
     }
+
 }

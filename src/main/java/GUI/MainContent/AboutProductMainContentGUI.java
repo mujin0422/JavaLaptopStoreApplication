@@ -323,7 +323,7 @@ public class AboutProductMainContentGUI extends JPanel{
     }
     private void addCpu(){
         Window window = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditCpuGUI((JFrame) window, cpuBus, "Them CPU", "add");
+        new AddAndEditCpuGUI((JFrame) window, cpuBus, "Thêm CPU", "add");
         loadTableDataCPU();
     }
     private void editCpu(){
@@ -336,7 +336,7 @@ public class AboutProductMainContentGUI extends JPanel{
         String tenCpu = tblModelCPU.getValueAt(selectedRow, 1).toString();
         CpuDTO cpu = new CpuDTO(maCpu, tenCpu);
         Window window = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditCpuGUI((JFrame) window, cpuBus, "Chinh sua CPU", "save", cpu);
+        new AddAndEditCpuGUI((JFrame) window, cpuBus, "Chỉnh sửa CPU", "save", cpu);
         loadTableDataCPU();
     }
     private void deleteCpu(){
@@ -345,7 +345,7 @@ public class AboutProductMainContentGUI extends JPanel{
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một CPU để xoa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int confirm = JOptionPane.showConfirmDialog(this, "Ban co chac chan khong", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             int maCPU = Integer.parseInt(tblModelCPU.getValueAt(selectedRow, 0).toString());
             if (cpuBus.deleteCPU(maCPU)) { 

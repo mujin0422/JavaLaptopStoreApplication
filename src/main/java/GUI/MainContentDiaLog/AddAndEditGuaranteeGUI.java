@@ -74,7 +74,7 @@ public class AddAndEditGuaranteeGUI extends JDialog{
     private void initComponent(String type) {
         this.chiTietSanPhamBUS = new ChiTietSanPhamBUS();
         this.nvBus = new NhanVienBUS();
-        this.setSize(550, 400);
+        this.setSize(450, 350);
         this.setLayout(new BorderLayout());
 
         JPanel inputPanel = new JPanel(new GridLayout(7, 2, 10, 10));
