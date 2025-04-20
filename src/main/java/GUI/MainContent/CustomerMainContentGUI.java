@@ -14,6 +14,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Window;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -23,9 +25,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class CustomerMainContentGUI extends JPanel{
-    private UIButton btnAdd, btnDelete, btnEdit;
+    private UIButton btnAdd, btnDelete, btnEdit, btnExcel;
     private UITextField txtSearch;
     private UITable tblContent;
     private JPanel pnlHeader, pnlContent;
@@ -47,15 +53,18 @@ public class CustomerMainContentGUI extends JPanel{
 
         JPanel pnlButton = new JPanel(new FlowLayout(FlowLayout.LEFT,5,5));
         pnlButton.setBackground(UIConstants.MAIN_BACKGROUND);
-        btnAdd = new UIButton("menuButton", "THÊM", 90, 40, "/Icon/them_icon.png");
+        btnAdd = new UIButton("menuButton", "THÊM", 100, 40, "/Icon/them_icon.png");
         btnAdd.addActionListener(e -> addCustomer());
-        btnDelete = new UIButton("menuButton", "XÓA", 90, 40, "/Icon/xoa_icon.png");
+        btnDelete = new UIButton("menuButton", "XÓA", 100, 40, "/Icon/xoa_icon.png");
         btnDelete.addActionListener(e -> deleteCustomer());
-        btnEdit = new UIButton("menuButton", "SỬA", 90, 40, "/Icon/sua_icon.png");
+        btnEdit = new UIButton("menuButton", "SỬA", 100, 40, "/Icon/sua_icon.png");
         btnEdit.addActionListener(e -> editCustomer());
+        btnExcel = new UIButton("menuButton", "EXCEL", 100, 40, "/Icon/excel_icon.png");
+        btnExcel.addActionListener(e -> exportExcel());
         pnlButton.add(btnAdd);
         pnlButton.add(btnDelete);
         pnlButton.add(btnEdit);
+        pnlButton.add(btnExcel);
         applyPermissions(taiKhoan.getTenDangNhap(), 3);
             
         JPanel pnlSearchFilter = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,10));
@@ -109,6 +118,45 @@ public class CustomerMainContentGUI extends JPanel{
         }
     }
     
+    private void exportExcel() {
+        try {
+            File exportDir = new File("bang");
+            if (!exportDir.exists()) {
+                exportDir.mkdirs();
+            }
+            String filePath = "bang/DanhSachKhachHang.xlsx";
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.createSheet("Khách Hàng");
+
+            XSSFRow headerRow = sheet.createRow(0);
+            for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                Cell cell = headerRow.createCell(col);
+                cell.setCellValue(tableModel.getColumnName(col));
+            }
+            for (int row = 0; row < tableModel.getRowCount(); row++) {
+                XSSFRow excelRow = sheet.createRow(row + 1);
+                for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                    Object value = tableModel.getValueAt(row, col);
+                    Cell cell = excelRow.createCell(col);
+                    if (value instanceof Number) {
+                        cell.setCellValue(Double.parseDouble(value.toString()));
+                    } else {
+                        cell.setCellValue(value != null ? value.toString() : "");
+                    }
+                }
+            }
+            try (FileOutputStream out = new FileOutputStream(filePath)) {
+                workbook.write(out);
+            }
+            workbook.close();
+
+            JOptionPane.showMessageDialog(this, "Xuất Excel thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi xuất Excel: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void addCustomer(){
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditCostumerGUI((JFrame) window, khachHangBUS, "Thêm khách hàng", "add");

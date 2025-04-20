@@ -339,17 +339,24 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để thêm vào phiếu", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         int soLuong = Integer.parseInt(soLuongText);
         String serialSp = tblForProduct.getValueAt(selectedRow, 0).toString();
+
+        DefaultTableModel model = (DefaultTableModel) tblForForm.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String existingSerial = model.getValueAt(i, 4).toString(); 
+            if (serialSp.equals(existingSerial)) {
+                JOptionPane.showMessageDialog(this, "Sản phẩm với serial này đã được thêm vào phiếu", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
         int maSp = chiTietSanPhamBUS.getMaSpBySerialSp(serialSp);
         String tenSp = sanPhamBUS.getTenSanPhamByMaSanPham(maSp);
         int giaBan = sanPhamBUS.getGiaSpByMaSp(maSp);
-        
-        DefaultTableModel model = (DefaultTableModel) tblForForm.getModel();
         model.addRow(new Object[]{maSp, tenSp, soLuong, giaBan, serialSp});
         calcTongTien();
     }
+
     
     private void removeFromTableForForm(){
         int selectedRow = tblForForm.getSelectedRow();
@@ -503,7 +510,6 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         document.add(new Paragraph("Ngày ghi phiếu: " + px.getNgayXuat().toString(), infoFont));
         document.add(new Paragraph("Tổng tiền: " + px.getTongTien(), infoFont));
         document.add(new Paragraph("\n"));
-
         // Bảng chi tiết sản phẩm
         PdfPTable table = new PdfPTable(4); // 4 cột: Sản phẩm - Serial - Số lượng - Thành tiền
         table.setWidthPercentage(100);
