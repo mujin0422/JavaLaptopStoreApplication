@@ -423,21 +423,13 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
     }
     
     private void resetFormInput(){
-        txtMaPN.setText("");
+        String nextMaPN = phieuNhapBUS.getNextImportID();  //Tự động tạo mã
+        txtMaPN.setText(nextMaPN);
+        txtMaPN.setEditable(false); //Khóa không cho sửa
         tableModelForForm.setRowCount(0);
     }
     private boolean checkFormInput(){
         try {
-            String maPnStr = txtMaPN.getText().trim();
-            if (maPnStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã phiếu nhập không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int maPn= Integer.parseInt(maPnStr);
-            if (maPn <= 0) {
-                JOptionPane.showMessageDialog(this, "Mã phiếu nhập phải là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
             if (tblForForm.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(this, "Chưa có sản phẩm nào trong phiếu nhập!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;

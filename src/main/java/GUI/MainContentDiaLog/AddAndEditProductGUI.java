@@ -93,6 +93,11 @@ public class AddAndEditProductGUI extends JDialog {
         super(parent, title, true);
         this.sanPhamBus = sanPhamBus;
         initComponent(type);
+        
+        // Thêm mới thì tự động lấy mã mới
+        txtMaSP.setText(sanPhamBus.getNextProductID());
+        txtMaSP.setEnabled(false); // Không cho sửa
+        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }

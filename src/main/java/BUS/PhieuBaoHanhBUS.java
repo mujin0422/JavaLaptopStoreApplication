@@ -42,4 +42,8 @@ public class PhieuBaoHanhBUS {
     public String getTenSpByMaPbh(int maPBH) {
         return phieuBaoHanhDAO.getTenSpByMaPbh(maPBH);
     }
+    
+   public String getNextGuaranteeID() {
+        return phieuBaoHanhDAO.getNextGuaranteeID();
+    }
 }

@@ -35,6 +35,11 @@ public class AddAndEditStaffGUI extends JDialog{
         super(parent, title, true);
         this.nhanVienBus = nhanVienBus;
         initComponent(type);
+
+        // Thêm mới thì tự động lấy mã mới
+        txtMaNV.setText(nhanVienBus.getNextEmployeeID());
+        txtMaNV.setEnabled(false); // Không cho sửa
+        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }

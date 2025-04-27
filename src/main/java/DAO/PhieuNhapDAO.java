@@ -166,4 +166,19 @@ public class PhieuNhapDAO {
         }
         return tongTien;
     }
+    
+    public static String getNextImportID() {
+        String query = "SELECT MAX(maPN) AS max_id FROM phieunhap";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                int maxId = rs.getInt("max_id"); // Đọc trực tiếp int
+                return String.valueOf(maxId + 1); // +1
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "1"; // Nếu chưa có phiếu nhập nào
+    }
 }

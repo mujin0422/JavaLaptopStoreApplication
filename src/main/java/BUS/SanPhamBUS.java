@@ -103,6 +103,10 @@ public class SanPhamBUS {
     public ArrayList<SanPhamDTO> getSanPhamByExactDate(String date) {
         return sanPhamDAO.getSanPhamByExactDate(date);
     }
+    
+    public String getNextProductID() {
+        return sanPhamDAO.getNextProductID();
+    }
      
     public ArrayList<SanPhamDTO> searchSanPham1(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {

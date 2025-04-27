@@ -41,6 +41,10 @@ public class AddAndEditCostumerGUI extends JDialog{
         super(parent, title, true);
         this.khachHangBus = khachHangBus;
         initComponent(type);
+        // Thêm mới thì tự động lấy mã mới
+        txtMaKH.setText(khachHangBus.getNextCustomerID());
+        txtMaKH.setEnabled(false); // Không cho sửa
+        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }

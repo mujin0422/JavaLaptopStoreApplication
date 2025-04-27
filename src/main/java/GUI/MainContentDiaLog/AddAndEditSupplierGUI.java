@@ -42,6 +42,11 @@ public class AddAndEditSupplierGUI extends JDialog{
         super(parent, title, true);
         this.nccBus = nccBus;
         initComponent(type);
+        
+        // Thêm mới thì tự động lấy mã mới
+        txtMaNCC.setText(nccBus.getNextSupplierID());
+        txtMaNCC.setEnabled(false); // Không cho sửa
+        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }

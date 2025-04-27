@@ -49,6 +49,10 @@ public class PhieuNhapBUS{
         return ketQua;
     }
     
+    public String getNextImportID() {
+        return PhieuNhapDAO.getNextImportID();
+    }
+    
     // thống kê
     public double getTongTienTheoNam(int year) {
         return phieuNhapDAO.getTongTienTheoNam(year);

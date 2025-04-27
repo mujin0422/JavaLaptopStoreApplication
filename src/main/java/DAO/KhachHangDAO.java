@@ -122,4 +122,19 @@ public class KhachHangDAO {
         }
         return null; 
     }
+    
+    public static String getNextCustomerID() {
+        String query = "SELECT MAX(maKH) AS max_id FROM khachhang";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                int maxId = rs.getInt("max_id"); // Đọc trực tiếp int
+                return String.valueOf(maxId + 1); // +1
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "1"; // Nếu chưa có khách hàng nào
+    }
 }

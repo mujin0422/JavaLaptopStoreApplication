@@ -67,6 +67,11 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         super(parent, title, true);
         this.phieuBaoHanhBus = phieuBaoHanhBus;
         initComponent(type);
+        
+        // Thêm mới thì tự động lấy mã mới
+        txtMaPBH.setText(phieuBaoHanhBus.getNextGuaranteeID());
+        txtMaPBH.setEnabled(false); // Không cho sửa
+        
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }

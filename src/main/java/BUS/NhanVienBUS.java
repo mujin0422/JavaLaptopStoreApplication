@@ -43,6 +43,10 @@ public class NhanVienBUS {
         return NhanVienDAO.getTenNvByMaNv(maNv);
     }
     
+    public String getNextEmployeeID() {
+        return NhanVienDAO.getNextEmployeeID();
+    }
+    
     public ArrayList<NhanVienDTO> searchNhanVien(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return NhanVienDAO.getAll();

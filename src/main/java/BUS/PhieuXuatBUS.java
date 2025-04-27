@@ -63,6 +63,10 @@ public class PhieuXuatBUS {
         return phieuXuatDAO.getMaKhByMaPx(maPx);
     }
     
+    public String getNextExportID() {
+        return PhieuXuatDAO.getNextExportID();
+    }
+    
     // thống kê
     public double getTongTienTheoNam(int year) {
         return phieuXuatDAO.getTongTienTheoNam(year);
@@ -73,5 +77,4 @@ public class PhieuXuatBUS {
     public double getTongTienTheoNgay(String ngay) {
         return phieuXuatDAO.getTongTienTheoNgay(ngay);
     }
-
 }

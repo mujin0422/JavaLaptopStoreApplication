@@ -391,22 +391,14 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
     }
     
     private void resetFormInput(){
-        txtMaPX.setText("");
+        String nextMaPX = phieuXuatBUS.getNextExportID();  //Tự động tạo mã
+        txtMaPX.setText(nextMaPX);
+        txtMaPX.setEditable(false); //Khóa không cho sửa
         tableModelForForm.setRowCount(0);
     }
     
     private boolean checkFormInput(){
         try {
-            String maPxStr = txtMaPX.getText().trim();
-            if (maPxStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã phiếu xuất không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int maPx = Integer.parseInt(maPxStr);
-            if (maPx <= 0) {
-                JOptionPane.showMessageDialog(this, "Mã phiếu xuất phải là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
             if (tblForForm.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(this, "Chưa có sản phẩm nào trong phiếu xuất!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return false;

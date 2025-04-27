@@ -39,6 +39,10 @@ public class NhaCungCapBUS{
         return nhaCungCapDAO.getTenNccByMaNCC(maNcc);
     }
     
+    public String getNextSupplierID() {
+        return nhaCungCapDAO.getNextSupplierID();
+    }
+    
     public ArrayList<NhaCungCapDTO> searchNhaCungCap(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return nhaCungCapDAO.getAll();

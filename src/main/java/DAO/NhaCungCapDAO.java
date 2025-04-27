@@ -124,4 +124,19 @@ public class NhaCungCapDAO {
         }
         return null; 
     }
+    
+    public static String getNextSupplierID() {
+        String query = "SELECT MAX(maNCC) AS max_id FROM nhacungcap";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                int maxId = rs.getInt("max_id"); // Đọc trực tiếp int
+                return String.valueOf(maxId + 1); // +1
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "1"; // Nếu chưa có nhà cung cấp nào
+    }
 }

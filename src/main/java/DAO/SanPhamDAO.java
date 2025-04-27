@@ -527,4 +527,19 @@ public class SanPhamDAO {
         }
         return ketQua;
     }
+    
+    public static String getNextProductID() {
+        String query = "SELECT MAX(maSP) AS max_id FROM sanpham";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                int maxId = rs.getInt("max_id"); // Đọc trực tiếp int
+                return String.valueOf(maxId + 1); // +1
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "1"; // Nếu chưa có sản phẩm nào
+    }
 }

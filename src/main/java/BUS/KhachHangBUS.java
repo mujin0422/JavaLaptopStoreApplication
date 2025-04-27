@@ -38,6 +38,10 @@ public class KhachHangBUS {
     public String getTenKhByMaKh(int maKh){
         return khachHangDAO.getTenKhByMaKh(maKh);
     }
+    
+    public String getNextCustomerID() {
+        return khachHangDAO.getNextCustomerID();
+    }
 
     public ArrayList<KhachHangDTO> searchKhachHang(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
