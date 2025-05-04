@@ -135,16 +135,6 @@ public class AddAndEditStaffGUI extends JDialog{
 
     private boolean CheckFormInput() {
         try {
-            String maNVStr = txtMaNV.getText().trim();
-            if (maNVStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã nhân viên không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int maNV = Integer.parseInt(maNVStr);
-            if (maNV <= 0) {
-                JOptionPane.showMessageDialog(this, "Mã nhân viên phải là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
             String tenNV = txtTenNV.getText().trim();
             if (tenNV.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Tên nhân viên không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);

@@ -192,7 +192,7 @@ public class TaiKhoanDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false; // Mặc định không có quyền nếu có lỗi
+        return false; 
     }
 
 }   

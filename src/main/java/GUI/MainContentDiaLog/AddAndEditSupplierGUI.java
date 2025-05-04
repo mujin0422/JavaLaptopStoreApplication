@@ -135,16 +135,6 @@ public class AddAndEditSupplierGUI extends JDialog{
     
     private boolean CheckFormInput(){
         try {
-            String maNCCStr = txtMaNCC.getText().trim();
-            if(maNCCStr.isEmpty()){
-                JOptionPane.showMessageDialog(this, "Mã nhà cung cấp không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int maNCC = Integer.parseInt(maNCCStr);
-            if(maNCC < 0){
-                JOptionPane.showMessageDialog(this, "Mã nhà cung cấp là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
             String tenNCCStr = txtTenNCC.getText().trim();
             if(tenNCCStr.isEmpty()){
                 JOptionPane.showMessageDialog(this, "Tên nhà cung cấp không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);

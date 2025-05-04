@@ -267,16 +267,6 @@ public class AddAndEditProductGUI extends JDialog {
 
     private boolean checkFormInput() {
         try {
-            String maSPStr = txtMaSP.getText().trim();
-            if (maSPStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã sản phẩm không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int maSP = Integer.parseInt(maSPStr);
-            if (maSP <= 0) {
-                JOptionPane.showMessageDialog(this, "Mã sản phẩm phải là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
             String tenSP = txtTenSP.getText().trim();
             if (tenSP.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Tên sản phẩm không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);

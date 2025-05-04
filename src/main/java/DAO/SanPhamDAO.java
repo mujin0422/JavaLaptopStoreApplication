@@ -462,13 +462,18 @@ public class SanPhamDAO {
     public ArrayList<SanPhamDTO> getSanPhamByExactDate(String date) {
         ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
         String sql = "SELECT DISTINCT sp.* FROM sanpham sp " +
-                     "JOIN chitietphieunhap ctpn ON sp.maSP = ctpn.maSP " +
-                     "JOIN phieunhap pn ON ctpn.maPN = pn.maPN " +
-                     "WHERE DATE(pn.ngayNhap) = ? AND sp.trangThaiXoa = 0";
-
+                     "LEFT JOIN chitietphieunhap ctpn ON sp.maSP = ctpn.maSP " +
+                     "LEFT JOIN phieunhap pn ON ctpn.maPN = pn.maPN " +
+                     "LEFT JOIN chitietphieuxuat ctpx ON sp.maSP = ctpx.maSP " +
+                     "LEFT JOIN phieuxuat px ON ctpx.maPX = px.maPX " +
+                     "WHERE DATE(pn.ngayNhap) = ? OR DATE(px.ngayXuat) = ? " +
+                     "AND sp.trangThaiXoa = 0";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, date);
+            ps.setString(2, date);
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     SanPhamDTO sp = new SanPhamDTO(
@@ -493,9 +498,6 @@ public class SanPhamDAO {
         return dsSanPham;
     }
 
-
-
-    
     public ArrayList<SanPhamDTO> searchSanPham(String keyword) {
         ArrayList<SanPhamDTO> ketQua = new ArrayList<>();
         String sql = "SELECT * FROM sanpham WHERE trangThaiXoa=0 AND LOWER(tenSP) LIKE ?";

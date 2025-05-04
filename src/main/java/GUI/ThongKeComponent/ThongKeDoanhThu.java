@@ -22,6 +22,7 @@ import Utils.UIScrollPane;
 import Utils.UITable;
 import Utils.UITextField;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.jfree.chart.axis.NumberAxis;
@@ -104,7 +105,6 @@ public class ThongKeDoanhThu extends JPanel {
         plot.setDomainGridlinePaint(Color.GRAY);
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setNumberFormatOverride(new DecimalFormat("#,###"));  
-
         ChartPanel chartPanel = new ChartPanel(barChart);
 
         // ===================== (SOUTH - Bảng dữ liệu) ===================== //
@@ -117,8 +117,8 @@ public class ThongKeDoanhThu extends JPanel {
         // ===================== (Sự kiện LỌC) ===================== //
         btnLoc.addActionListener(e -> {
             try {
-                int fromYear = Integer.parseInt(txtYearFrom.getText());
-                int toYear = Integer.parseInt(txtYearTo.getText());
+                int fromYear = Integer.parseInt(txtYearFrom.getText().trim());
+                int toYear = Integer.parseInt(txtYearTo.getText().trim());
 
                 if (fromYear < 2024 || toYear < 2024) {
                     JOptionPane.showMessageDialog(this, "Chỉ được thống kê từ năm 2024 trở đi.");
@@ -205,12 +205,11 @@ public class ThongKeDoanhThu extends JPanel {
         // ===================== (Sự kiện lọc) ===================== //
         btnLoc.addActionListener(e -> {
             try {
-                int nam = Integer.parseInt(txtYear.getText());
+                int nam = Integer.parseInt(txtYear.getText().trim());
                 if (nam < 2024) {
                     JOptionPane.showMessageDialog(this, "Chỉ được thống kê từ năm 2024 trở đi.");
                     return;
                 }
-
                 dataset.clear();
                 model.setRowCount(0);
 
@@ -251,28 +250,14 @@ public class ThongKeDoanhThu extends JPanel {
         JPanel panelForFilter = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         panelForFilter.setBackground(Color.WHITE);
         panelForFilter.setPreferredSize(new Dimension(0, 35));
-        panelForFilter.add(new UILabel("Ngày (dd/MM/yyyy):", 150, 25));
-        UITextField txtDate = new UITextField(100, 25);
-        panelForFilter.add(txtDate);
+        panelForFilter.add(new UILabel("Từ (dd/MM/yyyy):", 130, 25));
+        UITextField txtFromDate = new UITextField(100, 25);
+        panelForFilter.add(txtFromDate);
+        panelForFilter.add(new UILabel("Đến (dd/MM/yyyy):", 135, 25));
+        UITextField txtToDate = new UITextField(100, 25);
+        panelForFilter.add(txtToDate);
         btnLoc = new UIButton("confirm", "LỌC", 50, 25);
         panelForFilter.add(btnLoc);
-
-        // ===================== (CENTER - Biểu đồ cột) ===================== //
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        JFreeChart barChart = ChartFactory.createBarChart(
-                "THỐNG KÊ LỢI NHUẬN THEO NGÀY", "", "",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true, true, false
-        );
-        barChart.setBackgroundPaint(UIConstants.WHITE_FONT);
-        CategoryPlot plot = barChart.getCategoryPlot();
-        plot.setBackgroundPaint(UIConstants.WHITE_FONT);
-        plot.setRangeGridlinePaint(Color.GRAY);
-        plot.setDomainGridlinePaint(Color.GRAY);
-        NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setNumberFormatOverride(new DecimalFormat("#,###"));  
-        ChartPanel chartPanel = new ChartPanel(barChart);
 
         // ===================== (SOUTH - Bảng dữ liệu) ===================== //
         String[] columnNames = {"NGÀY", "VỐN", "DOANH THU", "LỢI NHUẬN"};
@@ -284,48 +269,56 @@ public class ThongKeDoanhThu extends JPanel {
         // ===================== (Sự kiện LỌC) ===================== //
         btnLoc.addActionListener(e -> {
             try {
-                String input = txtDate.getText();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 sdf.setLenient(false);
-                Date inputDate = sdf.parse(input);
-                Date minDate = sdf.parse("01/10/2024");
 
-                if (inputDate.before(minDate)) {
+                String fromInput = txtFromDate.getText().trim();
+                Date fromDate = sdf.parse(fromInput);
+                Date minDate = sdf.parse("01/10/2024");
+                if (fromDate.before(minDate)) {
                     JOptionPane.showMessageDialog(this, "Chỉ thống kê từ ngày 01/10/2024 trở đi.");
                     return;
                 }
+                String toInput = txtToDate.getText().trim();
+                Date toDate = sdf.parse(toInput);
 
-                String date = chuyenDoiNgay(input);
-                if (date == null) return;
+                if (toDate.before(fromDate)) {
+                    JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau ngày bắt đầu.");
+                    return;
+                }
 
-                dataset.clear();
                 model.setRowCount(0);
+                long startTime = fromDate.getTime();
+                long endTime = toDate.getTime();
+                long oneDay = 24 * 60 * 60 * 1000; 
 
-                double von = phieuNhapBUS.getTongTienTheoNgay(date);
-                double doanhThu = phieuXuatBUS.getTongTienTheoNgay(date);
-                double loiNhuan = doanhThu - von;
+                for (long time = startTime; time <= endTime; time += oneDay) {
+                    Date currentDate = new Date(time);
+                    String currentDateStr = sdf.format(currentDate);
+                    String dbDateStr = chuyenDoiNgay(currentDateStr);
 
-                dataset.addValue(von, "Vốn", "Ngày");
-                dataset.addValue(doanhThu, "Doanh thu", "Ngày");
-                dataset.addValue(loiNhuan, "Lợi nhuận", "Ngày");
+                    double von = phieuNhapBUS.getTongTienTheoNgay(dbDateStr);
+                    double doanhThu = phieuXuatBUS.getTongTienTheoNgay(dbDateStr);
+                    double loiNhuan = doanhThu - von;
 
-                model.addRow(new Object[]{
-                        input,
+                    model.addRow(new Object[]{
+                        currentDateStr,
                         String.format("%,.0f VNĐ", von),
                         String.format("%,.0f VNĐ", doanhThu),
                         String.format("%,.0f VNĐ", loiNhuan)
-                });
-
-            } catch (Exception ex) {
+                    });
+                }
+            } catch (ParseException ex) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày hợp lệ (vd: 15/04/2025).");
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi thực hiện thống kê.");
+                ex.printStackTrace();
             }
         });
 
         // ===================== (Thêm vào mainPanel) ===================== //
         mainPanel.add(panelForFilter, BorderLayout.NORTH);
-        mainPanel.add(chartPanel, BorderLayout.CENTER);
-        mainPanel.add(scrollPane, BorderLayout.SOUTH);
-
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
         return mainPanel;
     }
 

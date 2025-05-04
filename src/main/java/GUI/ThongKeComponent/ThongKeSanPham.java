@@ -119,8 +119,8 @@ public class ThongKeSanPham extends JPanel {
         // ===================== (Sự kiện lọc) ===================== //
         btnLoc.addActionListener(e -> {
             try {
-                int fromYear = Integer.parseInt(txtYearFrom.getText());
-                int toYear = Integer.parseInt(txtYearTo.getText());
+                int fromYear = Integer.parseInt(txtYearFrom.getText().trim());
+                int toYear = Integer.parseInt(txtYearTo.getText().trim());
                 if (fromYear < 2024 || toYear < 2024) {
                     JOptionPane.showMessageDialog(this, "Chỉ được thống kê từ năm 2024 trở đi.");
                     return;
@@ -216,7 +216,7 @@ public class ThongKeSanPham extends JPanel {
         // ===================== (Sự kiện lọc) ===================== //
         btnLoc.addActionListener(e -> {
             try {
-                int nam = Integer.parseInt(txtYear.getText());
+                int nam = Integer.parseInt(txtYear.getText().trim());
                 if (nam < 2024) {
                     JOptionPane.showMessageDialog(this, "Chỉ được thống kê từ năm 2024 trở đi.");
                     return;
@@ -271,23 +271,6 @@ public class ThongKeSanPham extends JPanel {
         btnLoc = new UIButton("confirm", "LỌC", 50, 25);
         panelForFilter.add(btnLoc);
 
-        // ===================== (CENTER - Biểu đồ cột đôi) ===================== //
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        JFreeChart barChart = ChartFactory.createBarChart(
-                "THỐNG KÊ SẢN PHẨM THEO NGÀY", "", "",
-                dataset,
-                PlotOrientation.VERTICAL,
-                true, true, false
-        );
-        barChart.setBackgroundPaint(UIConstants.WHITE_FONT); 
-        CategoryPlot plot = barChart.getCategoryPlot();
-        plot.setBackgroundPaint(UIConstants.WHITE_FONT); 
-        plot.setRangeGridlinePaint(Color.GRAY);
-        plot.setDomainGridlinePaint(Color.GRAY);
-
-        ChartPanel chartPanel = new ChartPanel(barChart);
-        chartPanel.setPreferredSize(new Dimension(0, 300));
-
         // ===================== (SOUTH - Bảng dữ liệu) ===================== //
         String[] columnNames = {"MÃ SẢN PHẨM", "TÊN SẢN PHẨM", "SỐ LƯỢNG NHẬP", "SỐ LƯỢNG BÁN"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
@@ -298,25 +281,20 @@ public class ThongKeSanPham extends JPanel {
         // ===================== (Sự kiện lọc) ===================== //
         btnLoc.addActionListener(e -> {
             try {
-                String input = txtDate.getText();
-
+                String input = txtDate.getText().trim();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 sdf.setLenient(false);
 
                 Date inputDate = sdf.parse(input);
                 Date minDate = sdf.parse("01/10/2024");
-
                 if (inputDate.before(minDate)) {
                     JOptionPane.showMessageDialog(this, "Chỉ thống kê từ ngày 01/10/2024 trở đi.");
                     return;
                 }
-
-                String date = chuyenDoiNgay(input); // Nếu bạn cần định dạng khác để dùng trong truy vấn
+                String date = chuyenDoiNgay(input); 
                 if (date == null) return;
-
                 model.setRowCount(0);
-                dataset.clear();
-
+                
                 for (SanPhamDTO sp : sanPhamBUS.getSanPhamByExactDate(date)) {
                     int soLuongNhap = ctpnBUS.getTongSoLuongNhap(sp.getMaSP(), date);
                     int soLuongBan = ctpxBUS.getTongSoLuongXuat(sp.getMaSP(), date);
@@ -324,19 +302,14 @@ public class ThongKeSanPham extends JPanel {
                     model.addRow(new Object[]{
                             sp.getMaSP(), sp.getTenSP(), soLuongNhap, soLuongBan
                     });
-
-                    dataset.addValue(soLuongNhap, "Số lượng nhập", sp.getTenSP());
-                    dataset.addValue(soLuongBan, "Số lượng bán", sp.getTenSP());
                 }
-
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày hợp lệ (vd: 15/04/2025).");
             }
         });
         // ===================== (Thêm vào mainPanel) ===================== //
         mainPanel.add(panelForFilter, BorderLayout.NORTH);
-        mainPanel.add(chartPanel, BorderLayout.CENTER);
-        mainPanel.add(scrollPane, BorderLayout.SOUTH);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         return mainPanel;
     }

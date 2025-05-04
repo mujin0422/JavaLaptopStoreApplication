@@ -231,15 +231,6 @@ public class AddAndEditGuaranteeGUI extends JDialog{
     }
     
     private boolean checkFormInput() {
-        if (txtMaPBH.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã phiếu bảo hành.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-        int maPBH = Integer.parseInt(txtMaPBH.getText().trim());
-        if (maPBH <= 0) {
-            JOptionPane.showMessageDialog(this, "Mã phiếu bảo hành phải là số nguyên dương.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
         if (txtMaPX.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã phiếu xuất.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return false;

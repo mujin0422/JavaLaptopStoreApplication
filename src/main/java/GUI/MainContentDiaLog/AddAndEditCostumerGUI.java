@@ -41,9 +41,8 @@ public class AddAndEditCostumerGUI extends JDialog{
         super(parent, title, true);
         this.khachHangBus = khachHangBus;
         initComponent(type);
-        // Thêm mới thì tự động lấy mã mới
         txtMaKH.setText(khachHangBus.getNextCustomerID());
-        txtMaKH.setEnabled(false); // Không cho sửa
+        txtMaKH.setEnabled(false); 
         
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -101,7 +100,7 @@ public class AddAndEditCostumerGUI extends JDialog{
             String soDT = txtSDT.getText().trim();
             String email = txtEmail.getText().trim();
             KhachHangDTO kh = new KhachHangDTO(maKH, tenKH, soDT, email);
-            if(khachHangBus.addKhachHang(kh)){
+            if(khachHangBus.updateKhachHang(kh)){
                 JOptionPane.showMessageDialog(this, "Cập nhật khach hang thành công!");
                 dispose();
             } else {
@@ -133,16 +132,6 @@ public class AddAndEditCostumerGUI extends JDialog{
     
     private boolean CheckFormInput() {
         try {
-            String maKHStr = txtMaKH.getText().trim();
-            if (maKHStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã khách hàng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-            int maKH = Integer.parseInt(maKHStr);
-            if (maKH <= 0) {
-                JOptionPane.showMessageDialog(this, "Mã khách hàng phải là số nguyên dương!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
             String tenKH = txtTenKH.getText().trim();
             if (tenKH.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Tên khách hàng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -167,8 +156,5 @@ public class AddAndEditCostumerGUI extends JDialog{
             return false;
         }
         return true;
-    }
-
-
-    
+    }   
 }
