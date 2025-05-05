@@ -1,10 +1,6 @@
 package GUI.MainContent;
 
-import BUS.ChiTietSanPhamBUS;
-import BUS.KhachHangBUS;
 import BUS.PhieuBaoHanhBUS;
-import BUS.PhieuXuatBUS;
-import BUS.SanPhamBUS;
 import BUS.TaiKhoanBUS;
 import DTO.PhieuBaoHanhDTO;
 import DTO.TaiKhoanDTO;

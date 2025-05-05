@@ -2,15 +2,15 @@ package GUI.MainContentDiaLog;
 
 import javax.swing.*;
 import java.awt.*;
-
 import BUS.NhanVienBUS;
 import DTO.NhanVienDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
+import Utils.UITextField;
 
 public class AddAndEditStaffGUI extends JDialog{
-    private JTextField txtMaNV, txtTenNV, txtEmail, txtSDT, txtVaiTro;
+    private UITextField txtMaNV, txtTenNV, txtEmail, txtSDT, txtVaiTro;
     private UIButton btnAdd, btnSave, btnCancel;
     private NhanVienBUS nhanVienBus;
     private NhanVienDTO nhanVien;
@@ -25,7 +25,8 @@ public class AddAndEditStaffGUI extends JDialog{
             txtTenNV.setText(nhanVien.getTenNV());
             txtSDT.setText(nhanVien.getSdt());
             txtEmail.setText(nhanVien.getEmail());
-            txtMaNV.setEnabled(false);
+            txtVaiTro.setText(nhanVien.getVaiTro());
+            txtMaNV.setEditable(false);
         }
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -35,11 +36,8 @@ public class AddAndEditStaffGUI extends JDialog{
         super(parent, title, true);
         this.nhanVienBus = nhanVienBus;
         initComponent(type);
-
-        // Thêm mới thì tự động lấy mã mới
         txtMaNV.setText(nhanVienBus.getNextEmployeeID());
-        txtMaNV.setEnabled(false); // Không cho sửa
-        
+        txtMaNV.setEditable(false); 
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
@@ -54,15 +52,15 @@ public class AddAndEditStaffGUI extends JDialog{
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         inputPanel.add(new UILabel("Mã Nhân Viên:"));
-        inputPanel.add(txtMaNV = new JTextField());
+        inputPanel.add(txtMaNV = new UITextField(0,0));
         inputPanel.add(new UILabel("Tên Nhân Viên:"));
-        inputPanel.add(txtTenNV = new JTextField());
+        inputPanel.add(txtTenNV = new UITextField(0,0));
         inputPanel.add(new UILabel("Số Điện Thoại:"));
-        inputPanel.add(txtSDT = new JTextField());
+        inputPanel.add(txtSDT = new UITextField(0,0));
         inputPanel.add(new UILabel("Email:"));
-        inputPanel.add(txtEmail = new JTextField());
+        inputPanel.add(txtEmail = new UITextField(0,0));
         inputPanel.add(new UILabel("Vai Trò:"));
-        inputPanel.add(txtVaiTro = new JTextField());
+        inputPanel.add(txtVaiTro = new UITextField(0,0));
         //=============================( End Panel Input )==============================//
         
         

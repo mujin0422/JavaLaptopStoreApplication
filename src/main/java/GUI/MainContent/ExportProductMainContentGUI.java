@@ -136,9 +136,6 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         cbMaKH = new JComboBox<>();
         cbMaKH.setPreferredSize(new Dimension(520, 25));
         cbMaKH.setBackground(UIConstants.WHITE_FONT);
-        for(KhachHangDTO kh : khachHangBUS.getAllKhachHang()){
-            cbMaKH.addItem(kh.getTenKH());
-        }
         pnlFormNorth.add(cbMaKH);
             //CENTER
         String[] columns = {"MÃ", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN", "SERIAL"};
@@ -239,6 +236,8 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         this.add(pnlProduct, BorderLayout.EAST);
         this.add(pnlContent, BorderLayout.SOUTH);
         loadTableData();
+        loadComboBoxData();
+        resetFormInput();
     }
     
     private void applyPermissions(String username, int maCN) {
@@ -261,6 +260,13 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         }     
     }
     
+    public void loadComboBoxData() {
+        cbMaKH.removeAllItems(); 
+        for (KhachHangDTO kh : khachHangBUS.getAllKhachHang()) {
+            cbMaKH.addItem(kh.getTenKH());
+        }
+    }
+    
     private void loadChiTietSanPhamToTable() {
         tableModelForProduct.setRowCount(0);
         String tenSP = cbFilterChiTietSanPham.getSelectedItem().toString();
@@ -271,7 +277,6 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         }
     }
 
-    
     private void viewChiTietPhieuXuat() {
         int selectedRow = tblContent.getSelectedRow();
         if (selectedRow == -1) {

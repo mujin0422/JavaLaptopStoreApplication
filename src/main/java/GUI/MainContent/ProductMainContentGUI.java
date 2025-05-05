@@ -103,14 +103,14 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
             tableModel.addRow(new Object[] {
                 sp.getMaSP(),
                 sp.getTenSP(),
-                sp.getGiaSP(),
+                sp.getGiaSP() + " VNĐ",
                 sp.getSoLuongTon(),
                 sanPhamBUS.getTenCpuByMaSp(sp.getMaSP()),
                 sanPhamBUS.getDungLuongRamByMaSp(sp.getMaSP()) ,
                 sanPhamBUS.getDungLuongRomByMaSp(sp.getMaSP()),
                 sanPhamBUS.getTenDpgByMaSp(sp.getMaSP()),
                 sanPhamBUS.getTenThByMaSp(sp.getMaSP()),
-                sp.getThoiGianBH()
+                sp.getThoiGianBH() + " tháng"
             });
         }
     }
@@ -214,6 +214,11 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
                 sp.getThoiGianBH()
             });
         }
+    }
+
+    @Override
+    public void loadComboBoxData() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

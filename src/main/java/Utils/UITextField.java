@@ -21,13 +21,18 @@ public class UITextField extends JTextField{
         ));
     }
     
-   
     public void setEditable(boolean editable) {
         super.setEditable(editable);
         if (!editable) {
-            this.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));  
+            this.setBorder(new CompoundBorder(
+                new LineBorder(Color.GRAY, 1),      
+                new EmptyBorder(0, 5, 0, 0)        
+            ));          
         } else {
-            this.setBorder(new LineBorder(Color.LIGHT_GRAY, 1));  
+            this.setBorder(new CompoundBorder(
+                new LineBorder(Color.GRAY, 1),      
+                new EmptyBorder(0, 5, 0, 0)        
+            ));
         }
     }
 }

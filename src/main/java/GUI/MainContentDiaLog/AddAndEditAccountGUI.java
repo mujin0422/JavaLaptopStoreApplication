@@ -9,6 +9,7 @@ import DTO.TaiKhoanDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
+import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -18,10 +19,9 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class AddAndEditAccountGUI extends JDialog{
-    private JTextField txtTenDangNhap, txtMatKhau;
+    private UITextField txtTenDangNhap, txtMatKhau;
     private JComboBox cbMaNV, cbMaQuyen;
     private UIButton btnAdd, btnSave, btnCancel;
     private TaiKhoanBUS tkBus;
@@ -62,7 +62,7 @@ public class AddAndEditAccountGUI extends JDialog{
     private void initComponent(String type) {
         this.nvBus = new NhanVienBUS();
         this.quyenBus = new QuyenBUS();
-        this.setSize(450, 300);
+        this.setSize(450, 280);
         this.setLayout(new BorderLayout());
         
         JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
@@ -70,11 +70,9 @@ public class AddAndEditAccountGUI extends JDialog{
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         inputPanel.add(new UILabel("Tên đăng nhập:"));
-        inputPanel.add(txtTenDangNhap = new JTextField());
-        
+        inputPanel.add(txtTenDangNhap = new UITextField(0,0));
         inputPanel.add(new UILabel("Mật khẩu:"));
-        inputPanel.add(txtMatKhau = new JTextField());
-        
+        inputPanel.add(txtMatKhau = new UITextField(0,0));
         inputPanel.add(new UILabel("Nhân viên:"));
         cbMaNV = new JComboBox<>();
         cbMaNV.setBackground(UIConstants.WHITE_FONT);
@@ -88,7 +86,6 @@ public class AddAndEditAccountGUI extends JDialog{
             }
         }
         inputPanel.add(cbMaNV);
-        
         inputPanel.add(new UILabel("Nhóm Quyền:"));
         cbMaQuyen = new JComboBox<>();
         cbMaQuyen.setBackground(UIConstants.WHITE_FONT);

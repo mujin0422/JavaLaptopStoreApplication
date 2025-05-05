@@ -30,7 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class CustomerMainContentGUI extends JPanel{
+public class CustomerMainContentGUI extends JPanel implements ReloadablePanel{
     private UIButton btnAdd, btnDelete, btnEdit, btnExcel;
     private UITextField txtSearch;
     private UITable tblContent;
@@ -106,7 +106,7 @@ public class CustomerMainContentGUI extends JPanel{
         btnDelete.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
-    private void loadTableData(){
+    public void loadTableData(){
         tableModel.setRowCount(0);
         for(KhachHangDTO kh : khachHangBUS.getAllKhachHang()){
             tableModel.addRow(new Object[]{
@@ -179,17 +179,17 @@ public class CustomerMainContentGUI extends JPanel{
     private void deleteCustomer(){
         int selectedRow = tblContent.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khach hang để xoa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn một khách hàng để xoa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int confirm = JOptionPane.showConfirmDialog(this, "Ban co chac chan khong", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn không", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             int maKH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
             if (khachHangBUS.deleteKhachHang(maKH)) { 
-                JOptionPane.showMessageDialog(this, "Xóa khach hang thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 loadTableData();
             } else {
-                JOptionPane.showMessageDialog(this, "Xóa khach hang thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Xóa khách hàng thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -214,5 +214,10 @@ public class CustomerMainContentGUI extends JPanel{
                 kh.getEmail()
             });
         }
+    }
+
+    @Override
+    public void loadComboBoxData() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

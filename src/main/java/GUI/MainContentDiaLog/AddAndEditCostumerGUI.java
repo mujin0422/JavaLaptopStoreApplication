@@ -5,6 +5,7 @@ import DTO.KhachHangDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
+import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -13,10 +14,9 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class AddAndEditCostumerGUI extends JDialog{
-    private JTextField txtMaKH, txtTenKH, txtSDT, txtEmail;
+    private UITextField txtMaKH, txtTenKH, txtSDT, txtEmail;
     private UIButton btnAdd, btnSave, btnCancel;
     private KhachHangBUS khachHangBus;
     private KhachHangDTO khachHang;
@@ -31,7 +31,7 @@ public class AddAndEditCostumerGUI extends JDialog{
             txtTenKH.setText(khachHang.getTenKH());
             txtSDT.setText(khachHang.getSdt());
             txtEmail.setText(khachHang.getEmail());
-            txtMaKH.setEnabled(false);
+            txtMaKH.setEditable(false);
         }
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -42,7 +42,7 @@ public class AddAndEditCostumerGUI extends JDialog{
         this.khachHangBus = khachHangBus;
         initComponent(type);
         txtMaKH.setText(khachHangBus.getNextCustomerID());
-        txtMaKH.setEnabled(false); 
+        txtMaKH.setEditable(false); 
         
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -58,13 +58,13 @@ public class AddAndEditCostumerGUI extends JDialog{
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         inputPanel.add(new UILabel("Mã Khách Hàng:"));
-        inputPanel.add(txtMaKH = new JTextField());
+        inputPanel.add(txtMaKH = new UITextField(0,0));
         inputPanel.add(new UILabel("Tên Khách Hàng:"));
-        inputPanel.add(txtTenKH = new JTextField());
+        inputPanel.add(txtTenKH = new UITextField(0,0));
         inputPanel.add(new UILabel("Số điện thoại:"));
-        inputPanel.add(txtSDT = new JTextField());
+        inputPanel.add(txtSDT = new UITextField(0,0));
         inputPanel.add(new UILabel("Email:"));
-        inputPanel.add(txtEmail = new JTextField());
+        inputPanel.add(txtEmail = new UITextField(0,0));
         //=============================( End Panel Input )==============================//
         
         
@@ -75,7 +75,6 @@ public class AddAndEditCostumerGUI extends JDialog{
         btnAdd = new UIButton("add", "THÊM", 90, 35);
         btnSave = new UIButton("confirm", "LƯU", 90, 35);
         btnCancel = new UIButton("cancel", "HỦY", 90, 35);
-        
         switch(type) {
             case("add") -> btnPanel.add(btnAdd);
             case("save") -> btnPanel.add(btnSave);          
@@ -86,7 +85,6 @@ public class AddAndEditCostumerGUI extends JDialog{
         
         this.add(inputPanel, BorderLayout.CENTER);
         this.add(btnPanel, BorderLayout.SOUTH);
-
         btnCancel.addActionListener(e -> dispose());
         btnAdd.addActionListener(e -> addCostumer());
         btnSave.addActionListener(e -> saveCostumer());
@@ -101,10 +99,10 @@ public class AddAndEditCostumerGUI extends JDialog{
             String email = txtEmail.getText().trim();
             KhachHangDTO kh = new KhachHangDTO(maKH, tenKH, soDT, email);
             if(khachHangBus.updateKhachHang(kh)){
-                JOptionPane.showMessageDialog(this, "Cập nhật khach hang thành công!");
+                JOptionPane.showMessageDialog(this, "Cập nhật khách hàng thành công!");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Cập nhật khach hang that bai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Cập nhật khách hàng that bai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -120,10 +118,10 @@ public class AddAndEditCostumerGUI extends JDialog{
             String email = txtEmail.getText().trim();
             KhachHangDTO kh = new KhachHangDTO(maKH, tenKH, soDT, email);
             if(khachHangBus.addKhachHang(kh)){
-                JOptionPane.showMessageDialog(this, "Thêm khach hang thành công!");
+                JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công!");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Mã khach hang đã tồn tại hoặc dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);

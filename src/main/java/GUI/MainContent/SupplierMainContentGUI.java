@@ -30,7 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class SupplierMainContentGUI extends JPanel{
+public class SupplierMainContentGUI extends JPanel implements ReloadablePanel{
     private UIButton btnAdd, btnDelete, btnEdit, btnExcel;
     private UITextField txtSearch;
     private UITable tblContent;
@@ -102,7 +102,7 @@ public class SupplierMainContentGUI extends JPanel{
         btnDelete.setVisible(taiKhoanBUS.hasPermission(username, maCN, "delete"));
     }
     
-    private void loadTableData(){
+    public void loadTableData(){
         tableModel.setRowCount(0);
         ArrayList<NhaCungCapDTO> listNCC = nhaCungCapBus.getAllNhaCungCap();
         for (NhaCungCapDTO ncc: listNCC){
@@ -212,5 +212,10 @@ public class SupplierMainContentGUI extends JPanel{
                 ncc.getSdt()
             });
         }
+    }
+
+    @Override
+    public void loadComboBoxData() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

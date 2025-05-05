@@ -125,7 +125,6 @@ public class StaffMainContentGUI extends JPanel{
                 exportDir.mkdirs();
             }
             String filePath = "bang/DanhSachNhanVien.xlsx";
-
             // Tạo workbook và sheet
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = workbook.createSheet("Nhân Viên");
@@ -151,7 +150,6 @@ public class StaffMainContentGUI extends JPanel{
                 workbook.write(out);
             }
             workbook.close();
-
             JOptionPane.showMessageDialog(this, "Xuất danh sách nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -172,14 +170,12 @@ public class StaffMainContentGUI extends JPanel{
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một nhân viên để chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-    
         int maNV = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
         NhanVienDTO nv = nhanVienBUS.getById(maNV);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditStaffGUI((JFrame) window, nhanVienBUS, "Chỉnh sửa nhân viên", "save", nv);
         loadTableData();
     }
-    
     
     private void deleteStaff(){
         int selectedRow = tblContent.getSelectedRow();

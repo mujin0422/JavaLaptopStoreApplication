@@ -11,6 +11,7 @@ import Utils.UIConstants;
 import Utils.UILabel;
 import Utils.UITextField;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -43,20 +45,20 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         initComponent(type);
         if (phieuBaoHanh != null) {
             txtMaPBH.setText(String.valueOf(phieuBaoHanh.getMaPBH()));
-            txtMaPBH.setEnabled(false);
+            txtMaPBH.setEditable(false);
             txtMaPX.setText(String.valueOf(phieuBaoHanhBus.getMaPxByMaPbh(phieuBaoHanh.getMaPBH())));
-            txtMaPX.setEnabled(false);
+            txtMaPX.setEditable(false);
             cbSerialSP.setSelectedItem(phieuBaoHanh.getSerialSP());
-            cbSerialSP.setEnabled(false);
+            cbSerialSP.setEditable(false);
             txtMoTaLoi.setText(phieuBaoHanh.getMoTaLoi());
             txtMoTaLoi.setEditable(false);
             cbTrangThaiBH.setSelectedIndex(phieuBaoHanh.getTrangThaiBH());
-            cbTrangThaiBH.setEnabled(true); 
+            cbTrangThaiBH.setEditable(true); 
             int maNVBH = phieuBaoHanh.getMaNVBH();
             String tenNv = nvBus.getTenNvByMaNv(maNVBH);
             if (tenNv != null) {
                 cbNhanVien.setSelectedItem(tenNv);
-                cbNhanVien.setEnabled(false);
+                cbNhanVien.setEditable(false);
             }
         }
         this.setLocationRelativeTo(parent);
@@ -67,11 +69,8 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         super(parent, title, true);
         this.phieuBaoHanhBus = phieuBaoHanhBus;
         initComponent(type);
-        
-        // Thêm mới thì tự động lấy mã mới
         txtMaPBH.setText(phieuBaoHanhBus.getNextGuaranteeID());
-        txtMaPBH.setEnabled(false); // Không cho sửa
-        
+        txtMaPBH.setEditable(false); 
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
@@ -137,9 +136,11 @@ public class AddAndEditGuaranteeGUI extends JDialog{
 
         inputPanel.add(new UILabel("Mô Tả Lỗi:"));
         txtMoTaLoi = new JTextArea();
+        Border line = BorderFactory.createLineBorder(Color.GRAY, 1);
+        Border padding = BorderFactory.createEmptyBorder(2, 5, 2, 5);
+        Border compound = BorderFactory.createCompoundBorder(line, padding);
+        txtMoTaLoi.setBorder(compound);
         inputPanel.add(txtMoTaLoi);
-        
-        
         inputPanel.add(new UILabel("Trạng Thái Bảo Hành:"));
         cbTrangThaiBH = new JComboBox<>();
         cbNhanVien.setBackground(UIConstants.WHITE_FONT);
@@ -154,7 +155,6 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         btnAdd = new UIButton("add", "THÊM", 90, 35);
         btnSave = new UIButton("confirm", "LƯU", 90, 35);
         btnCancel = new UIButton("cancel", "HỦY", 90, 35);
-
         if (type.equals("add")) {
             btnPanel.add(btnAdd);
         } else if (type.equals("save")) {
@@ -206,7 +206,6 @@ public class AddAndEditGuaranteeGUI extends JDialog{
         }
     }
 
-    
     private void saveGuarantee(){
         if(!checkFormInput()) return;
         try {

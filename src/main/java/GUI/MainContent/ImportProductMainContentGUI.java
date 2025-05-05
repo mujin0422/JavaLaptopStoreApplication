@@ -135,9 +135,6 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         cbMaNCC = new JComboBox<>();
         cbMaNCC.setPreferredSize(new Dimension(370, 25));
         cbMaNCC.setBackground(UIConstants.WHITE_FONT);
-        for(NhaCungCapDTO ncc : nhaCungCapBUS.getAllNhaCungCap()){
-            cbMaNCC.addItem(ncc.getTenNCC());
-        }
         pnlFormNorth.add(cbMaNCC);
             //CENTER
         String[] columnsForm = {"MÃ", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN"};
@@ -234,6 +231,8 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         this.add(pnlContent, BorderLayout.SOUTH);
         loadTableData();
         addSearchFunctionality();
+        loadComboBoxData(); 
+        resetFormInput();
     }
     
     private void applyPermissions(String username, int maCN) {
@@ -263,6 +262,13 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
                 (int)giaNhap,
                 sp.getSoLuongTon()
             });
+        }
+    }
+    
+    public void loadComboBoxData() {
+        cbMaNCC.removeAllItems();
+        for(NhaCungCapDTO ncc : nhaCungCapBUS.getAllNhaCungCap()){
+            cbMaNCC.addItem(ncc.getTenNCC());
         }
     }
     
@@ -423,11 +429,12 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
     }
     
     private void resetFormInput(){
-        String nextMaPN = phieuNhapBUS.getNextImportID();  //Tự động tạo mã
+        String nextMaPN = phieuNhapBUS.getNextImportID();  
         txtMaPN.setText(nextMaPN);
-        txtMaPN.setEditable(false); //Khóa không cho sửa
+        txtMaPN.setEditable(false);
         tableModelForForm.setRowCount(0);
     }
+    
     private boolean checkFormInput(){
         try {
             if (tblForForm.getRowCount() == 0) {

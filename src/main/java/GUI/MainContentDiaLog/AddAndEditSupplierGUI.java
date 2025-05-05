@@ -5,6 +5,7 @@ import DTO.NhaCungCapDTO;
 import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
+import Utils.UITextField;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -14,10 +15,9 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class AddAndEditSupplierGUI extends JDialog{
-    private JTextField txtMaNCC, txtTenNCC, txtDiaChi, txtSDT;
+    private UITextField txtMaNCC, txtTenNCC, txtDiaChi, txtSDT;
     private UIButton btnAdd, btnSave, btnCancel;
     private NhaCungCapBUS nccBus;
     private NhaCungCapDTO ncc;
@@ -32,7 +32,7 @@ public class AddAndEditSupplierGUI extends JDialog{
             txtTenNCC.setText(ncc.getTenNCC());
             txtDiaChi.setText(ncc.getDiaChi());
             txtSDT.setText(ncc.getSdt());
-            txtMaNCC.setEnabled(false);
+            txtMaNCC.setEditable(false);
         }
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -42,11 +42,8 @@ public class AddAndEditSupplierGUI extends JDialog{
         super(parent, title, true);
         this.nccBus = nccBus;
         initComponent(type);
-        
-        // Thêm mới thì tự động lấy mã mới
         txtMaNCC.setText(nccBus.getNextSupplierID());
-        txtMaNCC.setEnabled(false); // Không cho sửa
-        
+        txtMaNCC.setEditable(false); 
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
@@ -61,13 +58,13 @@ public class AddAndEditSupplierGUI extends JDialog{
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         inputPanel.add(new UILabel("Mã Nhà Cung Cấp:"));
-        inputPanel.add(txtMaNCC = new JTextField());
+        inputPanel.add(txtMaNCC = new UITextField(0,0));
         inputPanel.add(new UILabel("Tên Nhà Cung Cấp:"));
-        inputPanel.add(txtTenNCC = new JTextField());
+        inputPanel.add(txtTenNCC = new UITextField(0,0));
         inputPanel.add(new UILabel("Địa chỉ:"));
-        inputPanel.add(txtDiaChi = new JTextField());
+        inputPanel.add(txtDiaChi = new UITextField(0,0));
         inputPanel.add(new UILabel("Số điện thoại:"));
-        inputPanel.add(txtSDT = new JTextField());
+        inputPanel.add(txtSDT = new UITextField(0,0));
         //=============================( End Panel Input )==============================//
         
         //==============================( PANEL BUTTON )================================//
@@ -77,7 +74,6 @@ public class AddAndEditSupplierGUI extends JDialog{
         btnAdd = new UIButton("add", "THÊM", 90, 35);
         btnSave = new UIButton("confirm", "LƯU", 90, 35);
         btnCancel = new UIButton("cancel", "HỦY", 90, 35);
-        
         switch(type) {
             case("add") -> btnPanel.add(btnAdd);
             case("save") -> btnPanel.add(btnSave);          
@@ -88,7 +84,6 @@ public class AddAndEditSupplierGUI extends JDialog{
         
         this.add(inputPanel, BorderLayout.CENTER);
         this.add(btnPanel, BorderLayout.SOUTH);
-
         btnCancel.addActionListener(e -> dispose());
         btnAdd.addActionListener(e -> addSupplier());
         btnSave.addActionListener(e -> saveSupplier());
@@ -106,7 +101,7 @@ public class AddAndEditSupplierGUI extends JDialog{
                 JOptionPane.showMessageDialog(this, "Thêm thành công!");
                 dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Mã NCC đã tồn tại hoặc dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Lỗi nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);

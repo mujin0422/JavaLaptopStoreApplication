@@ -81,8 +81,8 @@ public class AddAndEditProductGUI extends JDialog {
                 cbTh.setSelectedItem(tenTH);
             }
             txtThoiGianBH.setText(String.valueOf(sanPham.getThoiGianBH()));
-            txtMaSP.setEnabled(false);
-            txtSoLuongTon.setEnabled(false);
+            txtMaSP.setEditable(false);
+            txtSoLuongTon.setEditable(false);
             
         }
         this.setLocationRelativeTo(parent);
@@ -92,12 +92,9 @@ public class AddAndEditProductGUI extends JDialog {
     public AddAndEditProductGUI(JFrame parent, SanPhamBUS sanPhamBus, String title, String type) {
         super(parent, title, true);
         this.sanPhamBus = sanPhamBus;
-        initComponent(type);
-        
-        // Thêm mới thì tự động lấy mã mới
+        initComponent(type); 
         txtMaSP.setText(sanPhamBus.getNextProductID());
-        txtMaSP.setEnabled(false); // Không cho sửa
-        
+        txtMaSP.setEditable(false); 
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
     }
