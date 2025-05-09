@@ -93,38 +93,6 @@ public class NhaCungCapDAO {
         return null;
     }
     
-    public int getMaNccByTenNCC(String tenNcc) {
-        String sql = "SELECT maNCC FROM nhacungcap WHERE tenNCC=?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, tenNcc); 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("maNCC"); 
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0; 
-    }
-
-    public String getTenNccByMaNCC(int maNcc) {
-        String sql = "SELECT tenNCC FROM nhacungcap WHERE maNCC=?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maNcc); 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("tenNCC"); 
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null; 
-    }
-    
     public static String getNextSupplierID() {
         String query = "SELECT MAX(maNCC) AS max_id FROM nhacungcap";
         try (Connection conn = DatabaseConnection.getConnection();

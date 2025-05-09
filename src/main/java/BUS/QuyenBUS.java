@@ -10,19 +10,18 @@ public class QuyenBUS {
     public QuyenBUS(){
         quyenDAO = new QuyenDAO();
     }
-    
     public ArrayList<QuyenDTO> getAllQuyen(){
         return quyenDAO.getAll();
     }
-    
+    public QuyenDTO getById(int id){
+        return quyenDAO.getById(id);
+    }
     public boolean addQuyen(QuyenDTO quyen){
         return quyenDAO.add(quyen) > 0;
     }
-    
     public boolean updateQuyen(QuyenDTO quyen){
         return quyenDAO.update(quyen) > 0;
-    }
-    
+    } 
     public boolean deleteQuyen(int maQuyen){
         return quyenDAO.delete(maQuyen) > 0;
     }
@@ -41,10 +40,6 @@ public class QuyenBUS {
             }
         }
         return ketQua;
-    }
-    
-    public String getTenQuyenByMaQuyen(int maQuyen){
-        return quyenDAO.getTenQuyenByMaQuyen(maQuyen);
     }
     
     public int getMaQuyenByTenQuyen(String tenQuyen) {

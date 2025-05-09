@@ -108,21 +108,6 @@ public class NhanVienDAO {
         return 0; 
     }
     
-    public String getTenNvByMaNv(int maNv) {
-        String sql = "SELECT tenNV FROM nhanvien WHERE maNV=?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maNv); 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("tenNV"); 
-                }
-            }
-        } catch (SQLException e) {
-        }
-        return null; 
-    }
-    
     public NhanVienDTO getCurrentStaffByUserName(String username){
         String sql = "SELECT * FROM taikhoan tk JOIN nhanvien nv "
                 + "WHERE nv.maNV = tk.maNV AND tk.tenDangNhap=? ";

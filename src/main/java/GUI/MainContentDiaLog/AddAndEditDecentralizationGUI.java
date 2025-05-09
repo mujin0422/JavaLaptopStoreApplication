@@ -121,6 +121,13 @@ public class AddAndEditDecentralizationGUI extends JDialog {
                 pnlCheckBox.add(ckbChucNang[i][j]);
             }
         }
+        ckbChucNang[6][1].setEnabled(false);
+        ckbChucNang[6][2].setEnabled(false);
+        ckbChucNang[7][1].setEnabled(false);
+        ckbChucNang[7][2].setEnabled(false);
+        ckbChucNang[10][0].setEnabled(false);
+        ckbChucNang[10][1].setEnabled(false);
+        ckbChucNang[10][2].setEnabled(false);
         
         JPanel pnlButton = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         pnlButton.setBackground(UIConstants.WHITE_FONT);

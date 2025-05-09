@@ -91,36 +91,39 @@ public class KhachHangDAO {
         return null;
     }
     
-    public int getMaKhByTenKh(String tenKh) {
-        String sql = "SELECT maKH FROM khachhang WHERE tenKH=?";
+    public boolean existsSDT(String sdt) {
+        String query = "SELECT COUNT(*) FROM khachhang WHERE sdt = ?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, tenKh); 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("maKH"); 
-                }
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, sdt);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0; 
+        return false;
     }
-
-    public String getTenKhByMaKh(int maKh) {
-        String sql = "SELECT tenKH FROM khachhang WHERE maKH=?";
+    
+    public KhachHangDTO getKhBySDT(String sdt) {
+        String query = "SELECT * FROM khachhang WHERE sdt = ?";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maKh); 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("tenKH"); 
-                }
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, sdt);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new KhachHangDTO(
+                    rs.getInt("maKH"),
+                    rs.getString("tenKH"),
+                    rs.getString("sdt"),
+                    rs.getString("email")
+                );
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; 
+        return null;
     }
     
     public static String getNextCustomerID() {

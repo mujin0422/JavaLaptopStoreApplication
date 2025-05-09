@@ -55,7 +55,7 @@ public class AddAndEditGuaranteeGUI extends JDialog{
             cbTrangThaiBH.setSelectedIndex(phieuBaoHanh.getTrangThaiBH());
             cbTrangThaiBH.setEditable(true); 
             int maNVBH = phieuBaoHanh.getMaNVBH();
-            String tenNv = nvBus.getTenNvByMaNv(maNVBH);
+            String tenNv = nvBus.getById(maNVBH).getTenNV();
             if (tenNv != null) {
                 cbNhanVien.setSelectedItem(tenNv);
                 cbNhanVien.setEditable(false);

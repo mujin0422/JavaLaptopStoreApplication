@@ -52,21 +52,6 @@ public class PhieuXuatDAO {
         }
         return 0;
     }
-    
-    public int exists(int maPX) {
-        String sql = "SELECT COUNT(*) FROM phieuxuat WHERE maPX=?";
-        try (Connection conn = DatabaseConnection.getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, maPX);  
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);  
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;  
-    }
 
     public ArrayList<PhieuXuatDTO> getAll() {
         ArrayList<PhieuXuatDTO> list = new ArrayList<>();

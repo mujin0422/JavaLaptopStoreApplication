@@ -99,20 +99,4 @@ public class CpuDAO {
         }
         return 0;
     }
-    
-    public String getTenCpuByMaCpu(int maCpu){
-        String sql = "SELECT tenCPU FROM cpu WHERE maCPU=?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maCpu);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getString("tenCPU");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

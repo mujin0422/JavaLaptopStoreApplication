@@ -168,7 +168,7 @@ public class SupplierMainContentGUI extends JPanel implements ReloadablePanel{
             return;
         }
         int maNCC = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-        NhaCungCapDTO ncc = nhaCungCapBus.getNhaCungCapById(maNCC);
+        NhaCungCapDTO ncc = nhaCungCapBus.getById(maNCC);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditSupplierGUI((JFrame) window, nhaCungCapBus, "Sửa Nhà Cung Cấp", "save", ncc);
         loadTableData();
@@ -212,10 +212,5 @@ public class SupplierMainContentGUI extends JPanel implements ReloadablePanel{
                 ncc.getSdt()
             });
         }
-    }
-
-    @Override
-    public void loadComboBoxData() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

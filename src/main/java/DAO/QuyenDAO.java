@@ -84,22 +84,6 @@ public class QuyenDAO {
         return null;
     }
     
-    public String getTenQuyenByMaQuyen(int maQuyen) {
-        String sql = "SELECT tenQuyen FROM quyen WHERE maQuyen=? AND trangThaiXoa=0";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maQuyen);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("tenQuyen");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     public int getMaQuyenByTenQuyen(String tenQuyen) {
         String sql = "SELECT maQuyen FROM quyen WHERE tenQuyen=? AND trangThaiXoa=0";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -115,7 +99,4 @@ public class QuyenDAO {
         }
         return -1; 
     }
-
-
-    
 }

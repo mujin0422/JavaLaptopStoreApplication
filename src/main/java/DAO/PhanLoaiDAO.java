@@ -99,21 +99,4 @@ public class PhanLoaiDAO {
         }
         return 0;
     }
-    
-    public String getTenLoaiByMaLoai(int maLoai) {
-        String sql = "SELECT tenLoai FROM phanloai WHERE maLoai=?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, maLoai);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getString("tenLoai");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
 }

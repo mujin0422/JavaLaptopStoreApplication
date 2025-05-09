@@ -1,5 +1,9 @@
 package GUI.MainContent;
 
+import BUS.CpuBUS;
+import BUS.DoPhanGiaiBUS;
+import BUS.RamBUS;
+import BUS.RomBUS;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Window;
@@ -10,6 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import BUS.SanPhamBUS;
 import BUS.TaiKhoanBUS;
+import BUS.ThuongHieuBUS;
 import DTO.SanPhamDTO;
 import DTO.TaiKhoanDTO;
 import GUI.MainContentDiaLog.AddAndEditProductGUI;
@@ -32,6 +37,11 @@ import javax.swing.event.DocumentListener;
 
 public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
     private SanPhamBUS sanPhamBUS;
+    private ThuongHieuBUS thuongHieuBUS;
+    private DoPhanGiaiBUS doPhanGiaiBUS;
+    private RamBUS ramBUS;
+    private RomBUS romBUS;
+    private CpuBUS cpuBUS;
     private UIButton btnAdd, btnDelete, btnEdit, btnExcel;
     private UITextField txtSearch;
     private UITable tblContent;
@@ -41,6 +51,11 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
 
     public ProductMainContentGUI(TaiKhoanDTO taiKhoan) {
         this.sanPhamBUS = new SanPhamBUS();
+        this.ramBUS = new RamBUS();
+        this.romBUS = new RomBUS();
+        this.cpuBUS = new CpuBUS();
+        this.thuongHieuBUS = new ThuongHieuBUS();
+        this.doPhanGiaiBUS = new DoPhanGiaiBUS();
         this.taiKhoanBUS = new TaiKhoanBUS();
         this.setBackground(UIConstants.SUB_BACKGROUND);
         this.setPreferredSize(new Dimension(UIConstants.WIDTH - 200 - 10, UIConstants.HEIGHT - 200 - 10));
@@ -105,11 +120,11 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
                 sp.getTenSP(),
                 sp.getGiaSP() + " VNĐ",
                 sp.getSoLuongTon(),
-                sanPhamBUS.getTenCpuByMaSp(sp.getMaSP()),
-                sanPhamBUS.getDungLuongRamByMaSp(sp.getMaSP()) ,
-                sanPhamBUS.getDungLuongRomByMaSp(sp.getMaSP()),
-                sanPhamBUS.getTenDpgByMaSp(sp.getMaSP()),
-                sanPhamBUS.getTenThByMaSp(sp.getMaSP()),
+                cpuBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaCPU()).getTenCPU(),
+                ramBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaRAM()).getDungLuongRAM(),
+                romBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaROM()).getDungLuongROM(),
+                doPhanGiaiBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaDPG()).getTenDPG(),
+                thuongHieuBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaTH()).getTenTH(),
                 sp.getThoiGianBH() + " tháng"
             });
         }
@@ -165,7 +180,7 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
             return;
         }
         int maSP = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-        SanPhamDTO sp = sanPhamBUS.getSanPhamById(maSP);
+        SanPhamDTO sp = sanPhamBUS.getById(maSP);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditProductGUI((JFrame) window, sanPhamBUS, "Chỉnh sửa sản phẩm", "save", sp);
         loadTableData();
@@ -199,26 +214,20 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
     private void searchCustomer() {
         String keyword = txtSearch.getText().trim().toLowerCase();
         tableModel.setRowCount(0); 
-        ArrayList<SanPhamDTO> listSP = sanPhamBUS.searchSanPham1(keyword);
+        ArrayList<SanPhamDTO> listSP = sanPhamBUS.searchSanPham(keyword);
         for (SanPhamDTO sp : listSP) {
             tableModel.addRow(new Object[]{
                 sp.getMaSP(),
                 sp.getTenSP(),
                 sp.getGiaSP(),
                 sp.getSoLuongTon(),
-                sanPhamBUS.getTenCpuByMaSp(sp.getMaSP()),
-                sanPhamBUS.getDungLuongRamByMaSp(sp.getMaSP()) ,
-                sanPhamBUS.getDungLuongRomByMaSp(sp.getMaSP()),
-                sanPhamBUS.getTenDpgByMaSp(sp.getMaSP()),
-                sanPhamBUS.getTenThByMaSp(sp.getMaSP()),
+                cpuBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaCPU()).getTenCPU(),
+                ramBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaRAM()).getDungLuongRAM(),
+                romBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaROM()).getDungLuongROM(),
+                doPhanGiaiBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaDPG()).getTenDPG(),
+                thuongHieuBUS.getById(sanPhamBUS.getById(sp.getMaSP()).getMaTH()).getTenTH(),
                 sp.getThoiGianBH()
             });
         }
     }
-
-    @Override
-    public void loadComboBoxData() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 }

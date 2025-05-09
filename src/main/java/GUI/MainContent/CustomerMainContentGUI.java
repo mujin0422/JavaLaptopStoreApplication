@@ -215,9 +215,4 @@ public class CustomerMainContentGUI extends JPanel implements ReloadablePanel{
             });
         }
     }
-
-    @Override
-    public void loadComboBoxData() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

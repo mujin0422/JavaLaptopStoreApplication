@@ -10,32 +10,23 @@ public class CpuBUS {
     public CpuBUS() {
         cpuDAO = new CpuDAO();
     }
-
     public ArrayList<CpuDTO> getAllCPU() {
         return cpuDAO.getAll();
     }
-
+    public CpuDTO getById(int maCPU) {
+        return cpuDAO.getById(maCPU);
+    }
     public boolean addCPU(CpuDTO cpu) {
         return cpuDAO.add(cpu) > 0;
     }
-
     public boolean updateCPU(CpuDTO cpu) {
         return cpuDAO.update(cpu) > 0;
     }
-
     public boolean deleteCPU(int maCPU) {
         return cpuDAO.delete(maCPU) > 0;
     }
 
-    public CpuDTO getCpuById(int maCPU) {
-        return cpuDAO.getById(maCPU);
-    }
-    
     public int getMaCpuByTenCpu(String tenCpu){
         return cpuDAO.getMaCpuByTenCpu(tenCpu);
-    }
-    
-    public String getTenCpuByMaCpu(int maCpu){
-        return cpuDAO.getTenCpuByMaCpu(maCpu);
     }
 }

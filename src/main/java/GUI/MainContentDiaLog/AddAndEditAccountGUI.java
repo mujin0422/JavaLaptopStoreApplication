@@ -38,11 +38,11 @@ public class AddAndEditAccountGUI extends JDialog{
             txtTenDangNhap.setText(tk.getTenDangNhap());
             txtMatKhau.setText(tk.getMatKhau());
             
-            String tenNv = nvBus.getTenNvByMaNv(tk.getMaNV());
+            String tenNv = nvBus.getById(tk.getMaNV()).getTenNV();
             if (tenNv != null) {
                 cbMaNV.setSelectedItem(tenNv);
             }
-            String tenQuyen = quyenBus.getTenQuyenByMaQuyen(tk.getMaQuyen());
+            String tenQuyen = quyenBus.getById(tk.getMaQuyen()).getTenQuyen();
             if (tenQuyen != null) {
                 cbMaQuyen.setSelectedItem(tenQuyen);
             }
@@ -62,7 +62,7 @@ public class AddAndEditAccountGUI extends JDialog{
     private void initComponent(String type) {
         this.nvBus = new NhanVienBUS();
         this.quyenBus = new QuyenBUS();
-        this.setSize(450, 280);
+        this.setSize(450, 270);
         this.setLayout(new BorderLayout());
         
         JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
@@ -95,7 +95,7 @@ public class AddAndEditAccountGUI extends JDialog{
         inputPanel.add(cbMaQuyen);
         
         
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         btnPanel.setBackground(UIConstants.MAIN_BACKGROUND);
         btnAdd = new UIButton("add", "THÊM", 90, 35);
         btnSave = new UIButton("confirm", "LƯU", 90, 35);

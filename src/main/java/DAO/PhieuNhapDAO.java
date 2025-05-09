@@ -52,22 +52,6 @@ public class PhieuNhapDAO {
         return 0;
     }
 
-    public int exists(int maPN) {
-        String sql = "SELECT COUNT(*) FROM phieunhap WHERE maPN = ?";
-        try (Connection conn = DatabaseConnection.getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, maPN);  
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1);  
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;  
-    }
-
-    
     public ArrayList<PhieuNhapDTO> getAll() {
         ArrayList<PhieuNhapDTO> dspn = new ArrayList<>();
         String sql = "SELECT * FROM phieunhap WHERE trangThaiXoa=0";

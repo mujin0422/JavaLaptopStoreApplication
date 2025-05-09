@@ -10,28 +10,23 @@ public class RomBUS {
     public RomBUS() {
         romDAO = new RomDAO();
     }
-
     public ArrayList<RomDTO> getAllROM() {
         return romDAO.getAll();
     }
-
+    public RomDTO getById(int maROM) {
+        return romDAO.getById(maROM);
+    }
     public boolean addROM(RomDTO rom) {       
         return romDAO.add(rom) > 0;
     }
-
     public boolean updateROM(RomDTO rom) {
         return romDAO.update(rom) > 0; 
     }
-
     public boolean deleteROM(int maROM) {
         return romDAO.delete(maROM) > 0;  
     }
     
     public int getMaRomByDungLuongRom(String dungLuongRom){
         return romDAO.getMaRomByDungLuongRom(dungLuongRom);
-    }
-    
-    public String getDungLuongRomByMaRom(int maRom) {
-        return romDAO.getDungLuongRomByMaRom(maRom);
     }
 }

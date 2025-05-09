@@ -10,19 +10,18 @@ public class ThuongHieuBUS {
     public ThuongHieuBUS() {
         thuongHieuDAO = new ThuongHieuDAO();
     }
-
     public ArrayList<ThuongHieuDTO> getAllThuongHieu() {
         return thuongHieuDAO.getAll();
     }
-
+    public ThuongHieuDTO getById(int maTH){
+        return thuongHieuDAO.getById(maTH);
+    }
     public boolean addThuongHieu(ThuongHieuDTO thuongHieu) {
         return thuongHieuDAO.add(thuongHieu) > 0;
     }
-
     public boolean updateThuongHieu(ThuongHieuDTO thuongHieu) {
         return thuongHieuDAO.update(thuongHieu) > 0;
     }
-
     public boolean deleteThuongHieu(int maTH) {
         return thuongHieuDAO.delete(maTH) > 0;
     }
@@ -31,7 +30,4 @@ public class ThuongHieuBUS {
         return thuongHieuDAO.getMaThByTenTh(tenTh);
     }
     
-    public String getTenThByMaTh(int maTH) {
-        return thuongHieuDAO.getTenThByMaTh(maTH);
-    }
 }

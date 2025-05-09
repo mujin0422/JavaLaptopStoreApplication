@@ -10,37 +10,31 @@ public class KhachHangBUS {
     public KhachHangBUS() {
         khachHangDAO = new KhachHangDAO();
     }
-
     public ArrayList<KhachHangDTO> getAllKhachHang() {
         return khachHangDAO.getAll();
     }
-    
     public KhachHangDTO getById(int maKH) {
         return khachHangDAO.getById(maKH);
     } 
-
     public boolean addKhachHang(KhachHangDTO khachHang) {
         return khachHangDAO.add(khachHang) > 0;
     }
-
     public boolean updateKhachHang(KhachHangDTO khachHang) {
         return khachHangDAO.update(khachHang) > 0;
     }
-
     public boolean deleteKhachHang(int maKH) {
         return khachHangDAO.delete(maKH) > 0;
     }
-    
-    public int getMaKhByTenKh(String tenKh){
-        return khachHangDAO.getMaKhByTenKh(tenKh);
-    }
-    
-    public String getTenKhByMaKh(int maKh){
-        return khachHangDAO.getTenKhByMaKh(maKh);
-    }
-    
     public String getNextCustomerID() {
         return khachHangDAO.getNextCustomerID();
+    }
+    
+    
+    public boolean existsSDT(String std) {
+        return khachHangDAO.existsSDT(std);
+    }
+    public KhachHangDTO getKhBySDT(String sdt) {
+        return khachHangDAO.getKhBySDT(sdt);
     }
 
     public ArrayList<KhachHangDTO> searchKhachHang(String keyword) {

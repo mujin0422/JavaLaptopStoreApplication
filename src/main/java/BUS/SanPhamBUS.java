@@ -11,89 +11,36 @@ public class SanPhamBUS {
     public SanPhamBUS() {
         sanPhamDAO = new SanPhamDAO();
     }
-
     public  ArrayList<SanPhamDTO> getAllSanPham() {
         return sanPhamDAO.getAll();
+    }
+    public SanPhamDTO getById(int maSP) {
+        return sanPhamDAO.getById(maSP);
+    }
+    public boolean addSanPham(SanPhamDTO sanPham) {
+        return sanPhamDAO.add(sanPham) > 0;
+    }
+    public boolean updateSanPham(SanPhamDTO sanPham) {
+        return sanPhamDAO.update(sanPham) > 0;
+    }
+    public boolean deleteSanPham(int maSP) {
+        return sanPhamDAO.delete(maSP) > 0;
+    }
+    public String getNextProductID() {
+        return sanPhamDAO.getNextProductID();
     }
     
     public int getMaSpByTenSp(String tenSp) {
         return sanPhamDAO.getMaSpByTenSp(tenSp);
     }
     
-    public int getGiaSpByMaSp(int maSp){
-        return sanPhamDAO.getGiaSpByMaSp(maSp);
-    }
-
-    public boolean addSanPham(SanPhamDTO sanPham) {
-        return sanPhamDAO.add(sanPham) > 0;
-    }
-
-    public boolean updateSanPham(SanPhamDTO sanPham) {
-        return sanPhamDAO.update(sanPham) > 0;
-    }
-
-    public boolean deleteSanPham(int maSP) {
-        return sanPhamDAO.delete(maSP) > 0;
-    }
-
-    public int getSoLuongTonSanPham(int maSp){
-        return sanPhamDAO.getSoLuongTonSanPham(maSp);
-    }
-    
     public boolean updateSoLuongTonSanPham(int maSp, int soLuongTon){
         return sanPhamDAO.updateSoLuongTonSanPham(maSp, soLuongTon) > 0;
     }
-    
-    public SanPhamDTO getSanPhamById(int maSP) {
-        return sanPhamDAO.getById(maSP);
-    }
-    
-     public String getTenThByMaSp(int maSp) {
-        return sanPhamDAO.getTenThByMaSp(maSp);
-    }
 
-    public String getTenCpuByMaSp(int maSp) {
-        return sanPhamDAO.getTenCpuByMaSp(maSp);
-    }
-
-    public String getTenDpgByMaSp(int maSp) {
-        return sanPhamDAO.getTenDpgByMaSp(maSp);
-    }
-
-    public String getTenLoaiByMaSp(int maSp) {
-        return sanPhamDAO.getTenLoaiByMaSp(maSp);
-    }
-
-    public String getDungLuongRamByMaSp(int maSp) {
-        return sanPhamDAO.getDungLuongRamByMaSp(maSp);
-    }
-
-    public String getDungLuongRomByMaSp(int maSp) {
-        return sanPhamDAO.getDungLuongRomByMaSp(maSp);
-    }
-    
-    public ArrayList<SanPhamDTO> searchSanPham(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return sanPhamDAO.getAll();
-        }
-        return sanPhamDAO.searchSanPham(keyword);
-    }
-    
-    public String getTenSanPhamByMaSanPham(int maSp){
-        return sanPhamDAO.getTenSanPhamByMaSanPham(maSp);
-    }
-    
-    public ArrayList<SanPhamDTO> searchSanPhamByMaOrTen(String keyword) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return sanPhamDAO.getAll();
-        }
-        return sanPhamDAO.searchByMaOrTen(keyword);
-    }
-    
     public ArrayList<SanPhamDTO> getSanPhamByDateRange(String startDate, String endDate) {
         return sanPhamDAO.getSanPhamByDateRange(startDate, endDate);
     }
-    
     public ArrayList<SanPhamDTO> getSanPhamByYearRange(int fromYear, int toYear) {
         return sanPhamDAO.getSanPhamByYearRange(fromYear, toYear);
     }
@@ -104,11 +51,7 @@ public class SanPhamBUS {
         return sanPhamDAO.getSanPhamByExactDate(date);
     }
     
-    public String getNextProductID() {
-        return sanPhamDAO.getNextProductID();
-    }
-     
-    public ArrayList<SanPhamDTO> searchSanPham1(String keyword) {
+    public ArrayList<SanPhamDTO> searchSanPham(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             return sanPhamDAO.getAll();
         }

@@ -123,7 +123,7 @@ public class GuaranteeMainContentGUI extends JPanel{
             return;
         }
         int maPBH = Integer.parseInt(tableModel.getValueAt(selectedRow, 0).toString());
-        PhieuBaoHanhDTO pbh = phieuBaoHanhBUS.getPhieuBaoHanhById(maPBH);
+        PhieuBaoHanhDTO pbh = phieuBaoHanhBUS.getById(maPBH);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditGuaranteeGUI((JFrame) window, phieuBaoHanhBUS, "Thêm Phiếu Bảo Hành", "save", pbh);
         loadTableData();

@@ -52,31 +52,27 @@ public class AddAndEditProductGUI extends JDialog {
             txtTenSP.setText(sanPham.getTenSP());
             txtGiaSP.setText(String.valueOf(sanPham.getGiaSP()));
             txtSoLuongTon.setText(String.valueOf(sanPham.getSoLuongTon()));
-            String tenCpu = cpuBus.getTenCpuByMaCpu(sanPham.getMaCPU());
+            String tenCpu = cpuBus.getById(sanPham.getMaCPU()).getTenCPU();
             if (tenCpu != null) {
                 cbCpu.setSelectedItem(tenCpu);
             }
-            String tenRam = ramBus.getDungLuongRamByMaRam(sanPham.getMaRAM());
+            String tenRam = ramBus.getById(sanPham.getMaRAM()).getDungLuongRAM();
             if (tenRam != null) {
                 cbRam.setSelectedItem(tenRam);
             }
-
-            String tenRom = romBus.getDungLuongRomByMaRom(sanPham.getMaROM());
+            String tenRom = romBus.getById(sanPham.getMaROM()).getDungLuongROM();
             if (tenRom != null) {
                 cbRom.setSelectedItem(tenRom);
             }
-
-            String tenDpg = doPhanGiaiBus.getTenDpgByMaDpg(sanPham.getMaDPG());
+            String tenDpg = doPhanGiaiBus.getById(sanPham.getMaDPG()).getTenDPG();
             if (tenDpg != null) {
                 cbDpg.setSelectedItem(tenDpg);
             }
-
-            String tenLoai = phanLoaiBus.getTenLoaiByMaLoai(sanPham.getMaLoai());
+            String tenLoai = phanLoaiBus.getById(sanPham.getMaLoai()).getTenLoai();
             if (tenLoai != null) {
                 cbLoai.setSelectedItem(tenLoai);
             }
-
-            String tenTH = thuongHieuBus.getTenThByMaTh(sanPham.getMaTH());
+            String tenTH = thuongHieuBus.getById(sanPham.getMaTH()).getTenTH();
             if (tenTH != null) {
                 cbTh.setSelectedItem(tenTH);
             }
@@ -106,7 +102,7 @@ public class AddAndEditProductGUI extends JDialog {
         this.doPhanGiaiBus = new DoPhanGiaiBUS();
         this.thuongHieuBus = new ThuongHieuBUS();
         this.phanLoaiBus = new PhanLoaiBUS();
-        this.setSize(550, 600);
+        this.setSize(450, 550);
         this.setLayout(new BorderLayout());
 
         JPanel inputPanel = new JPanel(new GridLayout(12, 2, 10, 10));
@@ -114,39 +110,35 @@ public class AddAndEditProductGUI extends JDialog {
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         inputPanel.add(new UILabel("Mã Sản Phẩm:"));
-        inputPanel.add(txtMaSP = new UITextField(250,30));
+        inputPanel.add(txtMaSP = new UITextField(0,0));
         inputPanel.add(new UILabel("Tên Sản Phẩm:"));
-        inputPanel.add(txtTenSP = new UITextField(250,30));
+        inputPanel.add(txtTenSP = new UITextField(0,0));
         inputPanel.add(new UILabel("Giá Sản Phẩm:"));
-        inputPanel.add(txtGiaSP = new UITextField(250,30));
+        inputPanel.add(txtGiaSP = new UITextField(0,0));
         inputPanel.add(new UILabel("Số Lượng Tồn:"));
-        inputPanel.add(txtSoLuongTon = new UITextField(250,30));
+        inputPanel.add(txtSoLuongTon = new UITextField(0,0));
         txtSoLuongTon.setText("0");
         txtSoLuongTon.setEditable(false);
         
-        inputPanel.add(new UILabel("RAM:"));
+        inputPanel.add(new UILabel("Dung lượng RAM:"));
         cbRam = new JComboBox<>();
         cbRam.setBackground(UIConstants.WHITE_FONT);
-        cbRam.setPreferredSize(new Dimension(250,30));
         for (RamDTO ram : ramBus.getAllRAM()) {
             cbRam.addItem(ram.getDungLuongRAM());   
         }
         inputPanel.add(cbRam);
         
-        
-        inputPanel.add(new UILabel("ROM:"));
+        inputPanel.add(new UILabel("Dung lượng ROM:"));
         cbRom = new JComboBox<>();
         cbRom.setBackground(UIConstants.WHITE_FONT);
-        cbRom.setPreferredSize(new Dimension(250, 30));
         for (RomDTO rom : romBus.getAllROM()) {
             cbRom.addItem(rom.getDungLuongROM());
         }
         inputPanel.add(cbRom);
 
-        inputPanel.add(new UILabel("CPU:"));
+        inputPanel.add(new UILabel("Tên CPU:"));
         cbCpu = new JComboBox<>();
         cbCpu.setBackground(UIConstants.WHITE_FONT);
-        cbCpu.setPreferredSize(new Dimension(250, 30));
         for (CpuDTO cpu : cpuBus.getAllCPU()) {
             cbCpu.addItem(cpu.getTenCPU());
         }
@@ -155,7 +147,6 @@ public class AddAndEditProductGUI extends JDialog {
         inputPanel.add(new UILabel("Độ Phân Giải:"));
         cbDpg = new JComboBox<>();
         cbDpg.setBackground(UIConstants.WHITE_FONT);
-        cbDpg.setPreferredSize(new Dimension(250, 30));
         for (DoPhanGiaiDTO dpg : doPhanGiaiBus.getAllDoPhanGiai()) {
             cbDpg.addItem(dpg.getTenDPG());
         }
@@ -164,7 +155,6 @@ public class AddAndEditProductGUI extends JDialog {
         inputPanel.add(new UILabel("Phân Loại:"));
         cbLoai = new JComboBox<>();
         cbLoai.setBackground(UIConstants.WHITE_FONT);
-        cbLoai.setPreferredSize(new Dimension(250, 30));
         for (PhanLoaiDTO loai : phanLoaiBus.getAllPhanLoai()) {
             cbLoai.addItem(loai.getTenLoai());
         }
@@ -173,20 +163,16 @@ public class AddAndEditProductGUI extends JDialog {
         inputPanel.add(new UILabel("Thương Hiệu:"));
         cbTh = new JComboBox<>();
         cbTh.setBackground(UIConstants.WHITE_FONT);
-        cbTh.setPreferredSize(new Dimension(250, 30));
         for (ThuongHieuDTO th : thuongHieuBus.getAllThuongHieu()) {
             cbTh.addItem(th.getTenTH());
         }
         inputPanel.add(cbTh);
 
-        
         inputPanel.add(new UILabel("Thời Gian Bảo Hành:"));
-        inputPanel.add(txtThoiGianBH = new UITextField(250, 30));
-
+        inputPanel.add(txtThoiGianBH = new UITextField(0, 0));
         //==============================( PANEL BUTTON )================================//
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
         btnPanel.setBackground(UIConstants.MAIN_BACKGROUND);
-
         btnAdd = new UIButton("add", "THÊM", 90, 35);
         btnSave = new UIButton("confirm", "LƯU", 90, 35);
         btnCancel = new UIButton("cancel", "HỦY", 90, 35);
@@ -197,15 +183,12 @@ public class AddAndEditProductGUI extends JDialog {
             btnPanel.add(btnSave);
         }
         btnPanel.add(btnCancel);
-
         this.add(inputPanel, BorderLayout.CENTER);
         this.add(btnPanel, BorderLayout.SOUTH);
         
-
         btnCancel.addActionListener(e -> dispose());
         if (btnAdd != null) btnAdd.addActionListener(e -> addProduct());
         if (btnSave != null) btnSave.addActionListener(e -> saveProduct());
-        
     }
 
     private void saveProduct() {
@@ -249,7 +232,6 @@ public class AddAndEditProductGUI extends JDialog {
             int maLoai = phanLoaiBus.getMaLoaiByTenLoai(cbLoai.getSelectedItem().toString());
             int maTH = thuongHieuBus.getMaThByTenTh(cbTh.getSelectedItem().toString());
             int thoiGianBH = Integer.parseInt(txtThoiGianBH.getText().trim());
-
             SanPhamDTO sp = new SanPhamDTO( maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
             if (sanPhamBus.addSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!");
