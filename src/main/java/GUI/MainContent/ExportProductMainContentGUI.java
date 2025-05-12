@@ -302,37 +302,26 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         dialog.setLayout(new BorderLayout());
 
         JPanel panelThongTin = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        panelThongTin.setPreferredSize(new Dimension(600, 125));
-        panelThongTin.add(new UILabel("PHIẾU XUẤT " + px.getMaPX(), 550, 25));
-        panelThongTin.add(new UILabel("NHÂN VIÊN XUẤT HÀNG: " + nhanVienBUS.getById(px.getMaNV()).getTenNV(), 550, 25));
-        panelThongTin.add(new UILabel("KHÁCH HÀNG: " + khachHangBUS.getById(px.getMaKH()).getTenKH(), 550, 25));
-        panelThongTin.add(new UILabel("NGÀY GHI PHIẾU: " + px.getNgayXuat().toString(), 550, 25));
-        panelThongTin.add(new UILabel("TỔNG TIỀN: " + px.getTongTien(), 550, 25));
+        panelThongTin.setPreferredSize(new Dimension(600, 105));
+        panelThongTin.add(new UILabel("Phiếu xuất: " + px.getMaPX(), 550, 25, UIConstants.monoFont));
+        panelThongTin.add(new UILabel("Nhân viên xuất hàng: " + nhanVienBUS.getById(px.getMaNV()).getTenNV(), 550, 25, UIConstants.monoFont));
+        panelThongTin.add(new UILabel("Khách hàng: " + khachHangBUS.getById(px.getMaKH()).getTenKH(), 550, 25, UIConstants.monoFont));
+        panelThongTin.add(new UILabel("Ngày: " + px.getNgayXuat().toString(), 550, 25, UIConstants.monoFont));
 
         JPanel panelChiTiet = new JPanel();
         panelChiTiet.setLayout(new BoxLayout(panelChiTiet, BoxLayout.Y_AXIS));
         panelChiTiet.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-
-        UILabel lblTitle = new UILabel("CHI TIẾT PHIẾU XUẤT:", 550, 25);
-        panelChiTiet.add(lblTitle);
-        UILabel lblHeader = new UILabel(String.format("%-35s %-20s %-10s %-15s", "SẢN PHẨM", "SERIAL" ,"SỐ LƯỢNG", "THÀNH TIỀN"), 600, 25);
-        lblHeader.setFont(UIConstants.monoFont);
-        panelChiTiet.add(lblHeader);
-
-        ArrayList<ChiTietSanPhamDTO> dsSerial = chiTietSanPhamBUS.getAllByMaPX(maPX);
+        panelChiTiet.add(new UILabel(String.format("%-40s %-20s %-15s", "Sản phẩm", "Serial" , "Thành tiền"), 600, 25, UIConstants.monoFont));
         for (ChiTietPhieuXuatDTO ct : chiTietPhieuXuatBUS.getAllChiTietPhieuXuatByMaPx(maPX)) {
-            for (ChiTietSanPhamDTO sp : dsSerial) {
+            for (ChiTietSanPhamDTO sp : chiTietSanPhamBUS.getAllByMaPX(maPX)) {
                 if (sp.getMaSP() == ct.getMaSP()) {
-                    UILabel lblRow = new UILabel(String.format("%-35s %-20s %-10s %-15s", sanPhamBUS.getById(ct.getMaSP()).getTenSP(), sp.getSerialSP(),"1",  ct.getGiaBan()), 600, 25);
-                    lblRow.setFont(UIConstants.monoFont);
-                    panelChiTiet.add(lblRow);
+                    panelChiTiet.add(new UILabel(String.format("%-40s %-20s %-15s", sanPhamBUS.getById(ct.getMaSP()).getTenSP(), sp.getSerialSP(), ct.getGiaBan()), 600, 25, UIConstants.monoFont));
                 }
             }
         }
+        panelChiTiet.add(new UILabel(String.format("%-40s %-20s %-15s", "", "Tổng tiền:" , px.getTongTien()), 600, 25, UIConstants.monoFont));
+        
         JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        UIButton btnClose = new UIButton("add", "ĐÓNG", 100, 30);
-        btnClose.addActionListener(e -> dialog.dispose());
-        panelButton.add(btnClose);
         btnExportPDF = new UIButton("add", "XUẤT PDF", 100, 30);
         btnExportPDF.addActionListener(e -> exportToPDF(maPX));
         panelButton.add(btnExportPDF);
@@ -476,6 +465,7 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         JOptionPane.showMessageDialog(this, "Thêm phiếu xuất thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         loadTableData();
         resetFormInput();
+        loadChiTietSanPhamToTable();
     }
     
     private void exportToPDF(int maPX) {

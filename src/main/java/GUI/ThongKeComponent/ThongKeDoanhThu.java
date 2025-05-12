@@ -29,7 +29,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
 
 public class ThongKeDoanhThu extends JPanel {
-    private UIButton btnLamMoi, btnLoc;
+    private UIButton btnLoc;
     private UIButton btnOptionMonth, btnOptionYear, btnOptionDay;
     private PhieuNhapBUS phieuNhapBUS = new PhieuNhapBUS();
     private PhieuXuatBUS phieuXuatBUS = new PhieuXuatBUS();
@@ -132,7 +132,6 @@ public class ThongKeDoanhThu extends JPanel {
                     JOptionPane.showMessageDialog(this, "Khoảng cách giữa hai năm không được vượt quá 30 năm.");
                     return;
                 }
-
                 model.setRowCount(0);
                 dataset.clear();
 

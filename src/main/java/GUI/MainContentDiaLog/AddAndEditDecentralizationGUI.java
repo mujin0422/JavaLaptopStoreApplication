@@ -46,8 +46,7 @@ public class AddAndEditDecentralizationGUI extends JDialog {
         if (quyen != null) {
             txtMaQuyen.setText(String.valueOf(quyen.getMaQuyen()));
             txtTenQuyen.setText(quyen.getTenQuyen());
-            txtMaQuyen.setEnabled(false);
-            
+            txtMaQuyen.setEditable(false);
             ArrayList<ChiTietChucNangDTO> dsCTCN = chiTietChucNangBUS.getChiTietChucNangByMaQuyen(quyen.getMaQuyen());
             for (int i = 0; i < rowCkc; i++) {
                 for (int j = 0; j < colCkc; j++) {
@@ -93,8 +92,7 @@ public class AddAndEditDecentralizationGUI extends JDialog {
         pnlGroupTenQuyen.add(txtTenQuyen = new UITextField(350, 30));
         pnlTextField.add(pnlGroupMaQuyen);
         pnlTextField.add(pnlGroupTenQuyen);
-        
-               
+          
         JPanel pnlLabel = new JPanel(new GridLayout(1 + rowCkc, 1));
         pnlLabel.setPreferredSize(new Dimension(200,0));
         pnlLabel.setBackground(UIConstants.WHITE_FONT);

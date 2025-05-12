@@ -56,15 +56,13 @@ public class DecentralizationMainContentGUI extends JPanel{
         pnlHeader.add(pnlButton, BorderLayout.WEST);
         //==============================( End Panel Header )============================//
 
-        
-        
         //================================( PANEL CONTENT )=============================//
         pnlContent = new JPanel();
         pnlContent.setLayout(new BorderLayout());
         pnlContent.setBackground(UIConstants.MAIN_BACKGROUND);
         pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        String[] columnNames = {"MÃ QUYỀN", "TÊN QUYỀN"};
+        String[] columnNames = {"MÃ QUYỀN", "TÊN QUYỀN" ,"SỐ LƯỢNG NHÂN VIÊN CÓ QUYỀN"};
         tableModel = new DefaultTableModel(columnNames, 0); 
         tblContent = new UITable(tableModel);
         UIScrollPane scrollPane = new UIScrollPane(tblContent);
@@ -89,14 +87,15 @@ public class DecentralizationMainContentGUI extends JPanel{
         for(QuyenDTO qn : quyenBUS.getAllQuyen()){
             tableModel.addRow(new Object[]{
                 qn.getMaQuyen(),
-                qn.getTenQuyen()
+                qn.getTenQuyen(),
+                quyenBUS.getSoLuongNhanVienHasQuyen(qn.getMaQuyen()) + " nhân viên"
             });
         }
     }
     
     private void addDecentralization(){
         Window window = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditDecentralizationGUI((JFrame) window, quyenBUS, "Thêm Quyen", "add");
+        new AddAndEditDecentralizationGUI((JFrame) window, quyenBUS, "Thêm Quyền", "add");
         loadTableData(); 
     }
     
@@ -110,7 +109,7 @@ public class DecentralizationMainContentGUI extends JPanel{
         String tenQuyen = tableModel.getValueAt(selectedRow, 1).toString();
         QuyenDTO quyen = new QuyenDTO(maQuyen, tenQuyen);
         Window window = SwingUtilities.getWindowAncestor(this);
-        new AddAndEditDecentralizationGUI((JFrame) window, quyenBUS, "Phân quyền", "save", quyen);
+        new AddAndEditDecentralizationGUI((JFrame) window, quyenBUS, "Phân Quyền", "save", quyen);
         loadTableData();
     }
     

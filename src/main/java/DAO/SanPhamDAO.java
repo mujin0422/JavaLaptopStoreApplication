@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SanPhamDAO {
     
@@ -67,29 +66,6 @@ public class SanPhamDAO {
         return 0;
     }
     
-    public List<SanPhamDTO> getAllSanPham() {
-        List<SanPhamDTO> ds = new ArrayList<>();
-        String sql = "SELECT * FROM sanpham WHERE trangThaiXoa=0";
-        try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                SanPhamDTO sp = new SanPhamDTO();
-                sp.setMaSP(rs.getInt("maSP"));
-                sp.setTenSP(rs.getString("tenSP"));
-                sp.setGiaSP(rs.getInt("giaSP"));
-                sp.setSoLuongTon(rs.getInt("soLuongTon"));
-                // các trường khác nếu có
-                ds.add(sp);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return ds;
-    }
-    
     public ArrayList<SanPhamDTO> getAll() {
         ArrayList<SanPhamDTO> dsSanPham = new ArrayList<>();
         String sql = "SELECT * FROM sanpham WHERE trangThaiXoa=0";
@@ -103,11 +79,11 @@ public class SanPhamDAO {
                     rs.getInt("giaSP"),
                     rs.getInt("soLuongTon"),
                     rs.getInt("maCPU"),
-                    rs.getInt("maROM"),
                     rs.getInt("maRAM"),
-                    rs.getInt("maTH"),
+                    rs.getInt("maROM"),
                     rs.getInt("maDPG"),
                     rs.getInt("maLoai"),
+                    rs.getInt("maTH"),
                     rs.getInt("thoigianBH")
                 ));
             }
@@ -131,11 +107,11 @@ public class SanPhamDAO {
                         rs.getInt("giaSP"),
                         rs.getInt("soLuongTon"),
                         rs.getInt("maCPU"),
-                        rs.getInt("maROM"),
                         rs.getInt("maRAM"),
-                        rs.getInt("maTH"),
+                        rs.getInt("maROM"),
                         rs.getInt("maDPG"),
                         rs.getInt("maLoai"),
+                        rs.getInt("maTH"),
                         rs.getInt("thoigianBH")
                     );
                 }
@@ -195,11 +171,11 @@ public class SanPhamDAO {
                         rs.getInt("giaSP"),
                         rs.getInt("soLuongTon"),
                         rs.getInt("maCPU"),
-                        rs.getInt("maROM"),
                         rs.getInt("maRAM"),
-                        rs.getInt("maTH"),
+                        rs.getInt("maROM"),
                         rs.getInt("maDPG"),
                         rs.getInt("maLoai"),
+                        rs.getInt("maTH"),
                         rs.getInt("thoigianBH")
                     );
                     dsSanPham.add(sp);
@@ -231,11 +207,11 @@ public class SanPhamDAO {
                         rs.getInt("giaSP"),
                         rs.getInt("soLuongTon"),
                         rs.getInt("maCPU"),
-                        rs.getInt("maROM"),
                         rs.getInt("maRAM"),
-                        rs.getInt("maTH"),
+                        rs.getInt("maROM"),
                         rs.getInt("maDPG"),
                         rs.getInt("maLoai"),
+                        rs.getInt("maTH"),
                         rs.getInt("thoigianBH")
                     );
                     dsSanPham.add(sp);
@@ -268,11 +244,11 @@ public class SanPhamDAO {
                         rs.getInt("giaSP"),
                         rs.getInt("soLuongTon"),
                         rs.getInt("maCPU"),
-                        rs.getInt("maROM"),
                         rs.getInt("maRAM"),
-                        rs.getInt("maTH"),
+                        rs.getInt("maROM"),
                         rs.getInt("maDPG"),
                         rs.getInt("maLoai"),
+                        rs.getInt("maTH"),
                         rs.getInt("thoigianBH")
                     );
                     dsSanPham.add(sp);
@@ -307,11 +283,11 @@ public class SanPhamDAO {
                         rs.getInt("giaSP"),
                         rs.getInt("soLuongTon"),
                         rs.getInt("maCPU"),
-                        rs.getInt("maROM"),
                         rs.getInt("maRAM"),
-                        rs.getInt("maTH"),
+                        rs.getInt("maROM"),
                         rs.getInt("maDPG"),
                         rs.getInt("maLoai"),
+                        rs.getInt("maTH"),
                         rs.getInt("thoigianBH")
                     );
                     dsSanPham.add(sp);
@@ -329,12 +305,12 @@ public class SanPhamDAO {
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) {
-                int maxId = rs.getInt("max_id"); // Đọc trực tiếp int
-                return String.valueOf(maxId + 1); // +1
+                int maxId = rs.getInt("max_id"); 
+                return String.valueOf(maxId + 1); 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "1"; // Nếu chưa có sản phẩm nào
+        return "1"; 
     }
 }

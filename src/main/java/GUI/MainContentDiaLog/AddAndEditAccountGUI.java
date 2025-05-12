@@ -37,7 +37,6 @@ public class AddAndEditAccountGUI extends JDialog{
         if (tk != null) {
             txtTenDangNhap.setText(tk.getTenDangNhap());
             txtMatKhau.setText(tk.getMatKhau());
-            
             String tenNv = nvBus.getById(tk.getMaNV()).getTenNV();
             if (tenNv != null) {
                 cbMaNV.setSelectedItem(tenNv);
@@ -62,6 +61,7 @@ public class AddAndEditAccountGUI extends JDialog{
     private void initComponent(String type) {
         this.nvBus = new NhanVienBUS();
         this.quyenBus = new QuyenBUS();
+        this.tkBus = new TaiKhoanBUS();
         this.setSize(450, 270);
         this.setLayout(new BorderLayout());
         

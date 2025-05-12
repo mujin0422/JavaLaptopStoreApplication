@@ -45,4 +45,7 @@ public class QuyenBUS {
     public int getMaQuyenByTenQuyen(String tenQuyen) {
         return quyenDAO.getMaQuyenByTenQuyen(tenQuyen);
     }
+    public int getSoLuongNhanVienHasQuyen(int maQuyen) {
+        return quyenDAO.getSoLuongNhanVienHasQuyen(maQuyen);
+    }
 }

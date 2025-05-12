@@ -26,7 +26,6 @@ import Utils.UIButton;
 import Utils.UIConstants;
 import Utils.UILabel;
 import Utils.UITextField;
-import java.awt.Dimension;
 import javax.swing.JComboBox;
 public class AddAndEditProductGUI extends JDialog {
     private UITextField txtMaSP, txtTenSP, txtGiaSP, txtSoLuongTon, txtThoiGianBH;
@@ -78,8 +77,7 @@ public class AddAndEditProductGUI extends JDialog {
             }
             txtThoiGianBH.setText(String.valueOf(sanPham.getThoiGianBH()));
             txtMaSP.setEditable(false);
-            txtSoLuongTon.setEditable(false);
-            
+            txtSoLuongTon.setEditable(false);   
         }
         this.setLocationRelativeTo(parent);
         this.setVisible(true);
@@ -205,7 +203,6 @@ public class AddAndEditProductGUI extends JDialog {
             int maLoai = phanLoaiBus.getMaLoaiByTenLoai(cbLoai.getSelectedItem().toString());
             int maTH = thuongHieuBus.getMaThByTenTh(cbTh.getSelectedItem().toString());
             int thoiGianBH = Integer.parseInt(txtThoiGianBH.getText().trim());
-            
             SanPhamDTO sp = new SanPhamDTO(maSP, tenSP, giaSP, soLuongTon, maCPU, maRam, maRom, maDPG, maLoai, maTH, thoiGianBH);
             if (sanPhamBus.updateSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công!");

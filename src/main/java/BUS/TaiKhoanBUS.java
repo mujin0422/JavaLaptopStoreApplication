@@ -10,9 +10,11 @@ public class TaiKhoanBUS {
     public TaiKhoanBUS() {
         TaiKhoanDAO = new TaiKhoanDAO();
     }
-
     public ArrayList<TaiKhoanDTO> getAllTaiKhoan() {
         return TaiKhoanDAO.getAll();
+    }
+    public TaiKhoanDTO getByUsername(String username) {
+        return TaiKhoanDAO.getByUsername(username);
     }
     public boolean addTaiKhoan(TaiKhoanDTO taikhoan) {       
         return TaiKhoanDAO.add(taikhoan) > 0;

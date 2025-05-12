@@ -180,27 +180,8 @@ public class AccountMainContentGUI extends JPanel{
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một tài khoản chỉnh sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String tenNV = tableModel.getValueAt(selectedRow, 0).toString();
         String tenDangNhap = tableModel.getValueAt(selectedRow, 1).toString();
-        String matKhau = tableModel.getValueAt(selectedRow, 2).toString();
-        String tenQuyen = tableModel.getValueAt(selectedRow, 3).toString();
-        int maNV = 0;
-        NhanVienBUS nvBus = new NhanVienBUS();
-        for(NhanVienDTO nv : nvBus.getAllNhanVien()){
-            if(nv.getTenNV().equals(tenNV)){
-                maNV = nv.getMaNV();
-                break;
-            }
-        }
-        int maQuyen = 0;
-        QuyenBUS quyenBus = new QuyenBUS();
-        for(QuyenDTO quyen : quyenBus.getAllQuyen()){
-            if(quyen.getTenQuyen().equals(tenQuyen))
-                maQuyen = quyen.getMaQuyen();
-            break;
-        }
-        
-        TaiKhoanDTO tk = new TaiKhoanDTO(tenDangNhap, matKhau, maNV, maQuyen);
+        TaiKhoanDTO tk = taiKhoanBUS.getByUsername(tenDangNhap);
         Window window = SwingUtilities.getWindowAncestor(this);
         new AddAndEditAccountGUI((JFrame) window, taiKhoanBUS, "Chỉnh sửa tài khoản", "save", tk);
         loadTableData();

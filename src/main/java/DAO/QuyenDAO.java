@@ -66,7 +66,7 @@ public class QuyenDAO {
     }
     
     public QuyenDTO getById(int id){
-        String sql ="SELECT * FROM quyen WHERE maQuyen=? AND trangThaiXoa=0";
+        String sql ="SELECT * FROM quyen WHERE maQuyen=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, id);
@@ -98,5 +98,23 @@ public class QuyenDAO {
             e.printStackTrace();
         }
         return -1; 
+    }
+    
+    public int getSoLuongNhanVienHasQuyen(int maQuyen) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) AS soLuongNhanVien "
+                   + "FROM taikhoan "
+                   + "WHERE maQuyen = ? AND trangThaiXoa = 0";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, maQuyen);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("soLuongNhanVien");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
     }
 }

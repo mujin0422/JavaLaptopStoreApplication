@@ -67,7 +67,7 @@ public class PhanLoaiDAO {
     }
     
     public PhanLoaiDTO getById(int maLoai) {
-        String sql = "SELECT * FROM phanloai WHERE maLoai=? AND trangThaiXoa=0";
+        String sql = "SELECT * FROM phanloai WHERE maLoai=?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, maLoai);

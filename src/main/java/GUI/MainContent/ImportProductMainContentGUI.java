@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -264,44 +263,29 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một phiếu nhập để xem chi tiết.", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         int maPN = Integer.parseInt(tblContent.getValueAt(selectedRow, 0).toString());
         PhieuNhapDTO pn = phieuNhapBUS.getById(maPN);
-
         Window window = SwingUtilities.getWindowAncestor(this);
         JDialog dialog = new JDialog((Frame) window, "Chi tiết phiếu nhập", true);
         dialog.setLayout(new BorderLayout());
 
         JPanel panelThongTin = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        panelThongTin.setPreferredSize(new Dimension(600, 125));
-        panelThongTin.add(new UILabel("PHIẾU NHẬP " + pn.getMaPN(), 550, 25));
-        panelThongTin.add(new UILabel("NHÂN VIÊN NHẬP HÀNG: " + nhanVienBUS.getById(pn.getMaNV()).getTenNV(), 550, 25));
-        panelThongTin.add(new UILabel("NHÀ CUNG CẤP: " + nhaCungCapBUS.getById(pn.getMaNCC()).getTenNCC(), 550, 25));
-        panelThongTin.add(new UILabel("NGÀY GHI PHIẾU: " + pn.getNgayNhap().toString(), 550, 25));
-        panelThongTin.add(new UILabel("TỔNG TIỀN: " + pn.getTongTien(), 550, 25));
+        panelThongTin.setPreferredSize(new Dimension(650, 105));
+        panelThongTin.add(new UILabel("Phiếu nhập: " + pn.getMaPN(), 550, 25, UIConstants.monoFont));
+        panelThongTin.add(new UILabel("Nhân viên nhập hàng: " + nhanVienBUS.getById(pn.getMaNV()).getTenNV(), 550, 25, UIConstants.monoFont));
+        panelThongTin.add(new UILabel("nhà cung cấp: " + nhaCungCapBUS.getById(pn.getMaNCC()).getTenNCC(), 550, 25, UIConstants.monoFont));
+        panelThongTin.add(new UILabel("Ngày: " + pn.getNgayNhap().toString(), 550, 25, UIConstants.monoFont));
 
         JPanel panelChiTiet = new JPanel();
         panelChiTiet.setLayout(new BoxLayout(panelChiTiet, BoxLayout.Y_AXIS));
         panelChiTiet.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-
-        UILabel lblTitle = new UILabel("CHI TIẾT PHIẾU NHẬP:", 550, 25);
-        panelChiTiet.add(lblTitle);
-
-        UILabel lblHeader = new UILabel(String.format("%-40s %-10s %-15s", "SẢN PHẨM", "SỐ LƯỢNG", "THÀNH TIỀN"), 600, 25);
-        lblHeader.setFont(UIConstants.monoFont);
-        panelChiTiet.add(lblHeader);
-
+        panelChiTiet.add(new UILabel(String.format("%-40s %-15s %-15s", "Sản phẩm", "Số lượng", "Thành tiền"), 650, 25, UIConstants.monoFont));
         for (ChiTietPhieuNhapDTO ct : chiTietPhieuNhapBUS.getAllChiTietPhieuNhapByMaPn(maPN)) {
-            UILabel lblRow = new UILabel(String.format("%-40s %-10s %-15s", sanPhamBUS.getById(ct.getMaSP()).getTenSP(), ct.getSoLuongSP(),ct.getGiaNhap()), 600, 25);
-            lblRow.setFont(UIConstants.monoFont);
-            panelChiTiet.add(lblRow);
+            panelChiTiet.add(new UILabel(String.format("%-40s %-15s %-15s", sanPhamBUS.getById(ct.getMaSP()).getTenSP(), ct.getSoLuongSP(),ct.getGiaNhap()), 650, 25, UIConstants.monoFont));
         }
+        panelChiTiet.add(new UILabel(String.format("%-40s %-15s %-15s", "", "Tổng tiền:", pn.getTongTien()), 650, 25, UIConstants.monoFont));
 
         JPanel panelButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        UIButton btnClose = new UIButton("add", "ĐÓNG", 100, 30);
-        btnClose.addActionListener(e -> dialog.dispose());
-        panelButton.add(btnClose);
-
         btnExportPDF = new UIButton("add", "XUẤT PDF", 100, 30);
         btnExportPDF.addActionListener(e -> exportToPDF(maPN));
         panelButton.add(btnExportPDF);
@@ -309,10 +293,9 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
         dialog.add(panelThongTin, BorderLayout.NORTH);
         dialog.add(panelChiTiet, BorderLayout.CENTER);
         dialog.add(panelButton, BorderLayout.SOUTH);
-
         dialog.pack();
         int preferredHeight = dialog.getHeight(); 
-        dialog.setSize(650, preferredHeight);   
+        dialog.setSize(800, preferredHeight);   
         dialog.setLocationRelativeTo(null);   
         dialog.setVisible(true);
     }
@@ -473,6 +456,7 @@ public class ImportProductMainContentGUI extends JPanel implements ReloadablePan
                 sanPhamBUS.updateSoLuongTonSanPham(maSP, soLuongHienTai + soLuong);
             }
             JOptionPane.showMessageDialog(this, "Thêm phiếu nhập thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            exportToPDF(maPN);
             resetFormInput();
             loadTableData();
         } catch (NumberFormatException e) {

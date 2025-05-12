@@ -205,13 +205,13 @@ public class ProductMainContentGUI extends JPanel implements ReloadablePanel{
     
     private void addSearchFunctionality() {
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { searchCustomer(); }
-            public void removeUpdate(DocumentEvent e) { searchCustomer(); }
-            public void changedUpdate(DocumentEvent e) { searchCustomer(); }
+            public void insertUpdate(DocumentEvent e) { searchProduct(); }
+            public void removeUpdate(DocumentEvent e) { searchProduct(); }
+            public void changedUpdate(DocumentEvent e) { searchProduct(); }
         });
     }
     
-    private void searchCustomer() {
+    private void searchProduct() {
         String keyword = txtSearch.getText().trim().toLowerCase();
         tableModel.setRowCount(0); 
         ArrayList<SanPhamDTO> listSP = sanPhamBUS.searchSanPham(keyword);
