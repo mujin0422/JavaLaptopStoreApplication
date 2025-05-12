@@ -465,6 +465,7 @@ public final class ExportProductMainContentGUI extends JPanel implements Reloada
         JOptionPane.showMessageDialog(this, "Thêm phiếu xuất thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         loadTableData();
         resetFormInput();
+        exportToPDF(maPX);
         loadChiTietSanPhamToTable();
     }
     
