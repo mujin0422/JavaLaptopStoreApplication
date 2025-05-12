@@ -61,8 +61,8 @@ public class NhanVienDAO {
                 dsNhanVien.add(new NhanVienDTO(
                     rs.getInt("maNV"),
                     rs.getString("tenNV"),
-                    rs.getString("email"),
                     rs.getString("sdt"),
+                    rs.getString("email"),
                     rs.getString("vaiTro")
                 ));
             }
@@ -81,8 +81,8 @@ public class NhanVienDAO {
                     return new NhanVienDTO(
                         rs.getInt("maNV"),
                         rs.getString("tenNV"),
-                        rs.getString("email"),
                         rs.getString("sdt"),
+                        rs.getString("email"),
                         rs.getString("vaiTro")
                     );
                 }
@@ -119,8 +119,8 @@ public class NhanVienDAO {
                     return new NhanVienDTO(
                         rs.getInt("maNV"),
                         rs.getString("tenNV"),
-                        rs.getString("email"),
                         rs.getString("sdt"),
+                        rs.getString("email"),
                         rs.getString("vaiTro")
                     );
                 }
@@ -143,8 +143,8 @@ public class NhanVienDAO {
                 NhanVienDTO nv = new NhanVienDTO(
                     rs.getInt("maNV"),
                     rs.getString("tenNV"),
-                    rs.getString("email"),
                     rs.getString("sdt"),
+                    rs.getString("email"),
                     rs.getString("vaiTro")
                 );
                 list.add(nv);
